@@ -3,532 +3,543 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vidya Topper – Study Smarter, Score Better</title>
-  <meta name="description" content="Vidya Topper is a free study app for Indian students. Prepare for NCERT, Board exams, and Government exams with quizzes, notes, flashcards, and more." />
-
-  <!-- Google Fonts -->
+  <title>Vidya Topper – Free Study App for Indian Students</title>
+  <meta name="description" content="Vidya Topper is a free mobile study app for Indian students. Prepare for NCERT, Board Exams, and Government Exams with quizzes, notes, flashcards, offline access and more." />
+  <meta name="keywords" content="Vidya Topper, study app India, NCERT app, board exam preparation, government exam app, free study app" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --primary:   #4F46E5;
-      --primary-d: #3730A3;
-      --accent:    #7C3AED;
-      --text:      #1E293B;
-      --muted:     #64748B;
-      --bg:        #F8FAFC;
-      --white:     #FFFFFF;
-      --border:    #E2E8F0;
-      --card-bg:   #FFFFFF;
-      --radius:    16px;
+      --p:     #4F46E5;
+      --p2:    #7C3AED;
+      --pdark: #3730A3;
+      --text:  #0F172A;
+      --sub:   #475569;
+      --muted: #94A3B8;
+      --bg:    #F8FAFC;
+      --white: #FFFFFF;
+      --bdr:   #E2E8F0;
+      --r:     16px;
     }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.65; }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.6;
-    }
-
-    /* ── NAVBAR ── */
+    /* ════ NAVBAR ════ */
     nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 24px;
+      position: sticky; top: 0; z-index: 999;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--bdr); padding: 0 5%;
     }
-    .nav-inner {
-      max-width: 1100px; margin: auto;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
-    }
-    .logo {
-      font-size: 1.3rem; font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      text-decoration: none;
-    }
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a {
-      text-decoration: none; color: var(--muted);
-      font-size: 0.9rem; font-weight: 500;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--primary); }
+    .ni { max-width: 1140px; margin: auto; display: flex; align-items: center; justify-content: space-between; height: 66px; }
+    .logo { font-size: 1.25rem; font-weight: 900; text-decoration: none;
+      background: linear-gradient(135deg, var(--p), var(--p2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--sub); font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--p); }
+    .nav-cta { background: var(--p); color: #fff !important; padding: 8px 20px; border-radius: 8px; font-weight: 600 !important; transition: background .2s !important; }
+    .nav-cta:hover { background: var(--pdark) !important; color: #fff !important; }
 
-    /* ── HERO ── */
+    /* ════ HERO ════ */
     .hero {
-      background: linear-gradient(135deg, #EEF2FF 0%, #F5F3FF 100%);
-      padding: 96px 24px 80px;
-      text-align: center;
+      background: linear-gradient(160deg, #EEF2FF 0%, #F5F3FF 50%, #FDF4FF 100%);
+      padding: 100px 5% 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 800px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+      pointer-events: none;
     }
     .hero-badge {
-      display: inline-block;
-      background: #E0E7FF; color: var(--primary);
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.6px;
-      padding: 6px 16px; border-radius: 999px;
-      margin-bottom: 20px; text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #E0E7FF; color: var(--p);
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.8px;
+      padding: 6px 18px; border-radius: 999px; margin-bottom: 22px; text-transform: uppercase;
     }
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      font-weight: 800; line-height: 1.2;
-      color: var(--text); max-width: 720px; margin: 0 auto 20px;
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem); font-weight: 900; line-height: 1.15;
+      color: var(--text); max-width: 800px; margin: 0 auto 20px;
+      letter-spacing: -0.5px;
     }
-    .hero h1 span {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+    .hero h1 .grad {
+      background: linear-gradient(135deg, var(--p), var(--p2));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .hero p {
-      font-size: 1.1rem; color: var(--muted);
-      max-width: 580px; margin: 0 auto 36px;
+    .hero-sub {
+      font-size: 1.15rem; color: var(--sub); max-width: 580px; margin: 0 auto 36px; font-weight: 400;
     }
-    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      color: #fff; text-decoration: none;
-      padding: 14px 32px; border-radius: 12px;
-      font-weight: 600; font-size: 0.95rem;
-      box-shadow: 0 4px 20px rgba(79,70,229,0.35);
-      transition: transform .2s, box-shadow .2s;
+    .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-main {
+      background: linear-gradient(135deg, var(--p), var(--p2)); color: #fff !important;
+      text-decoration: none; padding: 15px 36px; border-radius: 12px;
+      font-weight: 700; font-size: 1rem; letter-spacing: 0.2px;
+      box-shadow: 0 6px 24px rgba(79,70,229,0.40); transition: transform .2s, box-shadow .2s;
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(79,70,229,0.45); }
-    .btn-secondary {
-      background: #fff; color: var(--primary);
-      text-decoration: none; border: 2px solid var(--border);
-      padding: 14px 28px; border-radius: 12px;
-      font-weight: 600; font-size: 0.95rem;
-      transition: border-color .2s;
+    .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(79,70,229,0.50); }
+    .btn-out {
+      background: #fff; color: var(--p) !important; text-decoration: none;
+      border: 2px solid #C7D2FE; padding: 13px 28px; border-radius: 12px;
+      font-weight: 700; font-size: 1rem; transition: border-color .2s;
     }
-    .btn-secondary:hover { border-color: var(--primary); }
+    .btn-out:hover { border-color: var(--p); }
 
-    /* ── SCREENSHOTS PLACEHOLDER ── */
-    .screenshots {
-      display: flex; justify-content: center; gap: 16px;
-      margin-top: 56px; flex-wrap: wrap;
+    /* Hero phones */
+    .hero-phones { display: flex; justify-content: center; gap: 16px; margin-top: 60px; flex-wrap: wrap; align-items: flex-end; }
+    .phone-frame {
+      width: 170px; background: var(--white);
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.13);
+      border: 4px solid #fff;
     }
-    .screen-card {
-      width: 160px; height: 290px;
-      background: linear-gradient(160deg, #C7D2FE, #DDD6FE);
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.10);
-      color: var(--primary); font-weight: 600; font-size: 0.82rem;
-      text-align: center; padding: 12px;
+    .phone-frame img { width: 100%; height: auto; display: block; }
+    .phone-frame .ph-ph {
+      width: 100%; height: 300px;
+      background: linear-gradient(160deg, #EEF2FF, #DDD6FE);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; color: var(--p); font-size: 0.78rem; font-weight: 600; text-align: center; padding: 12px;
     }
-    .screen-card:nth-child(2) {
-      margin-top: -24px;
-      background: linear-gradient(160deg, #A5B4FC, #C4B5FD);
-    }
-    .screen-card:nth-child(3) {
-      background: linear-gradient(160deg, #DDD6FE, #EDE9FE);
-    }
+    .phone-frame .ph-ph .ico { font-size: 2.4rem; }
+    .phone-frame:nth-child(2) { transform: translateY(-20px); }
+    .phone-frame:nth-child(2) .ph-ph { background: linear-gradient(160deg, #DDD6FE, #C4B5FD); }
+    .phone-frame:nth-child(3) .ph-ph { background: linear-gradient(160deg, #E0E7FF, #EDE9FE); }
 
-    /* ── SECTIONS ── */
-    section { padding: 80px 24px; }
-    .container { max-width: 1100px; margin: auto; }
-    .section-label {
-      text-align: center; margin-bottom: 12px;
-      font-size: 0.78rem; font-weight: 700; letter-spacing: 1px;
-      color: var(--primary); text-transform: uppercase;
-    }
-    .section-title {
-      text-align: center; font-size: clamp(1.6rem, 3vw, 2.2rem);
-      font-weight: 800; margin-bottom: 12px; color: var(--text);
-    }
-    .section-desc {
-      text-align: center; color: var(--muted);
-      max-width: 540px; margin: 0 auto 52px; font-size: 1rem;
-    }
+    /* ════ SECTION BASE ════ */
+    section { padding: 88px 5%; }
+    .wrap { max-width: 1140px; margin: auto; }
+    .slabel { text-align: center; font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; color: var(--p); text-transform: uppercase; margin-bottom: 10px; }
+    .stitle { text-align: center; font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 900; margin-bottom: 12px; letter-spacing: -0.3px; }
+    .sdesc { text-align: center; color: var(--sub); max-width: 540px; margin: 0 auto 52px; font-size: 1rem; }
 
-    /* ── ABOUT ── */
+    /* ════ STATS BAR ════ */
+    .stats { background: var(--p); padding: 36px 5%; }
+    .stats-grid { max-width: 900px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .stat { text-align: center; color: #fff; }
+    .stat-num { font-size: 2.2rem; font-weight: 900; }
+    .stat-lbl { font-size: 0.82rem; color: rgba(255,255,255,0.75); margin-top: 4px; font-weight: 500; }
+
+    /* ════ ABOUT ════ */
     .about { background: var(--white); }
-    .about-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; align-items: center;
-    }
-    .about-img {
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about-visual {
       background: linear-gradient(135deg, #EEF2FF, #F5F3FF);
-      border-radius: 24px; height: 320px;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 12px;
+      border-radius: 28px; padding: 40px;
+      display: flex; flex-direction: column; gap: 16px;
     }
-    .about-img .big-icon { font-size: 80px; }
-    .about-img p { color: var(--muted); font-size: 0.85rem; }
-    .about-text h2 {
-      font-size: 1.9rem; font-weight: 800; margin-bottom: 16px;
-    }
-    .about-text p { color: var(--muted); margin-bottom: 14px; line-height: 1.7; }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-    .tag {
-      background: #EEF2FF; color: var(--primary);
-      padding: 6px 14px; border-radius: 999px;
-      font-size: 0.82rem; font-weight: 600;
-    }
+    .av-row { display: flex; align-items: center; gap: 16px; background: #fff; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .av-row .av-icon { font-size: 1.6rem; }
+    .av-row .av-t { font-size: 0.88rem; font-weight: 700; margin-bottom: 2px; }
+    .av-row .av-s { font-size: 0.78rem; color: var(--sub); }
+    .about-text h2 { font-size: 2rem; font-weight: 900; margin-bottom: 18px; letter-spacing: -0.3px; }
+    .about-text p { color: var(--sub); margin-bottom: 16px; font-size: 0.97rem; line-height: 1.75; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .tag { background: #EEF2FF; color: var(--p); padding: 6px 16px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
 
-    /* ── FEATURES ── */
+    /* ════ FEATURES ════ */
     .features { background: var(--bg); }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+    .fg { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
+    .fc {
+      background: var(--white); border: 1.5px solid var(--bdr); border-radius: var(--r);
+      padding: 28px 24px; transition: box-shadow .25s, transform .25s, border-color .25s;
     }
-    .feature-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px 24px;
-      transition: box-shadow .2s, transform .2s;
-    }
-    .feature-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-4px); }
-    .feature-icon {
-      font-size: 2rem; margin-bottom: 14px;
-      background: #EEF2FF; width: 56px; height: 56px;
-      border-radius: 14px; display: flex; align-items: center; justify-content: center;
-    }
-    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-    .feature-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .fc:hover { box-shadow: 0 10px 40px rgba(79,70,229,0.10); transform: translateY(-5px); border-color: #C7D2FE; }
+    .fi { font-size: 1.8rem; background: #EEF2FF; width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .fc h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .fc p { color: var(--sub); font-size: 0.88rem; line-height: 1.65; }
 
-    /* ── HOW IT WORKS ── */
+    /* ════ HOW IT WORKS ════ */
     .how { background: var(--white); }
-    .steps { display: flex; flex-direction: column; gap: 0; max-width: 680px; margin: auto; }
-    .step {
-      display: flex; gap: 24px; align-items: flex-start;
-      position: relative; padding-bottom: 40px;
-    }
-    .step:last-child { padding-bottom: 0; }
-    .step-num {
-      min-width: 48px; height: 48px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      color: #fff; font-weight: 800; font-size: 1rem; position: relative; z-index: 1;
-    }
-    .step:not(:last-child) .step-num::after {
-      content: '';
-      position: absolute; top: 48px; left: 50%;
-      transform: translateX(-50%);
-      width: 2px; height: calc(100% + 4px);
-      background: linear-gradient(to bottom, var(--primary), transparent);
-      z-index: 0;
-    }
-    .step-content { padding-top: 8px; }
-    .step-content h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
-    .step-content p { color: var(--muted); font-size: 0.92rem; }
-
-    /* ── SCREENSHOTS SECTION ── */
-    .screens-section { background: linear-gradient(135deg, #EEF2FF, #F5F3FF); }
-    .screens-grid {
-      display: flex; justify-content: center; gap: 20px;
-      flex-wrap: wrap; margin-top: 16px;
-    }
-    .screen-placeholder {
-      width: 180px; height: 340px;
-      background: rgba(255,255,255,0.6);
-      border: 2px dashed #C7D2FE;
-      border-radius: 24px;
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; max-width: 1000px; margin: auto; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 40px; left: 15%; right: 15%; height: 2px; background: linear-gradient(90deg, var(--p), var(--p2)); z-index: 0; }
+    .step { text-align: center; padding: 0 20px; position: relative; z-index: 1; }
+    .snum {
+      width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--p), var(--p2));
       display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 10px;
-      color: var(--primary); font-size: 0.82rem; text-align: center; padding: 16px;
-      backdrop-filter: blur(4px);
+      font-size: 1.6rem;
+      box-shadow: 0 6px 24px rgba(79,70,229,0.3);
     }
-    .screen-placeholder .ph-icon { font-size: 2.5rem; opacity: 0.5; }
+    .step h3 { font-size: 0.98rem; font-weight: 800; margin-bottom: 8px; }
+    .step p { color: var(--sub); font-size: 0.86rem; line-height: 1.6; }
 
-    /* ── CONTACT ── */
+    /* ════ SCREENSHOTS ════ */
+    .screens { background: linear-gradient(160deg, #EEF2FF 0%, #F5F3FF 100%); }
+    .screens-note {
+      background: rgba(255,255,255,0.8); border: 1.5px solid #C7D2FE;
+      border-radius: 12px; padding: 14px 22px;
+      text-align: center; font-size: 0.88rem; color: var(--p); font-weight: 600;
+      max-width: 700px; margin: 0 auto 40px;
+    }
+    .sg { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; align-items: flex-end; }
+    .sc {
+      width: 175px;
+      background: var(--white);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+      border: 3px solid rgba(255,255,255,0.9);
+      transition: transform .3s;
+    }
+    .sc:hover { transform: translateY(-6px) scale(1.02); }
+    .sc img { width: 100%; height: auto; display: block; }
+    .sc .sp {
+      height: 310px;
+      background: linear-gradient(160deg, #EEF2FF, #DDD6FE);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; padding: 16px; text-align: center;
+    }
+    .sc:nth-child(2) .sp { background: linear-gradient(160deg, #DDD6FE, #C4B5FD); }
+    .sc:nth-child(3) .sp { background: linear-gradient(160deg, #C4B5FD, #A78BFA); }
+    .sc:nth-child(4) .sp { background: linear-gradient(160deg, #A5B4FC, #818CF8); }
+    .sc:nth-child(5) .sp { background: linear-gradient(160deg, #818CF8, #6366F1); }
+    .sc .sp-ico { font-size: 2.8rem; }
+    .sc .sp-name { font-size: 0.78rem; font-weight: 700; color: var(--p); }
+    .sc .sp-fn { font-size: 0.68rem; color: var(--sub); margin-top: 2px; font-family: monospace; background: rgba(255,255,255,0.5); padding: 2px 8px; border-radius: 4px; }
+    .sc:nth-child(3) { transform: translateY(-22px); }
+    .sc:nth-child(3):hover { transform: translateY(-28px) scale(1.02); }
+
+    /* Screenshot label below */
+    .sc-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .sc-label { font-size: 0.76rem; font-weight: 700; color: var(--p); text-align: center; }
+
+    /* ════ CONTACT ════ */
     .contact { background: var(--bg); }
-    .contact-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 24px; padding: 48px;
-      max-width: 560px; margin: auto; text-align: center;
+    .contact-inner {
+      max-width: 620px; margin: auto; text-align: center;
+      background: var(--white); border: 1.5px solid var(--bdr); border-radius: 24px; padding: 52px 40px;
     }
-    .contact-card h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 12px; }
-    .contact-card p { color: var(--muted); margin-bottom: 28px; }
-    .contact-email {
+    .contact-inner h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 14px; }
+    .contact-inner p { color: var(--sub); margin-bottom: 32px; }
+    .contact-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+    .chip {
       display: inline-flex; align-items: center; gap: 10px;
-      background: #EEF2FF; color: var(--primary);
-      padding: 14px 28px; border-radius: 12px;
-      font-weight: 600; font-size: 0.95rem;
-      text-decoration: none;
-      transition: background .2s;
+      background: #EEF2FF; color: var(--p); border: 1.5px solid #C7D2FE;
+      padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 0.92rem;
+      text-decoration: none; transition: background .2s, transform .2s;
     }
-    .contact-email:hover { background: #C7D2FE; }
+    .chip:hover { background: #C7D2FE; transform: translateY(-2px); }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--text); color: #94A3B8;
-      padding: 40px 24px; text-align: center;
-      font-size: 0.88rem;
-    }
-    footer .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; }
-    footer a { color: #94A3B8; text-decoration: none; transition: color .2s; }
-    footer a:hover { color: #fff; }
-    .footer-logo {
-      font-size: 1.2rem; font-weight: 800; color: #fff;
-      margin-bottom: 12px;
-    }
+    /* ════ FOOTER ════ */
+    footer { background: #0F172A; color: #64748B; padding: 48px 5%; }
+    .footer-inner { max-width: 1140px; margin: auto; }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 40px; flex-wrap: wrap; margin-bottom: 36px; }
+    .footer-brand .fl { font-size: 1.3rem; font-weight: 900; color: #fff; margin-bottom: 10px; }
+    .footer-brand p { font-size: 0.88rem; color: #64748B; max-width: 260px; line-height: 1.6; }
+    .footer-links-col h4 { color: #94A3B8; font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; }
+    .footer-links-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links-col a { color: #64748B; text-decoration: none; font-size: 0.88rem; transition: color .2s; }
+    .footer-links-col a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid #1E293B; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.82rem; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 700px) {
+    /* ════ RESPONSIVE ════ */
+    @media (max-width: 768px) {
       .about-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps { grid-template-columns: 1fr; gap: 32px; }
+      .steps::before { display: none; }
       .nav-links { display: none; }
-      .contact-card { padding: 32px 20px; }
+      .contact-inner { padding: 32px 20px; }
+      .footer-top { flex-direction: column; }
+      .footer-bottom { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
+<!-- ════ NAVBAR ════ -->
 <nav>
-  <div class="nav-inner">
+  <div class="ni">
     <a href="#" class="logo">📚 Vidya Topper</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#features">Features</a></li>
       <li><a href="#how">How It Works</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#screenshots">Screenshots</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
     </ul>
   </div>
 </nav>
 
-<!-- ── HERO ── -->
+<!-- ════ HERO ════ -->
 <section class="hero">
-  <div class="hero-badge">Free Education App for Indian Students</div>
-  <h1>Study Smarter,<br /><span>Score Better</span></h1>
-  <p>
-    Vidya Topper helps students across India prepare for NCERT, Board exams,
-    and Government competitive exams — all in one simple app.
+  <div class="hero-badge">🇮🇳 Free for all Indian Students</div>
+  <h1>India ka <span class="grad">Sabse Aasaan</span><br/>Study App</h1>
+  <p class="hero-sub">
+    Prepare for NCERT, Board Exams, and Government Exams — all in one place.
+    Simple to use, works offline, and completely free.
   </p>
-  <div class="btn-group">
-    <a href="#" class="btn-primary">⬇️ Download the App</a>
-    <a href="#features" class="btn-secondary">See Features →</a>
+  <div class="btn-row">
+    <a href="#" class="btn-main">⬇️ Download Free App</a>
+    <a href="#features" class="btn-out">Explore Features →</a>
   </div>
 
-  <!-- Phone mockups -->
-  <div class="screenshots">
-    <div class="screen-card">📖<br/>NCERT<br/>Content</div>
-    <div class="screen-card">✏️<br/>Practice<br/>Quizzes</div>
-    <div class="screen-card">📅<br/>Study<br/>Planner</div>
+  <!-- Phone frames — replace .ph-ph divs with <img> once you add screenshots -->
+  <div class="hero-phones">
+    <div class="phone-frame">
+      <div class="ph-ph">
+        <div class="ico">🏠</div>
+        Home Screen
+      </div>
+    </div>
+    <div class="phone-frame">
+      <div class="ph-ph">
+        <div class="ico">✏️</div>
+        Quiz Screen
+      </div>
+    </div>
+    <div class="phone-frame">
+      <div class="ph-ph">
+        <div class="ico">📅</div>
+        Planner
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ── ABOUT ── -->
+<!-- ════ STATS ════ -->
+<div class="stats">
+  <div class="stats-grid">
+    <div class="stat"><div class="stat-num">3+</div><div class="stat-lbl">Exam Categories</div></div>
+    <div class="stat"><div class="stat-num">12+</div><div class="stat-lbl">Study Tools</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-lbl">Free to Use</div></div>
+    <div class="stat"><div class="stat-num">📶</div><div class="stat-lbl">Works Offline</div></div>
+  </div>
+</div>
+
+<!-- ════ ABOUT ════ -->
 <section class="about" id="about">
-  <div class="container">
+  <div class="wrap">
     <div class="about-grid">
-      <div class="about-img">
-        <div class="big-icon">🎓</div>
-        <p>Built for Indian students</p>
+      <div class="about-visual">
+        <div class="av-row">
+          <div class="av-icon">📚</div>
+          <div><div class="av-t">NCERT Books, Class 6–12</div><div class="av-s">Chapter-wise content, all subjects</div></div>
+        </div>
+        <div class="av-row">
+          <div class="av-icon">🏫</div>
+          <div><div class="av-t">Board Exam Papers</div><div class="av-s">CBSE previous year papers & solutions</div></div>
+        </div>
+        <div class="av-row">
+          <div class="av-icon">🏛️</div>
+          <div><div class="av-t">Government Exam Prep</div><div class="av-s">Structured content for competitive exams</div></div>
+        </div>
+        <div class="av-row">
+          <div class="av-icon">📶</div>
+          <div><div class="av-t">Offline Study</div><div class="av-s">Download and study without internet</div></div>
+        </div>
       </div>
       <div class="about-text">
-        <div class="section-label" style="text-align:left">About Vidya Topper</div>
-        <h2>Your Complete Study Partner</h2>
+        <div class="slabel" style="text-align:left">About the App</div>
+        <h2>One App for All Your Studies</h2>
         <p>
-          Vidya Topper is a free mobile app built for students who want a simple,
-          organised way to study. Whether you're preparing for your Board exams,
-          NCERT syllabus, or a government entrance exam — everything you need is here.
+          Vidya Topper is a free mobile app made specifically for Indian students.
+          Whether you're in Class 6 or preparing for a government entrance exam,
+          the app gives you everything you need — in one simple, clean interface.
         </p>
         <p>
-          The app is designed to be lightweight, easy to use, and works even when
-          internet is limited. No unnecessary clutter — just your study material,
-          practice tests, and tools that actually help.
+          Study NCERT chapters, practice with quizzes, create flashcards,
+          write notes, plan your schedule, and track your progress — all without
+          spending a single rupee. The app also works offline so there's no
+          barrier to learning.
         </p>
-        <div class="tag-list">
-          <span class="tag">NCERT Books</span>
-          <span class="tag">Board Exams</span>
+        <p>
+          No complicated features, no subscriptions — just focused learning tools
+          designed for students who want to study smart.
+        </p>
+        <div class="tag-row">
+          <span class="tag">NCERT Class 6–12</span>
+          <span class="tag">CBSE Boards</span>
           <span class="tag">Govt Exams</span>
-          <span class="tag">Practice Quizzes</span>
+          <span class="tag">Quizzes</span>
           <span class="tag">Offline Access</span>
+          <span class="tag">Study Planner</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── FEATURES ── -->
+<!-- ════ FEATURES ════ -->
 <section class="features" id="features">
-  <div class="container">
-    <p class="section-label">Features</p>
-    <h2 class="section-title">Everything You Need to Prepare</h2>
-    <p class="section-desc">
-      Simple, useful tools that cover the full preparation journey — from reading
-      to practicing to tracking your progress.
-    </p>
+  <div class="wrap">
+    <p class="slabel">Features</p>
+    <h2 class="stitle">Everything You Need to Score Better</h2>
+    <p class="sdesc">12 built-in tools covering reading, practice, revision, planning, and progress tracking.</p>
+    <div class="fg">
 
-    <div class="features-grid">
+      <div class="fc"><div class="fi">📚</div><h3>NCERT Content (Class 6–12)</h3><p>Chapter-wise NCERT study material for all major subjects across classes 6 to 12, organised for easy reading and revision.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📚</div>
-        <h3>NCERT Study Material</h3>
-        <p>Access organised NCERT chapter content for multiple classes and subjects — structured for easy reading and revision.</p>
-      </div>
+      <div class="fc"><div class="fi">🏫</div><h3>Board Exam Papers</h3><p>Previous year question papers and sample papers for CBSE Board exams, arranged subject-wise and class-wise.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">🏫</div>
-        <h3>Board Exam Preparation</h3>
-        <p>Previous year question papers and chapter-wise content aligned to CBSE and state board syllabi.</p>
-      </div>
+      <div class="fc"><div class="fi">🏛️</div><h3>Government Exam Content</h3><p>Structured study material for students preparing for government competitive entrance exams.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">🏛️</div>
-        <h3>Government Exam Content</h3>
-        <p>Study material organised for students preparing for common government competitive entrance exams.</p>
-      </div>
+      <div class="fc"><div class="fi">✏️</div><h3>Practice Quizzes</h3><p>Chapter-wise multiple choice quizzes with instant feedback. Know what you've learned and what needs more revision.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">✏️</div>
-        <h3>Practice Quizzes</h3>
-        <p>Take chapter-wise quizzes to test what you've studied. Get instant feedback so you know what to revisit.</p>
-      </div>
+      <div class="fc"><div class="fi">🃏</div><h3>Flashcards</h3><p>Create and study flashcards for quick revision. Perfect for memorising key concepts, formulas, and definitions.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">🃏</div>
-        <h3>Flashcards</h3>
-        <p>Quick-revision flashcards to help you memorise key facts, formulas, and concepts before exams.</p>
-      </div>
+      <div class="fc"><div class="fi">📝</div><h3>Personal Notes</h3><p>Write and save your own study notes inside the app. Everything stays organised and accessible anytime.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📝</div>
-        <h3>Notes</h3>
-        <p>Create and save your own study notes inside the app. Keep everything in one organised place.</p>
-      </div>
+      <div class="fc"><div class="fi">📌</div><h3>Bookmarks</h3><p>Bookmark important chapters, questions, or topics and come back to them anytime with a single tap.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📌</div>
-        <h3>Bookmarks</h3>
-        <p>Save important chapters, questions, or content to your bookmarks for quick access anytime.</p>
-      </div>
+      <div class="fc"><div class="fi">📅</div><h3>Study Planner</h3><p>Plan your study sessions and set daily goals. Stay consistent and cover your syllabus systematically.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📅</div>
-        <h3>Study Planner</h3>
-        <p>Plan your study sessions day by day. Set goals, track what you've covered, and stay consistent.</p>
-      </div>
+      <div class="fc"><div class="fi">⏱️</div><h3>Study Timer</h3><p>Use the built-in timer to track focused study sessions. See how much you study each day over time.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">⏱️</div>
-        <h3>Study Timer</h3>
-        <p>Use a built-in timer to focus during your study sessions. Track how long you study each day.</p>
-      </div>
+      <div class="fc"><div class="fi">📶</div><h3>Offline Access</h3><p>Download content and study without internet. Works even in low-connectivity areas — no data, no problem.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">📶</div>
-        <h3>Offline Access</h3>
-        <p>Download content and study without internet. Useful for students with limited data or connectivity.</p>
-      </div>
+      <div class="fc"><div class="fi">💬</div><h3>Support Chat</h3><p>Have a question or facing an issue? Contact our support team directly through the in-app chat.</p></div>
 
-      <div class="feature-card">
-        <div class="feature-icon">💬</div>
-        <h3>Support Chat</h3>
-        <p>Reach out to our support team directly from the app if you have questions or face any issues.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">👤</div>
-        <h3>Student Profile</h3>
-        <p>Track your personal progress, view your study stats, and keep up with your preparation journey.</p>
-      </div>
+      <div class="fc"><div class="fi">👤</div><h3>Student Profile & Progress</h3><p>View your personal study stats, track your daily progress, and see how consistently you've been preparing.</p></div>
 
     </div>
   </div>
 </section>
 
-<!-- ── HOW IT WORKS ── -->
+<!-- ════ HOW IT WORKS ════ -->
 <section class="how" id="how">
-  <div class="container">
-    <p class="section-label">How It Works</p>
-    <h2 class="section-title">Getting Started Is Easy</h2>
-    <p class="section-desc">Follow these simple steps and start studying in minutes.</p>
-
+  <div class="wrap">
+    <p class="slabel">How It Works</p>
+    <h2 class="stitle">Start Studying in 4 Simple Steps</h2>
+    <p class="sdesc">No tutorials, no complexity — just download and start studying.</p>
     <div class="steps">
       <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>Download & Sign Up</h3>
-          <p>Install the app for free from the app store. Create your account with your email or phone number in seconds.</p>
-        </div>
+        <div class="snum">⬇️</div>
+        <h3>Download & Sign Up</h3>
+        <p>Install the app for free from the app store and create your account with email or phone in under a minute.</p>
       </div>
-
       <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>Choose Your Exam or Subject</h3>
-          <p>Select what you're studying — NCERT chapters, Board exam papers, or Government exam content. The app organises everything clearly.</p>
-        </div>
+        <div class="snum">📂</div>
+        <h3>Choose Your Category</h3>
+        <p>Pick your exam type — NCERT, Board Exams, or Government Exams. Then select your class or subject.</p>
       </div>
-
       <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>Study, Practice & Revise</h3>
-          <p>Read content, take quizzes, use flashcards, and make notes. Use the study timer to stay focused during sessions.</p>
-        </div>
+        <div class="snum">📖</div>
+        <h3>Study & Practice</h3>
+        <p>Read chapter content, take quizzes, use flashcards, make notes, and set your study timer.</p>
       </div>
-
       <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>Plan & Track Progress</h3>
-          <p>Use the study planner to set daily targets. Check your profile to see your progress and consistency over time.</p>
-        </div>
+        <div class="snum">📈</div>
+        <h3>Plan & Track</h3>
+        <p>Use the study planner to set daily targets. Track your progress and consistency from your profile.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── SCREENSHOTS ── -->
-<section class="screens-section" id="screenshots">
-  <div class="container">
-    <p class="section-label">App Screenshots</p>
-    <h2 class="section-title">See the App in Action</h2>
-    <p class="section-desc">
-      Clean, simple screens designed for focused studying.
-    </p>
-    <div class="screens-grid">
-      <div class="screen-placeholder"><div class="ph-icon">📱</div>Home Screen</div>
-      <div class="screen-placeholder"><div class="ph-icon">📚</div>Content Browser</div>
-      <div class="screen-placeholder"><div class="ph-icon">✏️</div>Quiz Screen</div>
-      <div class="screen-placeholder"><div class="ph-icon">📅</div>Study Planner</div>
-      <div class="screen-placeholder"><div class="ph-icon">👤</div>Profile & Stats</div>
+<!-- ════ SCREENSHOTS ════ -->
+<section class="screens" id="screenshots">
+  <div class="wrap">
+    <p class="slabel">App Screenshots</p>
+    <h2 class="stitle">See the App in Action</h2>
+
+    <!-- NOTE TO DEVELOPER: Replace the .sp divs with <img src="FILENAME" alt="..."> when you add real screenshots -->
+    <div class="screens-note">
+      📸 Screenshots will appear here — see the guide below for which screens to capture and what to name the files.
+    </div>
+
+    <div class="sg">
+
+      <div class="sc-wrap">
+        <div class="sc">
+          <!-- Replace with: <img src="screenshot-home.png" alt="Vidya Topper Home Screen"> -->
+          <div class="sp"><div class="sp-ico">🏠</div><div class="sp-name">Home Screen</div></div>
+        </div>
+        <div class="sc-label">screenshot-home.png</div>
+      </div>
+
+      <div class="sc-wrap">
+        <div class="sc">
+          <!-- Replace with: <img src="screenshot-ncert.png" alt="NCERT Content"> -->
+          <div class="sp"><div class="sp-ico">📚</div><div class="sp-name">NCERT Content</div></div>
+        </div>
+        <div class="sc-label">screenshot-ncert.png</div>
+      </div>
+
+      <div class="sc-wrap">
+        <div class="sc">
+          <!-- Replace with: <img src="screenshot-quiz.png" alt="Practice Quiz Screen"> -->
+          <div class="sp"><div class="sp-ico">✏️</div><div class="sp-name">Quiz Screen</div></div>
+        </div>
+        <div class="sc-label">screenshot-quiz.png</div>
+      </div>
+
+      <div class="sc-wrap">
+        <div class="sc">
+          <!-- Replace with: <img src="screenshot-planner.png" alt="Study Planner Screen"> -->
+          <div class="sp"><div class="sp-ico">📅</div><div class="sp-name">Study Planner</div></div>
+        </div>
+        <div class="sc-label">screenshot-planner.png</div>
+      </div>
+
+      <div class="sc-wrap">
+        <div class="sc">
+          <!-- Replace with: <img src="screenshot-profile.png" alt="Student Profile Screen"> -->
+          <div class="sp"><div class="sp-ico">👤</div><div class="sp-name">Profile & Stats</div></div>
+        </div>
+        <div class="sc-label">screenshot-profile.png</div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ── CONTACT ── -->
+<!-- ════ CONTACT ════ -->
 <section class="contact" id="contact">
-  <div class="container">
-    <div class="contact-card">
-      <p class="section-label" style="text-align:center">Get in Touch</p>
-      <h2>We're Here to Help</h2>
+  <div class="wrap">
+    <div class="contact-inner">
+      <p class="slabel">Contact & Support</p>
+      <h2>We're Here to Help You</h2>
       <p>
-        Have a question, feedback, or facing an issue? Send us an email and we'll
-        get back to you as soon as possible.
+        Have a question about the app, found a bug, or need help with something?
+        Reach out to us — we typically reply within 24 hours.
+        You can also use the in-app Support Chat after signing in.
       </p>
-      <a href="mailto:support@vidyatopper.in" class="contact-email">
-        ✉️ support@vidyatopper.in
-      </a>
-      <p style="margin-top: 20px; font-size: 0.85rem; color: #94A3B8;">
-        You can also use the in-app support chat after signing in.
-      </p>
+      <div class="contact-chips">
+        <a href="mailto:vidyatopper.in@gmail.com" class="chip">✉️ vidyatopper.in@gmail.com</a>
+        <a href="#" class="chip">⬇️ Download the App</a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
+<!-- ════ FOOTER ════ -->
 <footer>
-  <div class="footer-logo">📚 Vidya Topper</div>
-  <div class="footer-links">
-    <a href="/privacy-policy">Privacy Policy</a>
-    <a href="/terms">Terms of Use</a>
-    <a href="#contact">Contact</a>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="fl">📚 Vidya Topper</div>
+        <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in one place.</p>
+      </div>
+      <div class="footer-links-col">
+        <h4>App</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#screenshots">Screenshots</a></li>
+          <li><a href="#">Download</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/privacy-policy.html">Privacy Policy</a></li>
+          <li><a href="/terms.html">Terms of Use</a></li>
+        </ul>
+      </div>
+      <div class="footer-links-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="mailto:vidyatopper.in@gmail.com">Email Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Vidya Topper. All rights reserved.</span>
+      <span>Made with ❤️ for students across India 🇮🇳</span>
+    </div>
   </div>
-  <p>© 2025 Vidya Topper. All rights reserved.</p>
-  <p style="margin-top: 8px; font-size: 0.8rem; opacity: 0.7;">
-    Made with ❤️ for students across India.
-  </p>
 </footer>
 
 </body>
