@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vidya Topper – Free & Quality Education for All Indian Students</title>
-  <meta name="description" content="Vidya Topper is the ultimate free study companion for Indian students. Master NCERT, Board Exams, and Gov Exams with smart tools, offline access, and a premium learning experience." />
-  <meta name="keywords" content="Vidya Topper, NCERT solutions, CBSE board exams, government exam prep, free study app India, student tools" />
-  
+  <meta name="description"
+    content="Vidya Topper is the ultimate free study companion for Indian students. Master NCERT, Board Exams, and Gov Exams with smart tools, offline access, and a premium learning experience." />
+  <meta name="keywords"
+    content="Vidya Topper, NCERT solutions, CBSE board exams, government exam prep, free study app India, student tools" />
+
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vidyatopper.app/" />
   <meta property="og:title" content="Vidya Topper – Premium Education, Free for Everyone" />
-  <meta property="og:description" content="Join thousands of students scoring better with Vidya Topper. NCERT, Boards, and Competitive Exams made easy." />
-  <meta property="og:image" content="https://vidyatopper.app/vidyatopper-app-home.png" />
+  <meta property="og:description"
+    content="Join thousands of students scoring better with Vidya Topper. NCERT, Boards, and Competitive Exams made easy." />
+  <meta property="og:image" content="Feature graphic.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
@@ -20,31 +24,35 @@
   <meta property="twitter:description" content="The most advanced free study app for Indian students." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
   <style>
     :root {
-      --p:       hsl(245, 75%, 60%);
+      --p: hsl(245, 75%, 60%);
       --p-light: hsl(245, 90%, 95%);
-      --p-dark:  hsl(255, 80%, 40%);
-      --s:       hsl(270, 85%, 60%);
+      --p-dark: hsl(255, 80%, 40%);
+      --s: hsl(270, 85%, 60%);
       --s-light: hsl(270, 95%, 96%);
-      --text:    hsl(222, 47%, 11%);
-      --sub:     hsl(215, 25%, 45%);
-      --muted:   hsl(214, 32%, 91%);
-      --bg:      hsl(210, 40%, 98%);
-      --white:   #ffffff;
-      --glass:   rgba(255, 255, 255, 0.7);
-      --bdr:     rgba(226, 232, 240, 0.8);
-      --r-lg:    24px;
-      --r-md:    16px;
-      --shadow:  0 10px 30px -10px rgba(79, 70, 229, 0.15);
+      --text: hsl(222, 47%, 11%);
+      --sub: hsl(215, 25%, 45%);
+      --muted: hsl(214, 32%, 91%);
+      --bg: hsl(210, 40%, 98%);
+      --white: #ffffff;
+      --glass: rgba(255, 255, 255, 0.7);
+      --bdr: rgba(226, 232, 240, 0.8);
+      --r-lg: 24px;
+      --r-md: 16px;
+      --shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.15);
     }
 
-    html { scroll-behavior: smooth; }
-    body { 
-      font-family: 'Outfit', sans-serif; 
-      color: var(--text); 
-      background: var(--bg); 
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+      background: var(--bg);
       line-height: 1.6;
       overflow-x: hidden;
     }
@@ -60,472 +68,984 @@
 
     /* ════ NAVBAR ════ */
     nav {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      width: 90%; max-width: 1100px; z-index: 999;
-      padding: 12px 30px; border-radius: 999px;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1100px;
+      z-index: 999;
+      padding: 12px 30px;
+      border-radius: 999px;
     }
-    .ni { display: flex; align-items: center; justify-content: space-between; }
-    .logo { 
-      font-size: 1.4rem; font-weight: 800; text-decoration: none;
+
+    .ni {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-decoration: none;
       background: linear-gradient(135deg, var(--p), var(--s));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      display: flex; align-items: center; gap: 10px;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
-    .nav-links a { text-decoration: none; color: var(--sub); font-size: 0.95rem; font-weight: 600; transition: all .3s; }
-    .nav-links a:hover { color: var(--p); transform: translateY(-1px); }
-    .nav-cta { 
-      background: linear-gradient(135deg, var(--p), var(--s)); 
-      color: #fff !important; 
-      padding: 10px 24px; border-radius: 999px; 
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--sub);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all .3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--p);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--p), var(--s));
+      color: #fff !important;
+      padding: 10px 24px;
+      border-radius: 999px;
       font-weight: 700 !important;
       box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
     }
 
     /* ════ HERO ════ */
     .hero {
-      padding: 180px 5% 100px; text-align: center; position: relative;
+      padding: 180px 5% 100px;
+      text-align: center;
+      position: relative;
       background: radial-gradient(circle at top right, var(--p-light), transparent 40%),
-                  radial-gradient(circle at bottom left, var(--s-light), transparent 40%);
+        radial-gradient(circle at bottom left, var(--s-light), transparent 40%);
     }
+
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--p-light); color: var(--p);
-      font-size: 0.8rem; font-weight: 800; letter-spacing: 0.5px;
-      padding: 8px 24px; border-radius: 999px; margin-bottom: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--p-light);
+      color: var(--p);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 8px 24px;
+      border-radius: 999px;
+      margin-bottom: 30px;
       border: 1px solid rgba(79, 70, 229, 0.1);
     }
+
     .hero h1 {
-      font-size: clamp(2.5rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.1;
-      color: var(--text); max-width: 900px; margin: 0 auto 24px;
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--text);
+      max-width: 900px;
+      margin: 0 auto 24px;
       letter-spacing: -2px;
     }
+
     .hero h1 .grad {
       background: linear-gradient(135deg, var(--p), var(--s));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       position: relative;
     }
+
     .hero-sub {
-      font-size: 1.25rem; color: var(--sub); max-width: 650px; margin: 0 auto 40px; font-weight: 450;
+      font-size: 1.25rem;
+      color: var(--sub);
+      max-width: 650px;
+      margin: 0 auto 40px;
+      font-weight: 450;
     }
-    .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-row {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
     .btn-main {
-      background: linear-gradient(135deg, var(--p), var(--s)); color: #fff !important;
-      text-decoration: none; padding: 18px 44px; border-radius: 999px;
-      font-weight: 800; font-size: 1.1rem;
-      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); transition: all .3s;
+      background: linear-gradient(135deg, var(--p), var(--s));
+      color: #fff !important;
+      text-decoration: none;
+      padding: 18px 44px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+      transition: all .3s;
     }
-    .btn-main:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5); }
+
+    .btn-main:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
+    }
+
     .btn-out {
-      background: var(--white); color: var(--text) !important; text-decoration: none;
-      border: 1px solid var(--muted); padding: 18px 40px; border-radius: 999px;
-      font-weight: 700; font-size: 1.1rem; transition: all .3s;
+      background: var(--white);
+      color: var(--text) !important;
+      text-decoration: none;
+      border: 1px solid var(--muted);
+      padding: 18px 40px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all .3s;
     }
-    .btn-out:hover { background: var(--bg); border-color: var(--p); transform: translateY(-2px); }
+
+    .btn-out:hover {
+      background: var(--bg);
+      border-color: var(--p);
+      transform: translateY(-2px);
+    }
 
     /* Animated background elements */
     .blob {
-      position: absolute; width: 400px; height: 400px;
+      position: absolute;
+      width: 400px;
+      height: 400px;
       background: linear-gradient(135deg, var(--p-light), var(--s-light));
-      filter: blur(80px); border-radius: 50%; z-index: -1; animation: move 20s infinite alternate;
+      filter: blur(80px);
+      border-radius: 50%;
+      z-index: -1;
+      animation: move 20s infinite alternate;
     }
+
     @keyframes move {
-      from { transform: translate(-10%, -10%); }
-      to { transform: translate(10%, 10%); }
+      from {
+        transform: translate(-10%, -10%);
+      }
+
+      to {
+        transform: translate(10%, 10%);
+      }
     }
 
     /* Hero phones */
-    .hero-phones { display: flex; justify-content: center; gap: 16px; margin-top: 60px; flex-wrap: wrap; align-items: flex-end; }
+    .hero-phones {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 60px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
     .phone-frame {
-      width: 170px; background: var(--white);
-      border-radius: 28px; overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.13);
+      width: 170px;
+      background: var(--white);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.13);
       border: 4px solid #fff;
     }
-    .phone-frame img { width: 100%; height: auto; display: block; }
-    .phone-frame:nth-child(2) { transform: translateY(-20px); }
+
+    .phone-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .phone-frame:nth-child(2) {
+      transform: translateY(-20px);
+    }
 
     /* ════ SECTION BASE ════ */
-    section { padding: 88px 5%; }
-    .wrap { max-width: 1140px; margin: auto; }
-    .slabel { text-align: center; font-size: 0.72rem; font-weight: 800; letter-spacing: 1.2px; color: var(--p); text-transform: uppercase; margin-bottom: 10px; }
-    .stitle { text-align: center; font-size: clamp(1.7rem, 3.5vw, 2.4rem); font-weight: 900; margin-bottom: 12px; letter-spacing: -0.3px; }
-    .sdesc { text-align: center; color: var(--sub); max-width: 540px; margin: 0 auto 52px; font-size: 1rem; }
+    section {
+      padding: 88px 5%;
+    }
+
+    .wrap {
+      max-width: 1140px;
+      margin: auto;
+    }
+
+    .slabel {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: var(--p);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .stitle {
+      text-align: center;
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 900;
+      margin-bottom: 12px;
+      letter-spacing: -0.3px;
+    }
+
+    .sdesc {
+      text-align: center;
+      color: var(--sub);
+      max-width: 540px;
+      margin: 0 auto 52px;
+      font-size: 1rem;
+    }
 
     /* ════ ABOUT ════ */
-    .about { background: var(--white); }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
     .about-visual {
       background: linear-gradient(135deg, #EEF2FF, #F5F3FF);
-      border-radius: 28px; padding: 40px;
-      display: flex; flex-direction: column; gap: 16px;
+      border-radius: 28px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
-    .av-row { display: flex; align-items: center; gap: 16px; background: #fff; border-radius: 14px; padding: 16px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-    .av-row .av-icon { font-size: 1.6rem; }
-    .av-row .av-t { font-size: 0.88rem; font-weight: 700; margin-bottom: 2px; }
-    .av-row .av-s { font-size: 0.78rem; color: var(--sub); }
-    .about-text h2 { font-size: 2rem; font-weight: 900; margin-bottom: 18px; letter-spacing: -0.3px; }
-    .about-text p { color: var(--sub); margin-bottom: 16px; font-size: 0.97rem; line-height: 1.75; }
-    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-    .tag { background: #EEF2FF; color: var(--p); padding: 6px 16px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; }
+
+    .av-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .av-row .av-icon {
+      font-size: 1.6rem;
+    }
+
+    .av-row .av-t {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .av-row .av-s {
+      font-size: 0.78rem;
+      color: var(--sub);
+    }
+
+    .about-text h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 18px;
+      letter-spacing: -0.3px;
+    }
+
+    .about-text p {
+      color: var(--sub);
+      margin-bottom: 16px;
+      font-size: 0.97rem;
+      line-height: 1.75;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .tag {
+      background: #EEF2FF;
+      color: var(--p);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
 
     /* ════ FEATURES ════ */
-    .features { background: var(--bg); }
-    .fg { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; }
-    .fc {
-      background: var(--white); border: 1.5px solid var(--bdr); border-radius: var(--r-md);
-      padding: 28px 24px; transition: box-shadow .25s, transform .25s, border-color .25s;
+    .features {
+      background: var(--bg);
     }
-    .fc:hover { box-shadow: 0 10px 40px rgba(79,70,229,0.10); transform: translateY(-5px); border-color: var(--p); }
-    .fi { font-size: 1.8rem; background: var(--p-light); width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-    .fc h3 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
-    .fc p { color: var(--sub); font-size: 0.88rem; line-height: 1.65; }
+
+    .fg {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 20px;
+    }
+
+    .fc {
+      background: var(--white);
+      border: 1.5px solid var(--bdr);
+      border-radius: var(--r-md);
+      padding: 28px 24px;
+      transition: box-shadow .25s, transform .25s, border-color .25s;
+    }
+
+    .fc:hover {
+      box-shadow: 0 10px 40px rgba(79, 70, 229, 0.10);
+      transform: translateY(-5px);
+      border-color: var(--p);
+    }
+
+    .fi {
+      font-size: 1.8rem;
+      background: var(--p-light);
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .fc h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .fc p {
+      color: var(--sub);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
 
     /* ════ HOW IT WORKS ════ */
-    .how { background: var(--white); }
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; max-width: 1000px; margin: auto; position: relative; }
-    .steps::before { content: ''; position: absolute; top: 40px; left: 15%; right: 15%; height: 2px; background: linear-gradient(90deg, var(--p), var(--s)); z-index: 0; }
-    .step { text-align: center; padding: 0 20px; position: relative; z-index: 1; }
+    .how {
+      background: var(--white);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0;
+      max-width: 1000px;
+      margin: auto;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--p), var(--s));
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
     .snum {
-      width: 76px; height: 76px; border-radius: 50%; margin: 0 auto 20px;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
       background: linear-gradient(135deg, var(--p), var(--s));
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 1.6rem;
       box-shadow: 0 6px 24px rgba(79, 70, 229, 0.3);
     }
-    .step h3 { font-size: 0.98rem; font-weight: 800; margin-bottom: 8px; }
-    .step p { color: var(--sub); font-size: 0.86rem; line-height: 1.6; }
+
+    .step h3 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      color: var(--sub);
+      font-size: 0.86rem;
+      line-height: 1.6;
+    }
 
     /* ════ SCREENSHOTS ════ */
-    .screens { background: linear-gradient(160deg, var(--p-light) 0%, var(--s-light) 100%); }
-    .sg { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; align-items: flex-end; }
+    .screens {
+      background: linear-gradient(160deg, var(--p-light) 0%, var(--s-light) 100%);
+    }
+
+    .sg {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
     .sc {
-      width: 175px; background: var(--white); border-radius: 26px; overflow: hidden;
-      box-shadow: 0 16px 48px rgba(0,0,0,0.12); border: 3px solid rgba(255,255,255,0.9);
+      width: 175px;
+      background: var(--white);
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+      border: 3px solid rgba(255, 255, 255, 0.9);
       transition: transform .3s;
     }
-    .sc:hover { transform: translateY(-6px) scale(1.02); }
-    .sc img { width: 100%; height: auto; display: block; }
-    .sc:nth-child(3) { transform: translateY(-22px); }
-    .sc:nth-child(3):hover { transform: translateY(-28px) scale(1.02); }
 
-    .sc-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .sc-label { font-size: 0.76rem; font-weight: 700; color: var(--p); text-align: center; }
+    .sc:hover {
+      transform: translateY(-6px) scale(1.02);
+    }
+
+    .sc img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .sc:nth-child(3) {
+      transform: translateY(-22px);
+    }
+
+    .sc:nth-child(3):hover {
+      transform: translateY(-28px) scale(1.02);
+    }
+
+    .sc-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sc-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--p);
+      text-align: center;
+    }
 
     /* ════ CONTACT ════ */
-    .contact { background: var(--bg); }
+    .contact {
+      background: var(--bg);
+    }
+
     .contact-inner {
-      max-width: 620px; margin: auto; text-align: center;
-      background: var(--white); border: 1.5px solid var(--bdr); border-radius: 24px; padding: 52px 40px;
+      max-width: 620px;
+      margin: auto;
+      text-align: center;
+      background: var(--white);
+      border: 1.5px solid var(--bdr);
+      border-radius: 24px;
+      padding: 52px 40px;
     }
-    .contact-inner h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 14px; }
-    .contact-inner p { color: var(--sub); margin-bottom: 32px; }
-    .contact-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+    .contact-inner h2 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .contact-inner p {
+      color: var(--sub);
+      margin-bottom: 32px;
+    }
+
+    .contact-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
     .chip {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--p-light); color: var(--p); border: 1.5px solid var(--bdr);
-      padding: 14px 24px; border-radius: 12px; font-weight: 700; font-size: 0.92rem;
-      text-decoration: none; transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--p-light);
+      color: var(--p);
+      border: 1.5px solid var(--bdr);
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      transition: all .2s;
     }
-    .chip:hover { background: var(--white); transform: translateY(-2px); border-color: var(--p); }
+
+    .chip:hover {
+      background: var(--white);
+      transform: translateY(-2px);
+      border-color: var(--p);
+    }
 
     /* ════ FOOTER ════ */
-    footer { background: var(--text); color: var(--muted); padding: 80px 5% 40px; }
-    .footer-inner { max-width: 1140px; margin: auto; }
-    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
-    .footer-brand .fl { font-size: 1.5rem; font-weight: 900; color: #fff; margin-bottom: 16px; }
-    .footer-brand p { font-size: 0.95rem; line-height: 1.8; opacity: 0.8; max-width: 300px; }
-    .footer-links-col h4 { color: #fff; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 800; margin-bottom: 24px; }
-    .footer-links-col ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
-    .footer-links-col a { color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: color .2s; }
-    .footer-links-col a:hover { color: var(--white); }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; flex-wrap: wrap; gap: 20px; }
+    footer {
+      background: var(--text);
+      color: var(--muted);
+      padding: 80px 5% 40px;
+    }
+
+    .footer-inner {
+      max-width: 1140px;
+      margin: auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .footer-brand .fl {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      opacity: 0.8;
+      max-width: 300px;
+    }
+
+    .footer-links-col h4 {
+      color: #fff;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    .footer-links-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .footer-links-col a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color .2s;
+    }
+
+    .footer-links-col a:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
 
     /* ════ RESPONSIVE ════ */
     @media (max-width: 900px) {
-      .footer-top { grid-template-columns: 1fr 1fr; }
+      .footer-top {
+        grid-template-columns: 1fr 1fr;
+      }
     }
+
     @media (max-width: 768px) {
-      .hero { padding-top: 140px; }
-      nav { width: 95%; top: 10px; padding: 10px 20px; }
-      .nav-links { display: none; }
-      .about-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
-      .footer-top { grid-template-columns: 1fr; gap: 40px; }
-      .footer-bottom { justify-content: center; text-align: center; }
+      .hero {
+        padding-top: 140px;
+      }
+
+      nav {
+        width: 95%;
+        top: 10px;
+        padding: 10px 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 40px;
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-bottom {
+        justify-content: center;
+        text-align: center;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- ════ NAVBAR ════ -->
-<nav class="glass">
-  <div class="ni">
-    <a href="#" class="logo">📚 Vidya Topper</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how">How It Works</a></li>
-      <li><a href="#screenshots">App</a></li>
-      <li><a href="#contact" class="nav-cta">Download Now</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- ════ HERO ════ -->
-<section class="hero">
-  <div class="blob" style="top: 10%; right: 10%;"></div>
-  <div class="blob" style="bottom: 20%; left: 5%; animation-delay: -5s;"></div>
-  
-  <div class="hero-badge">🎓 Free & Unlimited for 🇮🇳 Students</div>
-  <h1>India ka <span class="grad">Premium</span><br/>Study Companion</h1>
-  <p class="hero-sub">
-    Master NCERT, Board Exams, and Gov Exams. Quality education, smart tools, and offline access — completely free.
-  </p>
-  <div class="btn-row">
-    <a href="#" class="btn-main">Get Started Free</a>
-    <a href="#features" class="btn-out">See All Tools</a>
-  </div>
-
-  <div class="hero-phones">
-    <div class="phone-frame glass">
-      <img src="vidyatopper-app-home.png" alt="Vidya Topper Home">
+  <!-- ════ NAVBAR ════ -->
+  <nav class="glass">
+    <div class="ni">
+      <a href="#" class="logo">
+        <img src="logo.png" alt="Vidya Topper Logo" style="height: 40px; border-radius: 8px;">
+        Vidya Topper
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#screenshots">App</a></li>
+        <li><a href="#contact" class="nav-cta">Download Now</a></li>
+      </ul>
     </div>
-    <div class="phone-frame glass">
-      <img src="vidyatopper-interactive-quiz.png" alt="Interactive Quiz">
+  </nav>
+
+  <!-- ════ HERO ════ -->
+  <section class="hero">
+    <div class="blob" style="top: 10%; right: 10%;"></div>
+    <div class="blob" style="bottom: 20%; left: 5%; animation-delay: -5s;"></div>
+
+    <div class="hero-badge">🎓 Free & Unlimited for 🇮🇳 Students</div>
+    <h1>India ka <span class="grad">Premium</span><br />Study Companion</h1>
+    <p class="hero-sub">
+      Master NCERT, Board Exams, and Gov Exams. Quality education, smart tools, and offline access — completely free.
+    </p>
+    <div class="btn-row">
+      <a href="#" class="btn-main">Get Started Free</a>
+      <a href="#features" class="btn-out">See All Tools</a>
     </div>
-    <div class="phone-frame glass">
-      <img src="vidyatopper-study-planner.png" alt="Smart Study Planner">
+
+    <div class="hero-phones">
+      <div class="phone-frame glass">
+        <img src="HomeScreen Screen.png" alt="Vidya Topper Home">
+      </div>
+      <div class="phone-frame glass">
+        <img src="Quiz Page Screen.png" alt="Interactive Quiz">
+      </div>
+      <div class="phone-frame glass">
+        <img src="Subject Screen.png" alt="Subject Overview">
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ STATS ════ -->
+  <div class="stats glass"
+    style="background: linear-gradient(90deg, var(--p), var(--s)); border: 0; padding: 50px 5%; margin: -40px 5% 0; border-radius: 30px; position: relative; z-index: 10;">
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-num">3+</div>
+        <div class="stat-lbl">Exam Hubs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">12+</div>
+        <div class="stat-lbl">Smart Tools</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0/-</div>
+        <div class="stat-lbl">Subscription Fee</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">📶</div>
+        <div class="stat-lbl">Fully Offline</div>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- ════ STATS ════ -->
-<div class="stats glass" style="background: linear-gradient(90deg, var(--p), var(--s)); border: 0; padding: 50px 5%; margin: -40px 5% 0; border-radius: 30px; position: relative; z-index: 10;">
-  <div class="stats-grid">
-    <div class="stat"><div class="stat-num">3+</div><div class="stat-lbl">Exam Hubs</div></div>
-    <div class="stat"><div class="stat-num">12+</div><div class="stat-lbl">Smart Tools</div></div>
-    <div class="stat"><div class="stat-num">0/-</div><div class="stat-lbl">Subscription Fee</div></div>
-    <div class="stat"><div class="stat-num">📶</div><div class="stat-lbl">Fully Offline</div></div>
-  </div>
-</div>
-
-<!-- ════ ABOUT ════ -->
-<section class="about" id="about">
-  <div class="wrap">
-    <div class="about-grid">
-      <div class="about-visual">
-        <div class="av-row">
-          <div class="av-icon">📚</div>
-          <div><div class="av-t">NCERT Books, Class 6–12</div><div class="av-s">Chapter-wise content, all subjects</div></div>
+  <!-- ════ ABOUT ════ -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="av-row">
+            <div class="av-icon">📚</div>
+            <div>
+              <div class="av-t">NCERT Books, Class 6–12</div>
+              <div class="av-s">Chapter-wise content, all subjects</div>
+            </div>
+          </div>
+          <div class="av-row">
+            <div class="av-icon">🏫</div>
+            <div>
+              <div class="av-t">Board Exam Papers</div>
+              <div class="av-s">CBSE previous year papers & solutions</div>
+            </div>
+          </div>
+          <div class="av-row">
+            <div class="av-icon">🏛️</div>
+            <div>
+              <div class="av-t">Government Exam Prep</div>
+              <div class="av-s">Structured content for competitive exams</div>
+            </div>
+          </div>
+          <div class="av-row">
+            <div class="av-icon">📶</div>
+            <div>
+              <div class="av-t">Offline Study</div>
+              <div class="av-s">Download and study without internet</div>
+            </div>
+          </div>
         </div>
-        <div class="av-row">
-          <div class="av-icon">🏫</div>
-          <div><div class="av-t">Board Exam Papers</div><div class="av-s">CBSE previous year papers & solutions</div></div>
-        </div>
-        <div class="av-row">
-          <div class="av-icon">🏛️</div>
-          <div><div class="av-t">Government Exam Prep</div><div class="av-s">Structured content for competitive exams</div></div>
-        </div>
-        <div class="av-row">
-          <div class="av-icon">📶</div>
-          <div><div class="av-t">Offline Study</div><div class="av-s">Download and study without internet</div></div>
+        <div class="about-text">
+          <div class="slabel" style="text-align:left">About the App</div>
+          <h2>One App for All Your Studies</h2>
+          <p>
+            Vidya Topper is a free mobile app made specifically for Indian students.
+            Whether you're in Class 6 or preparing for a government entrance exam,
+            the app gives you everything you need — in one simple, clean interface.
+          </p>
+          <p>
+            Study NCERT chapters, practice with quizzes, create flashcards,
+            write notes, plan your schedule, and track your progress — all without
+            spending a single rupee. The app also works offline so there's no
+            barrier to learning.
+          </p>
+          <p>
+            No complicated features, no subscriptions — just focused learning tools
+            designed for students who want to study smart.
+          </p>
+          <div class="tag-row">
+            <span class="tag">NCERT Class 6–12</span>
+            <span class="tag">CBSE Boards</span>
+            <span class="tag">Govt Exams</span>
+            <span class="tag">Quizzes</span>
+            <span class="tag">Offline Access</span>
+            <span class="tag">Study Planner</span>
+          </div>
         </div>
       </div>
-      <div class="about-text">
-        <div class="slabel" style="text-align:left">About the App</div>
-        <h2>One App for All Your Studies</h2>
+    </div>
+  </section>
+
+  <!-- ════ FEATURES ════ -->
+  <section class="features" id="features">
+    <div class="wrap">
+      <p class="slabel">Features</p>
+      <h2 class="stitle">Score Better with Smart Tools</h2>
+      <p class="sdesc">12 built-in tools designed to cover your entire learning journey.</p>
+      <div class="fg">
+
+        <div class="fc glass">
+          <div class="fi">📚</div>
+          <h3>NCERT Master</h3>
+          <p>Chapter-wise solutions for Class 6–12. Perfect for school and competitive prep.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">🏫</div>
+          <h3>Board Archives</h3>
+          <p>Previous year papers and samples for CBSE. Subject-wise and Year-wise.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">🏛️</div>
+          <h3>Gov Exam Hub</h3>
+          <p>Structured material for SSC, Banking, and other competitive entrances.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">✏️</div>
+          <h3>Smart Quizzes</h3>
+          <p>Instant feedback and performance analytics to identify your weak spots.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">🃏</div>
+          <h3>Active Recall</h3>
+          <p>Custom flashcards to help you memorize complex formulas and dates.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">📝</div>
+          <h3>Infinite Notes</h3>
+          <p>Quickly jot down insights. Organized by subject and and synced locally.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">📅</div>
+          <h3>AI Daily Planner</h3>
+          <p>Set goals and let the app help you manage your time effectively.</p>
+        </div>
+
+        <div class="fc glass">
+          <div class="fi">📶</div>
+          <h3>Zen Mode (Offline)</h3>
+          <p>Download once, study forever. No ads, no internet distractions.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ HOW IT WORKS ════ -->
+  <section class="how" id="how">
+    <div class="wrap">
+      <p class="slabel">How It Works</p>
+      <h2 class="stitle">Start Studying in 4 Simple Steps</h2>
+      <p class="sdesc">No tutorials, no complexity — just download and start studying.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="snum">⬇️</div>
+          <h3>Download & Sign Up</h3>
+          <p>Install the app for free from the app store and create your account with email or phone in under a minute.
+          </p>
+        </div>
+        <div class="step">
+          <div class="snum">📂</div>
+          <h3>Choose Your Category</h3>
+          <p>Pick your exam type — NCERT, Board Exams, or Government Exams. Then select your class or subject.</p>
+        </div>
+        <div class="step">
+          <div class="snum">📖</div>
+          <h3>Study & Practice</h3>
+          <p>Read chapter content, take quizzes, use flashcards, make notes, and set your study timer.</p>
+        </div>
+        <div class="step">
+          <div class="snum">📈</div>
+          <h3>Plan & Track</h3>
+          <p>Use the study planner to set daily targets. Track your progress and consistency from your profile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ SCREENSHOTS ════ -->
+  <section class="screens" id="screenshots">
+    <div class="wrap">
+      <p class="slabel">App Preview</p>
+      <h2 class="stitle">A Clean, Premium Interface</h2>
+      <p class="sdesc">Designed for focus. No distractions, just learning.</p>
+
+      <div class="sg">
+        <div class="sc-wrap">
+          <div class="sc glass">
+            <img src="HomeScreen Screen.png" alt="Home">
+          </div>
+          <div class="sc-label">Dashboard</div>
+        </div>
+
+        <div class="sc-wrap">
+          <div class="sc glass">
+            <img src="Chapterscreen.png" alt="Chapter">
+          </div>
+          <div class="sc-label">Chapters</div>
+        </div>
+
+        <div class="sc-wrap">
+          <div class="sc glass">
+            <img src="Quiz Page Screen.png" alt="Quiz">
+          </div>
+          <div class="sc-label">Practice</div>
+        </div>
+
+        <div class="sc-wrap">
+          <div class="sc glass">
+            <img src="Leaderboard Screen.png" alt="Leaderboard">
+          </div>
+          <div class="sc-label">Leaderboard</div>
+        </div>
+
+        <div class="sc-wrap">
+          <div class="sc glass">
+            <img src="Profile Page Screen.png" alt="Profile">
+          </div>
+          <div class="sc-label">Analytics</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ CONTACT ════ -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="contact-inner">
+        <p class="slabel">Contact & Support</p>
+        <h2>We're Here to Help You</h2>
         <p>
-          Vidya Topper is a free mobile app made specifically for Indian students.
-          Whether you're in Class 6 or preparing for a government entrance exam,
-          the app gives you everything you need — in one simple, clean interface.
+          Have a question about the app, found a bug, or need help with something?
+          Reach out to us — we typically reply within 24 hours.
+          You can also use the in-app Support Chat after signing in.
         </p>
-        <p>
-          Study NCERT chapters, practice with quizzes, create flashcards,
-          write notes, plan your schedule, and track your progress — all without
-          spending a single rupee. The app also works offline so there's no
-          barrier to learning.
-        </p>
-        <p>
-          No complicated features, no subscriptions — just focused learning tools
-          designed for students who want to study smart.
-        </p>
-        <div class="tag-row">
-          <span class="tag">NCERT Class 6–12</span>
-          <span class="tag">CBSE Boards</span>
-          <span class="tag">Govt Exams</span>
-          <span class="tag">Quizzes</span>
-          <span class="tag">Offline Access</span>
-          <span class="tag">Study Planner</span>
+        <div class="contact-chips">
+          <a href="mailto:vidyatopper.in@gmail.com" class="chip">✉️ vidyatopper.in@gmail.com</a>
+          <div class="chip">📍 Godda, Jharkhand - 814133, India</div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ════ FEATURES ════ -->
-<section class="features" id="features">
-  <div class="wrap">
-    <p class="slabel">Features</p>
-    <h2 class="stitle">Score Better with Smart Tools</h2>
-    <p class="sdesc">12 built-in tools designed to cover your entire learning journey.</p>
-    <div class="fg">
-
-      <div class="fc glass"><div class="fi">📚</div><h3>NCERT Master</h3><p>Chapter-wise solutions for Class 6–12. Perfect for school and competitive prep.</p></div>
-
-      <div class="fc glass"><div class="fi">🏫</div><h3>Board Archives</h3><p>Previous year papers and samples for CBSE. Subject-wise and Year-wise.</p></div>
-
-      <div class="fc glass"><div class="fi">🏛️</div><h3>Gov Exam Hub</h3><p>Structured material for SSC, Banking, and other competitive entrances.</p></div>
-
-      <div class="fc glass"><div class="fi">✏️</div><h3>Smart Quizzes</h3><p>Instant feedback and performance analytics to identify your weak spots.</p></div>
-
-      <div class="fc glass"><div class="fi">🃏</div><h3>Active Recall</h3><p>Custom flashcards to help you memorize complex formulas and dates.</p></div>
-
-      <div class="fc glass"><div class="fi">📝</div><h3>Infinite Notes</h3><p>Quickly jot down insights. Organized by subject and and synced locally.</p></div>
-
-      <div class="fc glass"><div class="fi">📅</div><h3>AI Daily Planner</h3><p>Set goals and let the app help you manage your time effectively.</p></div>
-
-      <div class="fc glass"><div class="fi">📶</div><h3>Zen Mode (Offline)</h3><p>Download once, study forever. No ads, no internet distractions.</p></div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ════ HOW IT WORKS ════ -->
-<section class="how" id="how">
-  <div class="wrap">
-    <p class="slabel">How It Works</p>
-    <h2 class="stitle">Start Studying in 4 Simple Steps</h2>
-    <p class="sdesc">No tutorials, no complexity — just download and start studying.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="snum">⬇️</div>
-        <h3>Download & Sign Up</h3>
-        <p>Install the app for free from the app store and create your account with email or phone in under a minute.</p>
-      </div>
-      <div class="step">
-        <div class="snum">📂</div>
-        <h3>Choose Your Category</h3>
-        <p>Pick your exam type — NCERT, Board Exams, or Government Exams. Then select your class or subject.</p>
-      </div>
-      <div class="step">
-        <div class="snum">📖</div>
-        <h3>Study & Practice</h3>
-        <p>Read chapter content, take quizzes, use flashcards, make notes, and set your study timer.</p>
-      </div>
-      <div class="step">
-        <div class="snum">📈</div>
-        <h3>Plan & Track</h3>
-        <p>Use the study planner to set daily targets. Track your progress and consistency from your profile.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ SCREENSHOTS ════ -->
-<section class="screens" id="screenshots">
-  <div class="wrap">
-    <p class="slabel">App Preview</p>
-    <h2 class="stitle">A Clean, Premium Interface</h2>
-    <p class="sdesc">Designed for focus. No distractions, just learning.</p>
-
-    <div class="sg">
-      <div class="sc-wrap">
-        <div class="sc glass">
-          <img src="vidyatopper-app-home.png" alt="Home">
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="fl" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <img src="logo.png" alt="Vidya Topper Logo" style="height: 32px; border-radius: 6px;">
+            Vidya Topper
+          </div>
+          <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in
+            one place.</p>
         </div>
-        <div class="sc-label">Dashboard</div>
-      </div>
-
-      <div class="sc-wrap">
-        <div class="sc glass">
-          <img src="vidyatopper-ncert-reader.png" alt="NCERT">
+        <div class="footer-links-col">
+          <h4>App</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#screenshots">Screenshots</a></li>
+            <li><a href="#">Download</a></li>
+          </ul>
         </div>
-        <div class="sc-label">Reading</div>
-      </div>
-
-      <div class="sc-wrap">
-        <div class="sc glass">
-          <img src="vidyatopper-interactive-quiz.png" alt="Quiz">
+        <div class="footer-links-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Use</a></li>
+            <li><a href="refund.html">Refund Policy</a></li>
+          </ul>
         </div>
-        <div class="sc-label">Practice</div>
-      </div>
-
-      <div class="sc-wrap">
-        <div class="sc glass">
-          <img src="vidyatopper-study-planner.png" alt="Planner">
+        <div class="footer-links-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="mailto:vidyatopper.in@gmail.com">Email Us</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
         </div>
-        <div class="sc-label">Planning</div>
       </div>
-
-      <div class="sc-wrap">
-        <div class="sc glass">
-          <img src="vidyatopper-student-analytics.png" alt="Profile">
-        </div>
-        <div class="sc-label">Analytics</div>
+      <div class="footer-bottom">
+        <span>© 2025 Vidya Topper. All rights reserved.</span>
+        <span>Made with ❤️ for students across India 🇮🇳</span>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ════ CONTACT ════ -->
-<section class="contact" id="contact">
-  <div class="wrap">
-    <div class="contact-inner">
-      <p class="slabel">Contact & Support</p>
-      <h2>We're Here to Help You</h2>
-      <p>
-        Have a question about the app, found a bug, or need help with something?
-        Reach out to us — we typically reply within 24 hours.
-        You can also use the in-app Support Chat after signing in.
-      </p>
-      <div class="contact-chips">
-        <a href="mailto:vidyatopper.in@gmail.com" class="chip">✉️ vidyatopper.in@gmail.com</a>
-        <div class="chip">📍 Godda, Jharkhand - 814133</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════ FOOTER ════ -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="fl">📚 Vidya Topper</div>
-        <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in one place.</p>
-      </div>
-      <div class="footer-links-col">
-        <h4>App</h4>
-        <ul>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#how">How It Works</a></li>
-          <li><a href="#screenshots">Screenshots</a></li>
-          <li><a href="#">Download</a></li>
-        </ul>
-      </div>
-      <div class="footer-links-col">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="privacy-policy.html">Privacy Policy</a></li>
-          <li><a href="terms.html">Terms of Use</a></li>
-          <li><a href="refund.html">Refund Policy</a></li>
-        </ul>
-      </div>
-      <div class="footer-links-col">
-        <h4>Support</h4>
-        <ul>
-          <li><a href="mailto:vidyatopper.in@gmail.com">Email Us</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 Vidya Topper. All rights reserved.</span>
-      <span>Made with ❤️ for students across India 🇮🇳</span>
-    </div>
-  </div>
-</footer>
+  </footer>
 
 </body>
+
 </html>
