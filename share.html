@@ -128,18 +128,9 @@
             font-weight: 700;
             line-height: 1.4;
             color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 32px;
             word-wrap: break-word;
             word-break: break-word;
-        }
-
-        .content-subject {
-            font-size: 13px;
-            font-weight: 600;
-            color: #818cf8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 32px;
         }
 
         /* Spinner & Status */
@@ -259,8 +250,7 @@
             <div id="content-badge" class="badge">Loading...</div>
 
             <!-- Title -->
-            <h1 id="title" class="content-title">Fetching Details...</h1>
-            <div id="subject" class="content-subject"></div>
+            <h1 id="title" class="content-title">Fetching Material...</h1>
 
             <!-- Custom Spinner -->
             <div class="spinner-container">
@@ -288,22 +278,15 @@
             return urlParams.get(name);
         }
 
-        // Get and decode values
+        // Get values
         const type = getQueryParam('type') || 'video';
         const id = getQueryParam('id') || '';
-        const title = decodeURIComponent(getQueryParam('title') || 'Educational Content');
-        const url = decodeURIComponent(getQueryParam('url') || '');
-        const subject = decodeURIComponent(getQueryParam('subject') || '');
 
         // Clean up title
-        const cleanTitle = title.replace(/_/g, ' ').replace('.mp4', '').replace('.pdf', '');
+        const displayTitle = type === 'video' ? 'Video Lecture' : 'Study Notes (PDF)';
 
         // Update DOM elements
-        document.getElementById('title').textContent = cleanTitle;
-        
-        if (subject) {
-            document.getElementById('subject').textContent = subject.replace(/_/g, ' ').toUpperCase();
-        }
+        document.getElementById('title').textContent = displayTitle;
 
         const badgeEl = document.getElementById('content-badge');
         if (type === 'video') {
@@ -315,8 +298,7 @@
         }
 
         // Construct App Scheme deep link
-        // Format: vidyatopper://share?type=...&id=...&title=...&url=...&subject=...
-        const deepLinkUrl = `vidyatopper://share?type=${type}&id=${id}&title=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}&subject=${encodeURIComponent(subject)}`;
+        const deepLinkUrl = `vidyatopper://share?type=${type}&id=${id}`;
         
         // Update the fallback Open button
         document.getElementById('btn-open').href = deepLinkUrl;
@@ -329,8 +311,6 @@
             // 2. Fallback to Google Play Store after 1.5 seconds if the page is still active
             const start = Date.now();
             setTimeout(() => {
-                // If user switched apps, Date.now() - start will be significantly longer than 1500ms
-                // Only redirect if they are still on this page (meaning app didn't open)
                 if (Date.now() - start < 1800) {
                     window.location.href = "https://play.google.com/store/apps/details?id=in.vidyatopper.student";
                 }
