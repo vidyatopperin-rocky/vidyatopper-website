@@ -265,7 +265,7 @@
             <a id="btn-open" href="#" class="btn btn-primary">
                 Open in App
             </a>
-            <a href="https://play.google.com/store/apps/details?id=in.vidyatopper.student" class="btn btn-secondary">
+            <a id="btn-install" href="https://play.google.com/store/apps/details?id=in.vidyatopper.student" class="btn btn-secondary">
                 Install App from Play Store
             </a>
         </div>
@@ -303,6 +303,15 @@
         // Update the fallback Open button
         document.getElementById('btn-open').href = deepLinkUrl;
 
+        // Detect if user is on Android to force native Play Store app opening
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const playStoreUrl = isAndroid 
+            ? "market://details?id=in.vidyatopper.student" 
+            : "https://play.google.com/store/apps/details?id=in.vidyatopper.student";
+
+        // Update the Play Store install button URL
+        document.getElementById('btn-install').href = playStoreUrl;
+
         // Auto-redirect mechanism
         function attemptRedirect() {
             // 1. Try to open the app via custom scheme
@@ -312,7 +321,7 @@
             const start = Date.now();
             setTimeout(() => {
                 if (Date.now() - start < 1800) {
-                    window.location.href = "https://play.google.com/store/apps/details?id=in.vidyatopper.student";
+                    window.location.href = playStoreUrl;
                 }
             }, 1500);
         }
