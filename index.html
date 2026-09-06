@@ -9,6 +9,8 @@
     content="Vidya Topper is the ultimate free study companion for Indian students. Master NCERT, Board Exams, and Gov Exams with smart tools, offline access, and a premium learning experience." />
   <meta name="keywords"
     content="Vidya Topper, NCERT solutions, CBSE board exams, government exam prep, free study app India, student tools" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://vidyatopper.com/" />
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website" />
@@ -16,37 +18,64 @@
   <meta property="og:title" content="Vidya Topper – Premium Education, Free for Everyone" />
   <meta property="og:description"
     content="Join thousands of students scoring better with Vidya Topper. NCERT, Boards, and Competitive Exams made easy." />
-  <meta property="og:image" content="Feature graphic.png" />
+  <meta property="og:image" content="https://vidyatopper.com/Feature%20graphic.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:title" content="Vidya Topper – The Future of Learning" />
   <meta property="twitter:description" content="The most advanced free study app for Indian students." />
+  <meta property="twitter:image" content="https://vidyatopper.com/Feature%20graphic.png" />
 
   <!-- Favicon & Icons -->
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
   <meta name="theme-color" content="#4F46E5" />
 
-  <!-- Schema.org Rich Snippet -->
+  <!-- Schema.org Rich Snippets (WebSite, Organization, SoftwareApplication) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Vidya Topper",
-    "operatingSystem": "Android",
-    "applicationCategory": "EducationalApplication",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "INR"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "12500"
-    },
-    "description": "India's free study companion for NCERT, CBSE Board Exams, and Government Entrance Exams."
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://vidyatopper.com/#website",
+        "url": "https://vidyatopper.com/",
+        "name": "Vidya Topper",
+        "alternateName": ["VidyaTopper", "Vidya Topper App"],
+        "description": "Free & Quality Education for All Indian Students - NCERT, CBSE & Competitive Exams",
+        "inLanguage": "en-IN"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://vidyatopper.com/#organization",
+        "name": "Vidya Topper",
+        "url": "https://vidyatopper.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://vidyatopper.com/logo.png"
+        },
+        "sameAs": [
+          "https://play.google.com/store/apps/details?id=in.vidyatopper.student"
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Vidya Topper",
+        "operatingSystem": "Android, Web",
+        "applicationCategory": "EducationalApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "INR"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.9",
+          "ratingCount": "12500"
+        },
+        "description": "India's free study companion for NCERT, CBSE Board Exams, and Government Entrance Exams."
+      }
+    ]
   }
   </script>
 
