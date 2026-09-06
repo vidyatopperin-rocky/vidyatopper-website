@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidya Topper - Content Sharing</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <meta name="theme-color" content="#4F46E5" />
     <!-- Modern Premium Font -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -242,7 +245,7 @@
         <div class="card">
             <!-- Logo Section -->
             <div class="logo-container">
-                <div class="logo-badge">VT</div>
+                <img src="logo.png" alt="Vidya Topper Logo" style="width: 64px; height: 64px; border-radius: 16px; margin-bottom: 12px; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);">
                 <div class="app-name">Vidya Topper</div>
             </div>
 
@@ -263,10 +266,16 @@
 
             <!-- Fallback CTAs -->
             <a id="btn-open" href="#" class="btn btn-primary">
-                Open in App
+                🚀 Open in App
             </a>
             <a id="btn-install" href="https://play.google.com/store/apps/details?id=in.vidyatopper.student" class="btn btn-secondary">
-                Install App from Play Store
+                📲 Install App from Play Store
+            </a>
+            <button id="btn-copy" onclick="copyCurrentShareLink()" class="btn btn-secondary" style="margin-top: 4px; font-size: 13px; padding: 12px 18px;">
+                📋 Copy Link
+            </button>
+            <a href="index.html" style="color: var(--text-secondary); text-decoration: none; font-size: 13px; margin-top: 20px; transition: color 0.2s;">
+                ← Go to Vidya Topper Website
             </a>
         </div>
     </div>
@@ -324,6 +333,16 @@
                     window.location.href = playStoreUrl;
                 }
             }, 1500);
+        }
+
+        function copyCurrentShareLink() {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const btn = document.getElementById('btn-copy');
+                    btn.textContent = '✅ Link Copied!';
+                    setTimeout(() => { btn.textContent = '📋 Copy Link'; }, 2500);
+                });
+            }
         }
 
         // Trigger on load

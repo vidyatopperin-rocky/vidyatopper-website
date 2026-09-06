@@ -1,50 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Refund & Cancellation Policy – Vidya Topper</title>
+  <meta name="description"
+    content="Official Refund and Cancellation Policy for Vidya Topper app. Learn about digital coin usage, subscription cancellations, and technical dispute resolutions." />
+  
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+  <meta name="theme-color" content="#4F46E5" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    body { font-family: 'Outfit', sans-serif; line-height: 1.8; color: #1e293b; background: #f8fafc; padding: 40px 5%; max-width: 900px; margin: auto; }
-    .card { background: #fff; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-    h1 { font-weight: 900; font-size: 2.5rem; margin-bottom: 24px; color: #4f46e5; }
-    h2 { font-weight: 800; font-size: 1.5rem; margin-top: 32px; margin-bottom: 16px; }
-    p { margin-bottom: 16px; opacity: 0.85; }
-    .back { display: inline-block; margin-bottom: 30px; text-decoration: none; color: #4f46e5; font-weight: 700; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
+
 <body>
-  <a href="index.html" class="back">← Back to Home</a>
-  <div class="card">
-  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
-    <img src="logo.png" alt="Logo" style="height: 48px; border-radius: 10px;">
-    <span style="font-weight: 900; font-size: 1.5rem; background: linear-gradient(135deg, #4f46e5, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Vidya Topper</span>
-  </div>
-  <h1>Refund & Cancellation Policy</h1>
-    <p>Last updated: April 26, 2024</p>
-    
-    <p>Thank you for using Vidya Topper. We want to ensure you have a clear understanding of our policies regarding payments, cancellations, and refunds.</p>
 
-    <h2>1. Digital Products & Coins</h2>
-    <p>Vidya Topper provides digital content, including NCERT solutions, study materials, and virtual "Coins" used to unlock specific features. Since these are intangible digital goods, they are consumed immediately upon purchase or allocation.</p>
+  <!-- ════ SCROLL PROGRESS BAR ════ -->
+  <div id="scroll-progress" class="scroll-progress-bar"></div>
 
-    <h2>2. No Refund Policy</h2>
-    <p><strong>All sales of virtual Coins or premium content are final.</strong> We do not offer refunds, returns, or exchanges for digital products once the transaction is successful and the items have been credited to your account.</p>
+  <!-- ════ NAVBAR ════ -->
+  <nav class="glass" id="navbar">
+    <div class="ni">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="Vidya Topper Logo" style="height: 40px; border-radius: 8px;">
+        Vidya Topper
+      </a>
 
-    <h2>3. Subscription Cancellation</h2>
-    <p>If you have subscribed to any recurring premium plan (if applicable), you can cancel your subscription at any time through the app settings or your Google Play Store account. Your access will remain active until the end of the current billing cycle, and no further charges will be made. We do not provide pro-rated refunds for the remaining period of a subscription.</p>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-item">Home</a></li>
+        <li><a href="privacy-policy.html" class="nav-item">Privacy</a></li>
+        <li><a href="terms.html" class="nav-item">Terms</a></li>
+        <li>
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <circle cx="12" cy="12" r="5" stroke-width="2" />
+              <path stroke-linecap="round" stroke-width="2"
+                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </li>
+        <li class="magnetic-btn">
+          <a href="index.html" class="nav-cta">← Back to Home</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    <h2>4. Duplicate Transactions</h2>
-    <p>In the event of a technical error or duplicate transaction where you were charged twice for the same item, please contact us within 48 hours. Upon verification, we will process a refund for the duplicate charge to your original payment method.</p>
+  <!-- ════ HEADER BANNER ════ -->
+  <header class="legal-header">
+    <div class="wrap">
+      <span class="legal-badge">Official Policy</span>
+      <h1>💳 Refund & Cancellation Policy</h1>
+      <p>Transparent terms regarding digital items, accidental transactions, and subscriptions.</p>
+      <span class="legal-updated">Last Updated: January 2026</span>
+    </div>
+  </header>
 
-    <h2>5. Contact Us</h2>
-    <p>If you have any questions about our Refund & Cancellation Policy, please reach out to us:</p>
-    <ul>
-      <li>Email: vidyatopper.in@gmail.com</li>
-      <li>Support: Available in-app via the Profile section.</li>
-    </ul>
-  </div>
+  <!-- ════ MAIN LEGAL CONTENT ════ -->
+  <main class="legal-content">
+
+    <div class="legal-highlight">
+      <strong>Important Notice:</strong> Vidya Topper is primarily a 100% free educational platform supported by minimal, non-intrusive ads. In the event you utilize any optional in-app coins or subscriptions, please review this policy carefully.
+    </div>
+
+    <div class="legal-card">
+      <h2>1. Digital Products & Virtual Coins</h2>
+      <p>
+        Vidya Topper provides instant digital educational content, including NCERT solutions, chapter summaries, formula handbooks, test series, and virtual "Coins" used to unlock specific optional interactive features.
+      </p>
+      <p>
+        Since these are intangible digital goods delivered electronically and made accessible immediately upon transaction, they are consumed upon delivery.
+      </p>
+    </div>
+
+    <div class="legal-card">
+      <h2>2. No Refund Policy for Consumed Items</h2>
+      <p>
+        <strong>All sales of virtual Coins, unlocked mock test modules, or digital study downloads are final.</strong> 
+        Except as mandated by applicable consumer protection laws in India or Google Play Store developer guidelines, we do not offer refunds, exchanges, or returns for digital products once credited to your user account.
+      </p>
+    </div>
+
+    <div class="legal-card">
+      <h2>3. Subscription Cancellation & Billing</h2>
+      <p>
+        If you have enrolled in any optional recurring subscription plan, you may cancel your renewal at any time:
+      </p>
+      <ul>
+        <li><strong>Google Play Store:</strong> Open the Google Play Store on your device &gt; Tap Profile &gt; <em>Payments &amp; Subscriptions</em> &gt; <em>Subscriptions</em> &gt; Select Vidya Topper &gt; Cancel Subscription.</li>
+        <li><strong>Active Period:</strong> Upon cancellation, your access remains active until the end of your prepaid billing period.</li>
+        <li><strong>No Prorated Credits:</strong> We do not issue partial or prorated refunds for unused days within an ongoing billing cycle.</li>
+      </ul>
+    </div>
+
+    <div class="legal-card">
+      <h2>4. Duplicate or Accidental Transactions</h2>
+      <p>
+        In the rare event of a technical glitch where you were charged multiple times for the exact same digital item or subscription:
+      </p>
+      <ul>
+        <li>Contact our billing dispute desk within <strong>48 hours</strong> of the transaction.</li>
+        <li>Provide your Google Play Store Order ID (GPA.XXXX-XXXX-XXXX-XXXXX) and the registered email ID.</li>
+        <li>Upon verification from our payment gateway logs, any verified duplicate charges will be reversed to your original payment method within 5 to 7 business days.</li>
+      </ul>
+    </div>
+
+    <div class="legal-card">
+      <h2>5. Contact & Support Desk</h2>
+      <p>
+        For inquiries regarding billing, transactions, or account balances, please reach out to our dedicated support team:
+      </p>
+      <ul>
+        <li><strong>Official Email:</strong> <a href="mailto:vidyatopper.in@gmail.com" style="color: var(--p); font-weight: 700;">vidyatopper.in@gmail.com</a></li>
+        <li><strong>In-App Chat:</strong> Available directly from the <em>Profile &gt; Help &amp; Support</em> section.</li>
+        <li><strong>Operating Address:</strong> Godda, Jharkhand - 814133, India</li>
+      </ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="index.html" class="btn-main" style="padding: 14px 36px; text-decoration: none; display: inline-block;">Return to Homepage</a>
+    </div>
+
+  </main>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="fl" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <img src="logo.png" alt="Vidya Topper Logo" style="height: 32px; border-radius: 6px;">
+            Vidya Topper
+          </div>
+          <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in one place.</p>
+        </div>
+        <div class="footer-links-col">
+          <h4>App</h4>
+          <ul>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#how">How It Works</a></li>
+            <li><a href="index.html#screenshots">Screenshots</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=in.vidyatopper.student" target="_blank">Download App</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Use</a></li>
+            <li><a href="refund.html">Refund Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="mailto:vidyatopper.in@gmail.com">Email Us</a></li>
+            <li><a href="index.html#contact">Contact Support</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span id="copyright-text">© 2026 Vidya Topper. All rights reserved.</span>
+        <span>Made with ❤️ for students across India 🇮🇳</span>
+      </div>
+    </div>
+  </footer>
+
 </body>
+
 </html>

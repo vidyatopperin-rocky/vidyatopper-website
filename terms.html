@@ -1,175 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Terms of Use – Vidya Topper</title>
-  <meta name="description" content="Terms of Use for the Vidya Topper mobile app." />
+  <meta name="description"
+    content="Official Terms of Use for Vidya Topper mobile learning platform. Read about account eligibility, student conduct, and content usage rules." />
+  
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+  <meta name="theme-color" content="#4F46E5" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --p: #4F46E5; --p2: #7C3AED; --text: #0F172A; --sub: #475569; --muted: #94A3B8; --bg: #F8FAFC; --white: #FFFFFF; --bdr: #E2E8F0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.7; }
-    nav { position: sticky; top: 0; z-index: 999; background: rgba(255,255,255,0.95); backdrop-filter: blur(16px); border-bottom: 1px solid var(--bdr); padding: 0 5%; }
-    .ni { max-width: 1140px; margin: auto; display: flex; align-items: center; justify-content: space-between; height: 66px; }
-    .logo { font-size: 1.25rem; font-weight: 900; text-decoration: none; background: linear-gradient(135deg, var(--p), var(--p2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .back-btn { background: #EEF2FF; color: var(--p); text-decoration: none; padding: 8px 18px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; }
-    .back-btn:hover { background: #C7D2FE; }
-    .hero-pp { background: linear-gradient(160deg, #EEF2FF 0%, #F5F3FF 100%); padding: 64px 5% 56px; text-align: center; }
-    .hero-pp .badge { display: inline-block; background: #E0E7FF; color: var(--p); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.8px; padding: 6px 18px; border-radius: 999px; margin-bottom: 16px; text-transform: uppercase; }
-    .hero-pp h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 12px; }
-    .hero-pp p { color: var(--sub); font-size: 0.95rem; }
-    .hero-pp .updated { display: inline-block; margin-top: 10px; background: rgba(255,255,255,0.7); border: 1px solid var(--bdr); padding: 5px 16px; border-radius: 999px; font-size: 0.8rem; color: var(--muted); }
-    .content { max-width: 780px; margin: 0 auto; padding: 56px 5% 80px; }
-    .highlight-box { background: #EEF2FF; border-left: 4px solid var(--p); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 16px 0; color: var(--text); font-size: 0.92rem; font-weight: 500; }
-    .pp-section { margin-bottom: 44px; }
-    .pp-section h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid #EEF2FF; }
-    .pp-section p { color: var(--sub); margin-bottom: 12px; font-size: 0.95rem; }
-    .pp-section ul { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
-    .pp-section li { color: var(--sub); font-size: 0.95rem; }
-    .pp-section li strong { color: var(--text); }
-    .contact-box { background: var(--white); border: 1.5px solid var(--bdr); border-radius: 16px; padding: 28px; margin-top: 16px; text-align: center; }
-    .contact-box a { display: inline-flex; align-items: center; gap: 8px; background: #EEF2FF; color: var(--p); text-decoration: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; margin-top: 12px; }
-    .contact-box a:hover { background: #C7D2FE; }
-    footer { background: #0F172A; color: #64748B; padding: 32px 5%; text-align: center; font-size: 0.85rem; }
-    footer a { color: #94A3B8; text-decoration: none; margin: 0 12px; }
-    footer a:hover { color: #fff; }
-    .footer-logo { font-size: 1.1rem; font-weight: 900; color: #fff; margin-bottom: 12px; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
+
 <body>
 
-<nav>
-  <div class="ni">
-    <a href="index.html" class="logo" style="display: flex; align-items: center; gap: 8px;">
-      <img src="logo.png" alt="Logo" style="height: 32px; border-radius: 6px;">
-      Vidya Topper
-    </a>
-    <a href="index.html" class="back-btn">← Back to Home</a>
-  </div>
-</nav>
+  <!-- ════ SCROLL PROGRESS BAR ════ -->
+  <div id="scroll-progress" class="scroll-progress-bar"></div>
 
-<div class="hero-pp">
-  <div class="badge">Legal</div>
-  <h1>📄 Terms of Use</h1>
-  <p>Please read these terms carefully before using the Vidya Topper app.</p>
-  <span class="updated">Last Updated: March 2025</span>
-</div>
+  <!-- ════ NAVBAR ════ -->
+  <nav class="glass" id="navbar">
+    <div class="ni">
+      <a href="index.html" class="logo">
+        <img src="logo.png" alt="Vidya Topper Logo" style="height: 40px; border-radius: 8px;">
+        Vidya Topper
+      </a>
 
-<div class="content">
-
-  <div class="highlight-box">
-    📌 By downloading or using the Vidya Topper app, you agree to these Terms of Use. If you do not agree, please do not use the app.
-  </div>
-
-  <div class="pp-section">
-    <h2>1. 📱 About the App</h2>
-    <p>Vidya Topper ("the App") is a free educational mobile application developed for Indian students. It provides study content, practice quizzes, notes, flashcards, and other tools to help students prepare for NCERT curriculum, Board Exams, and Government Exams.</p>
-    <p>The App is provided free of charge. We reserve the right to introduce optional paid features in the future with clear prior notice.</p>
-  </div>
-
-  <div class="pp-section">
-    <h2>2. ✅ Eligibility</h2>
-    <ul>
-      <li>You must be at least <strong>13 years of age</strong> to use the App</li>
-      <li>If you are under 18, a parent or guardian should review these terms</li>
-      <li>By using the App, you confirm that the information you provide during registration is accurate</li>
-    </ul>
-  </div>
-
-  <div class="pp-section">
-    <h2>3. 👤 Your Account</h2>
-    <ul>
-      <li>You are responsible for keeping your account credentials <strong>secure and confidential</strong></li>
-      <li>You are responsible for all activity that occurs under your account</li>
-      <li>Do not share your account with others</li>
-      <li>Notify us immediately if you suspect unauthorised use of your account</li>
-      <li>We reserve the right to suspend or terminate accounts that violate these terms</li>
-    </ul>
-  </div>
-
-  <div class="pp-section">
-    <h2>4. 📚 Content & Intellectual Property</h2>
-    <p>All content in the App — including study material, quiz questions, app design, and branding — is owned by Vidya Topper or our content partners.</p>
-    <ul>
-      <li>You may use the content <strong>for personal study only</strong></li>
-      <li>You may <strong>not</strong> copy, redistribute, or sell any content from the App</li>
-      <li>You may <strong>not</strong> reproduce or republish app content without written permission</li>
-      <li>Notes and flashcards <strong>you create</strong> remain yours — but you grant us permission to store them securely</li>
-    </ul>
-  </div>
-
-  <div class="pp-section">
-    <h2>5. 🚫 Prohibited Conduct</h2>
-    <p>You agree not to:</p>
-    <ul>
-      <li>Use the App for any <strong>illegal</strong> or unauthorised purpose</li>
-      <li>Attempt to <strong>hack, exploit, or disrupt</strong> the App or its servers</li>
-      <li>Upload or share <strong>harmful, offensive, or misleading</strong> content</li>
-      <li>Create <strong>fake accounts</strong> or impersonate others</li>
-      <li>Use automated tools (bots) to access the App</li>
-      <li>Interfere with other users' experience</li>
-    </ul>
-  </div>
-
-  <div class="pp-section">
-    <h2>6. 📶 Offline Downloads</h2>
-    <p>The App allows you to download content for offline use. Downloaded content:</p>
-    <ul>
-      <li>Is for <strong>personal, non-commercial use only</strong></li>
-      <li>Must not be shared, copied, or distributed externally</li>
-      <li>May be removed from the App if the underlying content is updated or removed</li>
-    </ul>
-  </div>
-
-  <div class="pp-section">
-    <h2>7. ⚠️ Disclaimer of Warranties</h2>
-    <p>Vidya Topper is provided <strong>"as is"</strong> without warranties of any kind. We do our best to keep the App accurate and up-to-date, but we do not guarantee:</p>
-    <ul>
-      <li>That the App will be available at all times without interruptions</li>
-      <li>That all content is error-free or exam-specific</li>
-      <li>Any specific results from using the App (such as exam scores)</li>
-    </ul>
-    <p>The App is a study aid — it does not guarantee success in any exam.</p>
-  </div>
-
-  <div class="pp-section">
-    <h2>8. 🔄 Changes to Terms</h2>
-    <p>We may update these Terms from time to time. When we make significant changes, we will notify you through the App or via email. Continued use of the App after changes are posted constitutes your acceptance of the new Terms.</p>
-  </div>
-
-  <div class="pp-section">
-    <h2>9. ❌ Termination</h2>
-    <p>We reserve the right to suspend or terminate your access to the App at any time if you violate these Terms. You may also stop using the App at any time. To request account deletion, contact us at the email below.</p>
-  </div>
-
-  <div class="pp-section">
-    <h2>10. 📬 Contact Us</h2>
-    <p>For any questions about these Terms, please contact:</p>
-    <div class="contact-box">
-      <p style="font-weight:700; font-size:1rem;">Vidya Topper — Legal & Support</p>
-      <p style="color:var(--sub); font-size:0.9rem; margin-top:6px;">We typically reply within 1–2 business days.</p>
-      <a href="mailto:vidyatopper.in@gmail.com">✉️ vidyatopper.in@gmail.com</a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-item">Home</a></li>
+        <li><a href="privacy-policy.html" class="nav-item">Privacy</a></li>
+        <li><a href="terms.html" class="nav-item active">Terms</a></li>
+        <li><a href="refund.html" class="nav-item">Refund</a></li>
+        <li>
+          <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <circle cx="12" cy="12" r="5" stroke-width="2" />
+              <path stroke-linecap="round" stroke-width="2"
+                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </li>
+        <li class="magnetic-btn">
+          <a href="index.html" class="nav-cta">← Back to Home</a>
+        </li>
+      </ul>
     </div>
-  </div>
+  </nav>
 
-</div>
+  <!-- ════ HEADER BANNER ════ -->
+  <header class="legal-header">
+    <div class="wrap">
+      <span class="legal-badge">Terms &amp; Conditions</span>
+      <h1>📄 Terms of Use</h1>
+      <p>Please read these terms carefully before accessing or using the Vidya Topper platform.</p>
+      <span class="legal-updated">Last Updated: January 2026</span>
+    </div>
+  </header>
 
-<footer>
-  <div class="footer-logo" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px;">
-    <img src="logo.png" alt="Logo" style="height: 28px; border-radius: 5px;">
-    Vidya Topper
-  </div>
-  <div style="margin-bottom:14px;">
-    <a href="index.html">Home</a>
-    <a href="privacy-policy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Use</a>
-    <a href="mailto:vidyatopper.in@gmail.com">Contact</a>
-  </div>
-  <p>© 2025 Vidya Topper. All rights reserved.</p>
-</footer>
+  <!-- ════ MAIN CONTENT ════ -->
+  <main class="legal-content">
+
+    <div class="legal-highlight">
+      📌 <strong>Agreement:</strong> By installing, downloading, or using the Vidya Topper application, you agree to comply with and be bound by these Terms of Use. If you do not agree with any part, please refrain from using the app.
+    </div>
+
+    <!-- Section 1 -->
+    <div class="legal-card">
+      <h2>1. 📱 About the Platform</h2>
+      <p>
+        Vidya Topper is an educational mobile application developed primarily for Indian students across CBSE, ICSE, and various State Boards. The application offers chapter-wise NCERT solutions, previous year question archives, interactive mock quizzes, spaced-repetition flashcards, and study habit trackers.
+      </p>
+      <p>
+        The platform is provided free of charge, supported by minimal non-intrusive advertisements.
+      </p>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="legal-card">
+      <h2>2. ✅ Eligibility &amp; Minors</h2>
+      <ul>
+        <li>You must be at least <strong>13 years of age</strong> to create a personal account independently.</li>
+        <li>If you are under 18, a parent or legal guardian must review and approve these Terms on your behalf.</li>
+        <li>You warrant that all registration details submitted (such as class and name) are genuine and accurate.</li>
+      </ul>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="legal-card">
+      <h2>3. 👤 Account Security</h2>
+      <ul>
+        <li>You are responsible for safeguarding your login credentials and maintaining device password security.</li>
+        <li>You are solely accountable for all activities, quiz submissions, and leaderboards tied to your account.</li>
+        <li>Account sharing or selling accounts to third parties is strictly prohibited.</li>
+        <li>Notify our team immediately at <a href="mailto:vidyatopper.in@gmail.com" style="color: var(--p); font-weight: 700;">vidyatopper.in@gmail.com</a> if you observe any unauthorized activity.</li>
+      </ul>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="legal-card">
+      <h2>4. 📚 Intellectual Property &amp; Study Notes</h2>
+      <p>
+        All proprietary learning modules, quiz databases, UI artwork, and software assets belong to Vidya Topper or licensed educational partners:
+      </p>
+      <ul>
+        <li>You may access and download materials for <strong>personal, non-commercial education only</strong>.</li>
+        <li>You may not scrape, republish, resell, or distribute study notes or question banks on external commercial websites without express written consent.</li>
+        <li>Notes, bookmarks, and flashcards created by you remain your intellectual property.</li>
+      </ul>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="legal-card">
+      <h2>5. 🚫 Prohibited Conduct</h2>
+      <p>While using Vidya Topper, you agree to avoid any behavior that harms the community or service:</p>
+      <ul>
+        <li>Exploiting, hacking, reverse engineering, or attacking backend API servers.</li>
+        <li>Attempting to manipulate or falsify scores, leaderboards, or accuracy metrics using automated scripts or bots.</li>
+        <li>Posting harmful, abusive, or defamatory content in interactive feedback or profile handles.</li>
+        <li>Impersonating other students, teachers, or Vidya Topper administrators.</li>
+      </ul>
+    </div>
+
+    <!-- Section 6 -->
+    <div class="legal-card">
+      <h2>6. 📶 Offline Content Rules</h2>
+      <p>
+        Downloaded textbooks, solution PDFs, and revision notes cached for offline study are for personal study within the app. Transferring or cracking DRM-protected cached files outside the sandbox environment violates these terms.
+      </p>
+    </div>
+
+    <!-- Section 7 -->
+    <div class="legal-card">
+      <h2>7. ⚠️ Educational Disclaimers</h2>
+      <p>
+        Vidya Topper is provided on an "as is" and "as available" basis. While we strive for absolute factual and syllabus accuracy:
+      </p>
+      <ul>
+        <li>Vidya Topper is an independent supplemental study tool and does not guarantee specific exam percentages or board ranks.</li>
+        <li>Official government examination syllabus guidelines from NCERT or CBSE should always be cross-referenced.</li>
+      </ul>
+    </div>
+
+    <!-- Section 8 -->
+    <div class="legal-card">
+      <h2>8. 🔄 Termination &amp; Amendments</h2>
+      <p>
+        We reserve the right to suspend accounts that breach student safety guidelines or abuse platform resources. We may revise these terms occasionally and will provide reasonable notice inside the app.
+      </p>
+    </div>
+
+    <!-- Section 9 -->
+    <div class="legal-card" style="text-align: center;">
+      <h2>9. 📬 Legal &amp; Compliance Inquiries</h2>
+      <p>For questions or notices regarding these terms, reach our legal desk:</p>
+      <div style="margin-top: 18px;">
+        <a href="mailto:vidyatopper.in@gmail.com" class="btn-main" style="padding: 12px 30px; text-decoration: none; display: inline-block;">✉️ vidyatopper.in@gmail.com</a>
+      </div>
+      <p style="margin-top: 14px; font-size: 0.88rem; color: var(--sub);">Godda, Jharkhand - 814133, India</p>
+    </div>
+
+  </main>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="fl" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+            <img src="logo.png" alt="Vidya Topper Logo" style="height: 32px; border-radius: 6px;">
+            Vidya Topper
+          </div>
+          <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in one place.</p>
+        </div>
+        <div class="footer-links-col">
+          <h4>App</h4>
+          <ul>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#how">How It Works</a></li>
+            <li><a href="index.html#screenshots">Screenshots</a></li>
+            <li><a href="https://play.google.com/store/apps/details?id=in.vidyatopper.student" target="_blank">Download App</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Use</a></li>
+            <li><a href="refund.html">Refund Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="mailto:vidyatopper.in@gmail.com">Email Us</a></li>
+            <li><a href="index.html#contact">Contact Support</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span id="copyright-text">© 2026 Vidya Topper. All rights reserved.</span>
+        <span>Made with ❤️ for students across India 🇮🇳</span>
+      </div>
+    </div>
+  </footer>
 
 </body>
+
 </html>
