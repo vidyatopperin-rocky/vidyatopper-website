@@ -16,15 +16,23 @@
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vidyatopper.com/" />
-  <meta property="og:title" content="Vidya Topper – Premium Education, Free for Everyone" />
+  <meta property="og:site_name" content="Vidya Topper" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:title" content="Vidya Topper – Free & Quality Education for All Indian Students" />
   <meta property="og:description"
-    content="Join thousands of students scoring better with Vidya Topper. NCERT, Boards, and Competitive Exams made easy." />
+    content="Master NCERT, Board Exams, and Gov Exams with smart tools, offline access, and a premium learning experience. Join thousands of students scoring better with Vidya Topper." />
   <meta property="og:image" content="https://vidyatopper.com/Feature%20graphic.png" />
+  <meta property="og:image:secure_url" content="https://vidyatopper.com/Feature%20graphic.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1024" />
+  <meta property="og:image:height" content="500" />
+  <meta property="og:image:alt" content="Vidya Topper – Premium Education, Free for Everyone" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://vidyatopper.com/" />
   <meta property="twitter:title" content="Vidya Topper – The Future of Learning" />
-  <meta property="twitter:description" content="The most advanced free study app for Indian students." />
+  <meta property="twitter:description" content="The most advanced free study app for Indian students. NCERT, Boards, and Competitive Exams." />
   <meta property="twitter:image" content="https://vidyatopper.com/Feature%20graphic.png" />
 
   <!-- Favicon & Icons -->
@@ -32,7 +40,7 @@
   <link rel="apple-touch-icon" href="logo.png" />
   <meta name="theme-color" content="#4F46E5" />
 
-  <!-- Schema.org Rich Snippets (WebSite, Organization, SoftwareApplication) -->
+  <!-- Schema.org Comprehensive Rich Snippets (WebSite, Organization, MobileApplication, FAQPage, BreadcrumbList) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -42,27 +50,50 @@
         "@id": "https://vidyatopper.com/#website",
         "url": "https://vidyatopper.com/",
         "name": "Vidya Topper",
-        "alternateName": ["VidyaTopper", "Vidya Topper App"],
-        "description": "Free & Quality Education for All Indian Students - NCERT, CBSE & Competitive Exams",
-        "inLanguage": "en-IN"
+        "alternateName": ["VidyaTopper", "Vidya Topper App", "VidyaTopper Official"],
+        "description": "Free & Quality Education for All Indian Students - NCERT Solutions, CBSE Board Prep, Gov Exams & Interactive Quizzes",
+        "inLanguage": "en-IN",
+        "publisher": {
+          "@id": "https://vidyatopper.com/#organization"
+        }
       },
       {
         "@type": "Organization",
         "@id": "https://vidyatopper.com/#organization",
         "name": "Vidya Topper",
+        "legalName": "Vidya Topper Educational Services",
+        "alternateName": ["VidyaTopper", "Vidya Topper Official", "Vidya Topper India"],
         "url": "https://vidyatopper.com/",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://vidyatopper.com/logo.png"
+          "@id": "https://vidyatopper.com/#logo",
+          "url": "https://vidyatopper.com/logo.png",
+          "caption": "Vidya Topper Official Logo",
+          "width": "512",
+          "height": "512"
         },
+        "image": "https://vidyatopper.com/Feature%20graphic.png",
         "sameAs": [
+          "https://youtube.com/@vidyatopperofficial",
+          "https://www.instagram.com/vidyatopperofficial",
+          "https://www.facebook.com/share/19QM7ARDFe/",
+          "https://www.facebook.com/share/1D5TFay7Wy/",
+          "https://www.linkedin.com/in/vidya-topper-42b757434/",
+          "https://www.tiktok.com/@vidyatopper",
           "https://play.google.com/store/apps/details?id=in.vidyatopper.student"
-        ]
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "vidyatopper.in@gmail.com",
+          "contactType": "customer support",
+          "areaServed": "IN",
+          "availableLanguage": ["Hindi", "English"]
+        }
       },
       {
-        "@type": "SoftwareApplication",
+        "@type": "MobileApplication",
         "name": "Vidya Topper",
-        "operatingSystem": "Android, Web",
+        "operatingSystem": "Android 7.0 and up, Web Browser",
         "applicationCategory": "EducationalApplication",
         "offers": {
           "@type": "Offer",
@@ -72,9 +103,86 @@
         "aggregateRating": {
           "@type": "AggregateRating",
           "ratingValue": "4.9",
-          "ratingCount": "12500"
+          "ratingCount": "12500",
+          "bestRating": "5",
+          "worstRating": "1"
         },
-        "description": "India's free study companion for NCERT, CBSE Board Exams, and Government Entrance Exams."
+        "downloadUrl": "https://play.google.com/store/apps/details?id=in.vidyatopper.student",
+        "installUrl": "https://play.google.com/store/apps/details?id=in.vidyatopper.student",
+        "author": {
+          "@id": "https://vidyatopper.com/#organization"
+        },
+        "description": "India's free study companion for NCERT Class 6-12, CBSE Board Exams, and Government Entrance Exams."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://vidyatopper.com/#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://vidyatopper.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Web App",
+            "item": "https://app.vidyatopper.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Features & NCERT Solutions",
+            "item": "https://vidyatopper.com/#features"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://vidyatopper.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is Vidya Topper really 100% free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Vidya Topper is 100% free! All NCERT solutions, books, board papers, test series, and tools are unlocked for everyone. We do not have any hidden subscriptions, paywalls, or premium tiers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does the app work without an internet connection?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes! You can download chapters, notes, and study material inside the app. Once downloaded, you can study NCERT chapters and access your notes completely offline without needing cellular data or Wi-Fi."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which classes and board exams are covered?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Currently, we cover NCERT books and solutions from Class 6 to Class 12 for all major subjects (Maths, Science, SST, English, Hindi, Physics, Chemistry, Biology, etc.). We also provide previous year papers and sample sheets for CBSE Board and various state board exams."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use it to prepare for government entrance exams?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely! We offer highly structured general knowledge, science, and math content designed specifically for competitive exams like SSC, UPSC, Railways, banking, and state-level government tests."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are study materials available in both Hindi & English medium?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, Vidya Topper is crafted specifically for Indian students studying in both English and Hindi mediums. You can toggle your preferred medium in the app settings with a single tap."
+            }
+          }
+        ]
       }
     ]
   }
@@ -1058,6 +1166,11 @@
           <a href="mailto:vidyatopper.in@gmail.com" class="chip">✉️ vidyatopper.in@gmail.com</a>
           <button type="button" class="chip" id="copy-email-btn" data-email="vidyatopper.in@gmail.com">📋 Copy Email</button>
           <button type="button" class="chip" id="open-contact-modal-btn">💬 Send Quick Message</button>
+          <a href="https://youtube.com/@vidyatopperofficial" target="_blank" rel="noopener noreferrer" class="chip">▶️ YouTube</a>
+          <a href="https://www.instagram.com/vidyatopperofficial" target="_blank" rel="noopener noreferrer" class="chip">📸 Instagram</a>
+          <a href="https://www.facebook.com/share/19QM7ARDFe/" target="_blank" rel="noopener noreferrer" class="chip">👥 Facebook</a>
+          <a href="https://www.linkedin.com/in/vidya-topper-42b757434/" target="_blank" rel="noopener noreferrer" class="chip">💼 LinkedIn</a>
+          <a href="https://www.tiktok.com/@vidyatopper" target="_blank" rel="noopener noreferrer" class="chip">🎵 TikTok</a>
           <div class="chip">📍 Godda, Jharkhand - 814133, India</div>
         </div>
       </div>
@@ -1132,6 +1245,23 @@
           </div>
           <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in
             one place.</p>
+          <div class="footer-social-links" aria-label="Official Social Media Links">
+            <a href="https://youtube.com/@vidyatopperofficial" target="_blank" rel="noopener noreferrer" class="social-icon-btn youtube" aria-label="Vidya Topper YouTube Channel" title="YouTube">
+              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/vidyatopperofficial" target="_blank" rel="noopener noreferrer" class="social-icon-btn instagram" aria-label="Vidya Topper Instagram" title="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/19QM7ARDFe/" target="_blank" rel="noopener noreferrer" class="social-icon-btn facebook" aria-label="Vidya Topper Facebook Page" title="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/vidya-topper-42b757434/" target="_blank" rel="noopener noreferrer" class="social-icon-btn linkedin" aria-label="Vidya Topper LinkedIn" title="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a href="https://www.tiktok.com/@vidyatopper" target="_blank" rel="noopener noreferrer" class="social-icon-btn tiktok" aria-label="Vidya Topper TikTok" title="TikTok">
+              <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1.01v8.86c-.02 1.9-.62 3.8-1.8 5.3-1.61 2.06-4.17 3.25-6.76 3.09-2.9-.17-5.52-1.87-6.8-4.47-1.43-2.9-1.02-6.52 1.05-9.01 1.75-2.11 4.54-3.21 7.27-2.86.03 1.37.03 2.75.02 4.12-.96-.13-1.94.04-2.8.53-.94.53-1.64 1.4-1.92 2.44-.39 1.46.06 3.08 1.18 4.09 1.1 1.01 2.74 1.34 4.17.84 1.18-.41 2.09-1.47 2.33-2.7.07-.37.1-.75.1-1.12V.02z"/></svg>
+            </a>
+          </div>
         </div>
         <div class="footer-links-col">
           <h4>App</h4>
