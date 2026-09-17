@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.vidyatopper.student",
+      "sha256_cert_fingerprints": [
+        "BB:7A:B9:53:92:6D:72:BF:A3:0F:F4:C7:35:F1:E7:9E:30:0F:28:D9:52:26:B3:C6:65:EE:FB:A2:C5:31:C1:AC"
+      ]
+    }
+  }
+]
