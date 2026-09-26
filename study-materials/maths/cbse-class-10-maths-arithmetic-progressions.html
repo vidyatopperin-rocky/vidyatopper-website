@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Arithmetic Progressions Class 10 Notes – nth Term & Sum Formulas – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 10 Maths Chapter 5 Arithmetic Progressions. Complete notes on common difference d, general nth term formula, sum of n terms Sn, and real-life finance/ladder word problems." />
+  <meta name="keywords" content="arithmetic progressions class 10 notes, ap formulas nth term, sum of n terms of ap sn formula, common difference d, word problems ap class 10" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-arithmetic-progressions.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-arithmetic-progressions.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Arithmetic Progressions Class 10 Notes – nth Term & Sum Formulas – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 10 Maths Chapter 5 Arithmetic Progressions. Complete notes on common difference d, general nth term formula, sum of n terms Sn, and real-life finance/ladder word problems." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Arithmetic Progressions Class 10 Notes – nth Term & Sum Formulas – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 10 Maths Chapter 5 Arithmetic Progressions. Complete notes on common difference d, general nth term formula, sum of n terms Sn, and real-life finance/ladder word problems." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Arithmetic Progressions Class 10 Notes – nth Term & Sum Formulas",
+        "description": "Master CBSE Class 10 Maths Chapter 5 Arithmetic Progressions. Complete notes on common difference d, general nth term formula, sum of n terms Sn, and real-life finance/ladder word problems.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-arithmetic-progressions.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Arithmetic Progressions (AP)",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-arithmetic-progressions.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which term of the AP 21, 18, 15, ... is -81?","acceptedAnswer":{"@type":"Answer","text":"Here a = 21, d = 18 - 21 = -3. Let an = -81. Using an = a + (n - 1)d: -81 = 21 + (n - 1)(-3) ⟹ -102 = -3(n - 1) ⟹ n - 1 = 34 ⟹ n = 35. The 35th term is -81."}},{"@type":"Question","name":"If the sum of first n terms of an AP is given by Sn = 3n² + 5n, find its 25th term.","acceptedAnswer":{"@type":"Answer","text":"Using an = Sn - Sn-1: an = (3n² + 5n) - [3(n-1)² + 5(n-1)] = 6n + 2. Substituting n = 25: a25 = 6(25) + 2 = 150 + 2 = 152."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>🔢 Arithmetic Progressions: Master Notes, Formulas & Applications</h1>
+      <p>Step-by-step derivations for an, Sn, arithmetic mean, and board exam word problem solutions.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | CBSE Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,111 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Arithmetic Progressions (AP)</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      🎯 <strong>Key Formulas to Memorize:</strong> nth term an = a + (n - 1)d, and Sum of n terms Sn = n/2 [2a + (n - 1)d] = n/2 [a + l].
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. What is an Arithmetic Progression (AP)?</h2>
+      
+          <p>An <strong>Arithmetic Progression</strong> is a sequence of numbers in which each term is obtained by adding a fixed number <em>d</em> (called the <strong>Common Difference</strong>) to the preceding term, except the first term <em>a</em>.</p>
+          <div style="background:var(--bg); padding:12px; border:1px solid var(--bdr); border-radius:10px; margin-bottom:12px;">
+            Standard form: <code>a, a + d, a + 2d, a + 3d, ..., a + (n - 1)d</code>
+          </div>
+          <ul>
+            <li>Common difference <code>d = aₙ - aₙ₋₁</code> can be <strong>positive</strong> (increasing AP), <strong>negative</strong> (decreasing AP), or <strong>zero</strong> (constant AP).</li>
+            <li>Three consecutive terms in AP are conveniently assumed as: <code>(a - d), a, (a + d)</code>.</li>
+            <li>Four consecutive terms in AP are assumed as: <code>(a - 3d), (a - d), (a + d), (a + 3d)</code> (with common difference 2d).</li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. General nth Term of an AP (aₙ)</h2>
+      
+          <p>The <em>n</em>th term of an AP with first term <em>a</em> and common difference <em>d</em> is given by:</p>
+          <div style="background:var(--p-light); padding:14px 18px; border-radius:10px; font-size:1.05rem;">
+            <code>aₙ = a + (n - 1) · d</code>
+          </div>
+          <p><strong>nth Term from the END of an AP:</strong></p>
+          <p>If an AP has last term <em>l</em> and common difference <em>d</em>, the <em>n</em>th term from the end is:</p>
+          <div style="background:var(--bg); padding:12px; border:1px solid var(--bdr); border-radius:10px;">
+            <code>aₙ (from end) = l - (n - 1) · d</code>
+          </div>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Sum of First n Terms of an AP (Sₙ)</h2>
+      
+          <p>The sum <code>Sₙ</code> of the first <em>n</em> terms of an AP is calculated using either of two formulas:</p>
+          <div style="background:var(--bg); padding:16px; border:1px solid var(--bdr); border-radius:12px; margin-bottom:14px; line-height:1.8;">
+            <p>1. When common difference <em>d</em> is known: <code>Sₙ = (n / 2) · [2a + (n - 1)d]</code></p>
+            <p>2. When first term <em>a</em> and last term <em>l</em> are known: <code>Sₙ = (n / 2) · [a + l]</code></p>
+          </div>
+          <p><strong>Crucial Relation Between aₙ and Sₙ:</strong></p>
+          <p>The <em>n</em>th term is the difference between sum of <em>n</em> terms and sum of <em>(n - 1)</em> terms:
+            <br/><code>aₙ = Sₙ - Sₙ₋₁</code>
+          </p>
+          <p><strong>Sum of First n Natural Numbers:</strong> <code>Sₙ = 1 + 2 + 3 + ... + n = [n(n + 1)] / 2</code></p>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Which term of the AP 21, 18, 15, ... is -81?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Here a = 21, d = 18 - 21 = -3. Let an = -81. Using an = a + (n - 1)d: -81 = 21 + (n - 1)(-3) ⟹ -102 = -3(n - 1) ⟹ n - 1 = 34 ⟹ n = 35. The 35th term is -81.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ If the sum of first n terms of an AP is given by Sn = 3n² + 5n, find its 25th term.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Using an = Sn - Sn-1: an = (3n² + 5n) - [3(n-1)² + 5(n-1)] = 6n + 2. Substituting n = 25: a25 = 6(25) + 2 = 150 + 2 = 152.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of ...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Th...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +346,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

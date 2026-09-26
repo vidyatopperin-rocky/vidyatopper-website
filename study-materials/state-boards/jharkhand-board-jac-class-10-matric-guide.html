@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="hi">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>झारखंड बोर्ड (JAC) कक्षा 10 मैट्रिक परीक्षा पैटर्न व महत्वपूर्ण प्रश्न 2026 – Vidya Topper</title>
+  <meta name="description" content="झारखंड अधिविद्य परिषद (JAC रांची) कक्षा 10 मैट्रिक परीक्षा: 30 अंक OMR ऑब्जेक्टिव और 50 अंक सब्जेक्टिव परीक्षा पैटर्न, विज्ञान, गणित और सामाजिक विज्ञान के VVI प्रश्न।" />
+  <meta name="keywords" content="jac ranchi class 10 matric exam pattern 2026, jharkhand board 10th model question paper solution, jac matric science math important question" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/state-boards/jharkhand-board-jac-class-10-matric-guide.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/state-boards/jharkhand-board-jac-class-10-matric-guide.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="झारखंड बोर्ड (JAC) कक्षा 10 मैट्रिक परीक्षा पैटर्न व महत्वपूर्ण प्रश्न 2026 – Vidya Topper" />
+  <meta property="og:description" content="झारखंड अधिविद्य परिषद (JAC रांची) कक्षा 10 मैट्रिक परीक्षा: 30 अंक OMR ऑब्जेक्टिव और 50 अंक सब्जेक्टिव परीक्षा पैटर्न, विज्ञान, गणित और सामाजिक विज्ञान के VVI प्रश्न।" />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="झारखंड बोर्ड (JAC) कक्षा 10 मैट्रिक परीक्षा पैटर्न व महत्वपूर्ण प्रश्न 2026 – Vidya Topper" />
+  <meta name="twitter:description" content="झारखंड अधिविद्य परिषद (JAC रांची) कक्षा 10 मैट्रिक परीक्षा: 30 अंक OMR ऑब्जेक्टिव और 50 अंक सब्जेक्टिव परीक्षा पैटर्न, विज्ञान, गणित और सामाजिक विज्ञान के VVI प्रश्न।" />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "झारखंड बोर्ड (JAC) कक्षा 10 मैट्रिक परीक्षा पैटर्न व महत्वपूर्ण प्रश्न 2026",
+        "description": "झारखंड अधिविद्य परिषद (JAC रांची) कक्षा 10 मैट्रिक परीक्षा: 30 अंक OMR ऑब्जेक्टिव और 50 अंक सब्जेक्टिव परीक्षा पैटर्न, विज्ञान, गणित और सामाजिक विज्ञान के VVI प्रश्न।",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/state-boards/jharkhand-board-jac-class-10-matric-guide.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "State Boards",
+            "item": "https://vidyatopper.com/study-materials/?category=state-boards"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "JAC Ranchi Matric Prep Guide",
+            "item": "https://vidyatopper.com/study-materials/state-boards/jharkhand-board-jac-class-10-matric-guide.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"JAC बोर्ड मैट्रिक में फर्स्ट डिवीज़न के लिए कितने अंक चाहिए?","acceptedAnswer":{"@type":"Answer","text":"कुल 500 अंकों में से 300 या उससे अधिक अंक (60% या अधिक) प्राप्त करने वाले विद्यार्थी को फर्स्ट डिवीज़न (प्रथम श्रेणी) प्रदान की जाती है।"}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">Jharkhand Board (JAC) Class 10</span>
+      <h1>📚 झारखंड बोर्ड (JAC रांची) मैट्रिक परीक्षा: संपूर्ण तैयारी एवं ब्लूप्रिंट</h1>
+      <p>नवीनतम 30 अंक ओएमआर एवं 50 अंक उत्तर-पुस्तिका प्रारूप के आधार पर सटीक विश्लेषण।</p>
+      <span class="legal-updated">सत्र 2025–2026 | JAC रांची ब्लूप्रिंट</span>
     </div>
   </header>
 
@@ -261,21 +178,65 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=state-boards" style="color:var(--sub); text-decoration:none;">State Boards</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">JAC Ranchi Matric Prep Guide</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>JAC परीक्षा प्रारूप:</strong> परीक्षा दो खंडों में होती है: पहले 1.5 घंटे में 30 अंक के बहुविकल्पीय प्रश्न OMR शीट पर तथा अगले 1.5 घंटे में 50 अंक के वर्णनात्मक प्रश्न उत्तर-पुस्तिका पर हल करने होते हैं।
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. JAC मैट्रिक गणित एवं विज्ञान के रिपीटेड प्रश्न</h2>
+      
+          <p>JAC बोर्ड में पिछले 5 वर्षों के प्रश्न पत्रों (PYQ) से 60% से अधिक प्रश्न सीधे दोहराए जाते हैं। विशेष रूप से सिद्ध कीजिए कि √5 एक अपरिमेय संख्या है, थेल्स प्रमेय का सत्यापन, रासायनिक समीकरणों को संतुलित करना और विद्युत मोटर का सिद्धांत अनिवार्य रूप से पूछे जाते हैं।</p>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ JAC बोर्ड मैट्रिक में फर्स्ट डिवीज़न के लिए कितने अंक चाहिए?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">कुल 500 अंकों में से 300 या उससे अधिक अंक (60% या अधिक) प्राप्त करने वाले विद्यार्थी को फर्स्ट डिवीज़न (प्रथम श्रेणी) प्रदान की जाती है।</p>
+      </div>
+    
+        </div>
+      </div>
+    
 
-    ${relatedHtml}
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/state-boards/bihar-board-class-10-matric-prep-guide.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">BSEB Matric Guide</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Bihar Board Class 10 Matric Exam 2026: VVI Objective MCQs & Model Paper Guide</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Complete preparation guide for BSEB Class 10 Matric Exam. 100 objective questions with OMR strategy,...</div>
+        </a>
+      
+        <a href="../../study-materials/state-boards/up-board-class-10-model-paper-solutions.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">UP Board Model Paper</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">UP Board Class 10 Model Paper 2026: Solutions for Hindi, Ganit, and Vigyan</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Official UPMSP Class 10 model question papers with step-by-step solutions for Hindi, Mathematics, an...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/board-exam-preparation-tips-2026.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Topper Tips</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">10 Proven Board Exam Preparation Tips to Score 95%+ in 2026 Exams</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Expert strategies for CBSE, UP Board, and Bihar Board students. Study timetables, revision technique...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +300,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

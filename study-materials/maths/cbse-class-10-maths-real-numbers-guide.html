@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Real Numbers Class 10 Notes – Fundamental Theorem & Irrationality Proofs – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 10 Maths Chapter 1 Real Numbers. Complete notes on Fundamental Theorem of Arithmetic, HCF & LCM relation, and step-by-step proofs of irrational numbers (√2, √3, √5)." />
+  <meta name="keywords" content="real numbers class 10 notes, fundamental theorem of arithmetic, proof of root 2 is irrational, hcf and lcm relation, ncert class 10 maths chapter 1" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-real-numbers-guide.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-real-numbers-guide.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Real Numbers Class 10 Notes – Fundamental Theorem & Irrationality Proofs – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 10 Maths Chapter 1 Real Numbers. Complete notes on Fundamental Theorem of Arithmetic, HCF & LCM relation, and step-by-step proofs of irrational numbers (√2, √3, √5)." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Real Numbers Class 10 Notes – Fundamental Theorem & Irrationality Proofs – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 10 Maths Chapter 1 Real Numbers. Complete notes on Fundamental Theorem of Arithmetic, HCF & LCM relation, and step-by-step proofs of irrational numbers (√2, √3, √5)." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Real Numbers Class 10 Notes – Fundamental Theorem & Irrationality Proofs",
+        "description": "Master CBSE Class 10 Maths Chapter 1 Real Numbers. Complete notes on Fundamental Theorem of Arithmetic, HCF & LCM relation, and step-by-step proofs of irrational numbers (√2, √3, √5).",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-real-numbers-guide.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Real Numbers (Maths)",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-real-numbers-guide.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can the number 6ⁿ end with the digit 0 for any natural number n?","acceptedAnswer":{"@type":"Answer","text":"For a number to end with the digit 0, its prime factorization must contain both primes 2 and 5 (since 10 = 2 × 5). The prime factorization of 6ⁿ is (2 × 3)ⁿ = 2ⁿ × 3ⁿ. By the uniqueness of the Fundamental Theorem of Arithmetic, there are no prime factors of 5. Hence, 6ⁿ can never end with the digit zero for any natural number n."}},{"@type":"Question","name":"If HCF(306, 657) = 9, find LCM(306, 657).","acceptedAnswer":{"@type":"Answer","text":"Using the formula HCF(a, b) × LCM(a, b) = a × b: LCM(306, 657) = (306 × 657) / 9 = 34 × 657 = 22,338."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>🔢 Real Numbers: Complete NCERT Class 10 Maths Notes</h1>
+      <p>Step-by-step guide to prime factorization, HCF-LCM relationships, and proof of irrationality.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | CBSE Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,117 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Real Numbers (Maths)</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      🎯 <strong>Guaranteed 3-Mark Question:</strong> A contradiction proof that √2, √3, √5, or (3 + 2√5) is irrational appears in virtually every CBSE Class 10 board examination paper.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. The Fundamental Theorem of Arithmetic</h2>
+      
+          <p>Every composite number can be expressed (factorized) as the product of powers of primes, and this prime factorization is <strong>unique</strong>, apart from the order in which the prime factors occur.</p>
+          <div style="background:var(--bg); padding:14px; border:1px solid var(--bdr); border-radius:12px; margin-bottom:12px;">
+            <code>Composite Number x = p₁ᵃ¹ · p₂ᵃ² · p₃ᵃ³ ... · pₙᵃⁿ</code>
+          </div>
+          <p><strong>Calculating HCF and LCM via Prime Factorization:</strong></p>
+          <ul>
+            <li><strong>HCF (Highest Common Factor):</strong> Product of the <em>smallest power</em> of each common prime factor involved in the numbers.</li>
+            <li><strong>LCM (Lowest Common Multiple):</strong> Product of the <em>greatest power</em> of each prime factor involved in the numbers.</li>
+            <li><strong>Crucial Formula (For any two positive integers a and b):</strong>
+              <br/><code>HCF(a, b) × LCM(a, b) = a × b</code>
+              <br/><span style="color:#ef4444; font-size:0.85rem;">⚠️ Note: This relationship holds ONLY for two numbers, not for three numbers!</span>
+            </li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Step-by-Step Proof: Proving √2 and √5 are Irrational</h2>
+      
+          <p>These proofs rely on the classical method of <strong>Contradiction</strong>, assuming the contrary and demonstrating an absurd logical impossibility.</p>
+          <p><strong>Theorem: Prove that √5 is an irrational number.</strong></p>
+          <div style="background:var(--bg); padding:18px; border:1px solid var(--bdr); border-radius:12px; line-height:1.7;">
+            <p>1. Let us assume, on the contrary, that √5 is rational.</p>
+            <p>2. Then there exist coprime integers <em>a</em> and <em>b</em> (where b ≠ 0 and HCF(a, b) = 1) such that:
+               <br/><code>√5 = a / b  ⟹  a = b√5</code></p>
+            <p>3. Squaring both sides: <code>a² = 5b²</code> ... (Equation 1)</p>
+            <p>4. Since 5 divides <code>5b²</code>, it follows that <strong>5 divides a²</strong>. By fundamental arithmetic theorem, if a prime <em>p</em> divides <em>a²</em>, then <strong>5 divides a</strong>.</p>
+            <p>5. Therefore, we can write <code>a = 5c</code> for some integer <em>c</em>.</p>
+            <p>6. Substituting <code>a = 5c</code> into Equation 1:
+               <br/><code>(5c)² = 5b²  ⟹  25c² = 5b²  ⟹  b² = 5c²</code></p>
+            <p>7. This implies that <strong>5 divides b²</strong>, and consequently, <strong>5 divides b</strong>.</p>
+            <p>8. From steps 4 and 7, both <em>a</em> and <em>b</em> share at least <strong>5 as a common factor</strong>.</p>
+            <p>9. But this contradicts our foundational fact that <em>a</em> and <em>b</em> are coprime (HCF = 1).</p>
+            <p>10. This contradiction arises because of our incorrect assumption that √5 is rational. Hence, <strong>√5 is irrational</strong>. (Hence Proved)</p>
+          </div>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Decimal Expansions of Rational Numbers</h2>
+      
+          <p>Let <code>x = p / q</code> be a rational number in simplest form (where <em>p</em> and <em>q</em> are coprime):</p>
+          <ul>
+            <li><strong>Terminating Decimal:</strong> The prime factorization of denominator <em>q</em> is strictly of the form <code>2ⁿ · 5ᵐ</code>, where <em>n</em> and <em>m</em> are non-negative integers. E.g., <code>13 / 125 = 13 / 5³ = 13 × 2³ / (5³ × 2³) = 104 / 1000 = 0.104</code>.</li>
+            <li><strong>Non-Terminating Repeating (Recurring) Decimal:</strong> The prime factorization of denominator <em>q</em> contains any prime factor other than 2 or 5 (such as 3, 7, 11). E.g., <code>1 / 7</code>, <code>5 / 6</code>.</li>
+          </ul>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Can the number 6ⁿ end with the digit 0 for any natural number n?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">For a number to end with the digit 0, its prime factorization must contain both primes 2 and 5 (since 10 = 2 × 5). The prime factorization of 6ⁿ is (2 × 3)ⁿ = 2ⁿ × 3ⁿ. By the uniqueness of the Fundamental Theorem of Arithmetic, there are no prime factors of 5. Hence, 6ⁿ can never end with the digit zero for any natural number n.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ If HCF(306, 657) = 9, find LCM(306, 657).</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Using the formula HCF(a, b) × LCM(a, b) = a × b: LCM(306, 657) = (306 × 657) / 9 = 34 × 657 = 22,338.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-polynomials-notes.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Polynomials Class 10 Notes – Zeroes, Graph Shapes & Coefficients</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Complete CBSE Class 10 Maths Chapter 2 Polynomials revision notes. Geometrical meaning of zeroes, pa...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of ...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +352,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

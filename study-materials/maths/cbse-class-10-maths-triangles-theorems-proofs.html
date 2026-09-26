@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Thales Theorem), its converse, criteria for similarity (AAA, SSS, SAS), and solved numericals." />
+  <meta name="keywords" content="triangles class 10 notes, basic proportionality theorem bpt thales proof, converse of bpt theorem, similarity criteria aaa sss sas, ncert class 10 maths chapter 6" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Thales Theorem), its converse, criteria for similarity (AAA, SSS, SAS), and solved numericals." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Thales Theorem), its converse, criteria for similarity (AAA, SSS, SAS), and solved numericals." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs",
+        "description": "Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Thales Theorem), its converse, criteria for similarity (AAA, SSS, SAS), and solved numericals.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Triangles & BPT Theorem",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"State the Converse of Basic Proportionality Theorem.","acceptedAnswer":{"@type":"Answer","text":"If a line divides any two sides of a triangle in the same ratio (AD/DB = AE/EC), then the line must be parallel to the third side (DE || BC)."}},{"@type":"Question","name":"A vertical pole of length 6 m casts a shadow 4 m long on the ground, and at the same time a tower casts a shadow 28 m long. Find the height of the tower.","acceptedAnswer":{"@type":"Answer","text":"Since the sun angle of elevation is identical for both objects simultaneously: ΔPole ~ ΔTower (by AA similarity). Therefore: (Height of Pole) / (Height of Tower) = (Pole Shadow) / (Tower Shadow) ⟹ 6 / H = 4 / 28 ⟹ 6 / H = 1 / 7 ⟹ H = 42 meters. The height of the tower is 42 m."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>📐 Triangles: Complete Theorems, BPT Proof & Similarity Criteria</h1>
+      <p>Rigorous geometric proofs, Thales theorem applications, and similarity problem strategies.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | Board Ready</span>
     </div>
   </header>
 
@@ -261,21 +178,98 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Triangles & BPT Theorem</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      🎯 <strong>Guaranteed 5-Mark Theorem Proof:</strong> State and prove the Basic Proportionality Theorem (BPT) or its direct application is a staple in the long answer section of Class 10 board exams.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Basic Proportionality Theorem (Thales Theorem) Full Proof</h2>
+      
+          <p><strong>Statement:</strong> If a line is drawn parallel to one side of a triangle to intersect the other two sides in distinct points, the other two sides are divided in the same ratio.</p>
+          <div style="background:var(--bg); padding:18px; border:1px solid var(--bdr); border-radius:12px; line-height:1.7;">
+            <p><strong>Given:</strong> In ΔABC, a line DE is drawn parallel to BC, intersecting AB at D and AC at E (DE || BC).</p>
+            <p><strong>To Prove:</strong> <code>AD / DB = AE / EC</code></p>
+            <p><strong>Construction:</strong> Join BE and CD. Draw perpendiculars DM ⊥ AC and EN ⊥ AB.</p>
+            <p><strong>Proof:</strong></p>
+            <p>1. Area of ΔADE = <code>½ × Base × Height = ½ × AD × EN</code></p>
+            <p>2. Area of ΔBDE = <code>½ × DB × EN</code> (EN is height for obtuse angle)</p>
+            <p>3. Ratio: <code>ar(ΔADE) / ar(ΔBDE) = (½ × AD × EN) / (½ × DB × EN) = AD / DB</code> ... (Equation 1)</p>
+            <p>4. Similarly, considering AC as base:
+               <br/><code>ar(ΔADE) / ar(ΔCDE) = (½ × AE × DM) / (½ × EC × DM) = AE / EC</code> ... (Equation 2)</p>
+            <p>5. Notice that ΔBDE and ΔCDE share the same base DE and lie between the same parallel lines DE and BC.
+               <br/>Therefore: <code>ar(ΔBDE) = ar(ΔCDE)</code> ... (Equation 3)</p>
+            <p>6. From Equations 1, 2, and 3, the left-hand ratios are identical. Hence:
+               <br/><code>AD / DB = AE / EC</code> (Hence Proved)</p>
+          </div>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Criteria for Similarity of Triangles (AAA, SSS, SAS)</h2>
+      
+          <p>Two triangles ΔABC and ΔDEF are similar (written as <code>ΔABC ~ ΔDEF</code>) if: (1) Corresponding angles are equal, and (2) Corresponding sides are in the same ratio.</p>
+          <ul>
+            <li><strong>AAA Similarity (or AA Similarity):</strong> If two angles of one triangle are respectively equal to two angles of another triangle, the triangles are similar (third angle is automatically equal by angle-sum property).</li>
+            <li><strong>SSS Similarity:</strong> If the three sides of one triangle are proportional to the three sides of another triangle: <code>AB/DE = BC/EF = AC/DF</code>, the triangles are similar.</li>
+            <li><strong>SAS Similarity:</strong> If one angle of a triangle is equal to one angle of another triangle, and the sides including these angles are proportional: <code>AB/DE = AC/DF</code> and <code>∠A = ∠D</code>, then <code>ΔABC ~ ΔDEF</code>.</li>
+          </ul>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ State the Converse of Basic Proportionality Theorem.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">If a line divides any two sides of a triangle in the same ratio (AD/DB = AE/EC), then the line must be parallel to the third side (DE || BC).</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ A vertical pole of length 6 m casts a shadow 4 m long on the ground, and at the same time a tower casts a shadow 28 m long. Find the height of the tower.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Since the sun angle of elevation is identical for both objects simultaneously: ΔPole ~ ΔTower (by AA similarity). Therefore: (Height of Pole) / (Height of Tower) = (Pole Shadow) / (Tower Shadow) ⟹ 6 / H = 4 / 28 ⟹ 6 / H = 1 / 7 ⟹ H = 42 meters. The height of the tower is 42 m.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-coordinate-geometry-formulas.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Coordinate Geometry Class 10 Notes – Distance & Section Formulas</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 7 Coordinate Geometry. Complete formulas for Distance Formula, Se...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-trigonometry-identities-proofs.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Introduction to Trigonometry Class 10 Notes – Formulas & Proofs</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 8 Introduction to Trigonometry. Trigonometric ratios table (0°, 3...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +333,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

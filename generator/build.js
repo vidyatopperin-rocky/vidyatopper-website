@@ -1,17 +1,22 @@
-// generator/build.js
+// vidyatopper-website-main/generator/build.js
 const fs = require('fs');
 const path = require('path');
 const { generateArticleHtml } = require('./template');
 
-const scienceArticles = require('./articles_science');
-const mathsArticles = require('./articles_maths');
-const sstEngArticles = require('./articles_sst_eng');
-const hindiArticles = require('./articles_hindi');
-const stateBoardArticles = require('./articles_state_boards');
-const class12Articles = require('./articles_class12');
-const strategyArticles = require('./articles_strategy');
+const outputDir = path.resolve(__dirname, '..');
+const studyMaterialsDir = path.join(outputDir, 'study-materials');
 
-const newArticles = [
+// Load articles with assigned categorySlugs
+const scienceArticles = require('./articles_science').map(a => ({ ...a, categorySlug: 'science' }));
+const mathsArticles = require('./articles_maths').map(a => ({ ...a, categorySlug: 'maths' }));
+const sstEngArticles = require('./articles_sst_eng').map(a => ({ ...a, categorySlug: 'social-science' }));
+const hindiArticles = require('./articles_hindi').map(a => ({ ...a, categorySlug: 'hindi' }));
+const stateBoardArticles = require('./articles_state_boards').map(a => ({ ...a, categorySlug: 'state-boards' }));
+const class12Articles = require('./articles_class12').map(a => ({ ...a, categorySlug: 'class-12' }));
+const strategyArticles = require('./articles_strategy').map(a => ({ ...a, categorySlug: 'exam-tips' }));
+const legacyArticles = require('./articles_legacy');
+
+const generatedArticles = [
   ...scienceArticles,
   ...mathsArticles,
   ...sstEngArticles,
@@ -21,144 +26,108 @@ const newArticles = [
   ...strategyArticles
 ];
 
-const existingArticles = [
-  {
-    slug: 'cbse-class-10-science-important-questions',
-    title: 'CBSE Class 10 Science Most Important Questions & Chapter Notes 2026',
-    shortTitle: 'CBSE Class 10 Science Important Qs',
-    description: 'Comprehensive CBSE Class 10 Science revision guide. Master chemical reactions, life processes, light ray diagrams, and electricity numericals with solved competency questions.',
-    category: 'Science',
-    badge: 'CBSE Class 10 Science'
-  },
-  {
-    slug: 'cbse-class-10-maths-formula-sheet',
-    title: 'CBSE Class 10 Maths Master Formula Sheet (All Chapters)',
-    shortTitle: 'Class 10 Maths Formula Sheet',
-    description: 'Complete revision handbook covering Real Numbers, Quadratic Equations, Trigonometry identities, Surface Areas & Volumes, and Statistics formulas.',
-    category: 'Mathematics',
-    badge: 'CBSE Class 10 Maths'
-  },
-  {
-    slug: 'up-board-class-10-model-paper-solutions',
-    title: 'UP Board Class 10 Model Paper Solutions & OMR Strategy',
-    shortTitle: 'UP Board Class 10 Model Paper',
-    description: 'Detailed analysis of UPMSP Class 10 examination pattern, Hindi & Science 20-mark OMR objective questions, and descriptive writing guidelines.',
-    category: 'State Boards',
-    badge: 'UP Board (UPMSP)'
-  },
-  {
-    slug: 'bihar-board-class-10-matric-prep-guide',
-    title: 'Bihar Board (BSEB) Class 10 Matric Exam Prep Guide',
-    shortTitle: 'Bihar Board Matric Prep Guide',
-    description: 'Essential master guide for Bihar Board Matric students: 50% objective MCQ mastery, Hindi, Sanskrit, Mathematics, and Science key concepts.',
-    category: 'State Boards',
-    badge: 'Bihar Board (BSEB)'
-  },
-  {
-    slug: 'mp-board-class-10-science-notes',
-    title: 'MP Board Class 10 Science Blueprint & Revision Notes',
-    shortTitle: 'MP Board Class 10 Science Notes',
-    description: 'Madhya Pradesh Board of Secondary Education (MPBSE) Class 10 Science fast-revision handbook with chapter-wise weightage and diagrams.',
-    category: 'State Boards',
-    badge: 'MP Board (MPBSE)'
-  },
-  {
-    slug: 'board-exam-preparation-tips-2026',
-    title: 'Board Exam Preparation Strategy 2026: Score 95%+ Marks',
-    shortTitle: 'Board Exam Preparation Tips 2026',
-    description: 'Scientifically backed study plan, 3-round revision technique, answer sheet layout formatting, and exam stress management for board aspirants.',
-    category: 'Exam Strategy',
-    badge: 'Exam Strategy'
-  }
+const allArticles = [
+  ...generatedArticles,
+  ...legacyArticles
 ];
 
-const allArticles = [...existingArticles, ...newArticles];
+// Map by slug for related lookups
 const allArticlesMap = {};
 allArticles.forEach(a => {
   allArticlesMap[a.slug] = a;
 });
 
-const outputDir = path.resolve(__dirname, '..');
+console.log(`Building 48 generated articles into study-materials/<category>/...`);
 
-console.log(`Building ${newArticles.length} new articles into ${outputDir}...`);
+// 1. Generate 48 new articles
+generatedArticles.forEach(article => {
+  const catDir = path.join(studyMaterialsDir, article.categorySlug);
+  if (!fs.existsSync(catDir)) {
+    fs.mkdirSync(catDir, { recursive: true });
+  }
 
-// 1. Generate all new HTML files
-newArticles.forEach(article => {
   const html = generateArticleHtml(article, allArticlesMap);
-  const filePath = path.join(outputDir, `${article.slug}.html`);
+  const filePath = path.join(catDir, `${article.slug}.html`);
   fs.writeFileSync(filePath, html, 'utf8');
-  console.log(`Generated: ${article.slug}.html`);
+  console.log(`Generated: study-materials/${article.categorySlug}/${article.slug}.html`);
 });
 
-// 2. Build updated sitemap.xml
-console.log('Generating updated sitemap.xml...');
-const staticPages = [
-  { loc: 'https://vidyatopper.com/', priority: '1.0', changefreq: 'daily' },
-  { loc: 'https://vidyatopper.com/study-materials.html', priority: '0.9', changefreq: 'daily' },
-  { loc: 'https://vidyatopper.com/about.html', priority: '0.8', changefreq: 'monthly' },
-  { loc: 'https://vidyatopper.com/contact.html', priority: '0.8', changefreq: 'monthly' },
-  { loc: 'https://vidyatopper.com/privacy-policy.html', priority: '0.6', changefreq: 'monthly' },
-  { loc: 'https://vidyatopper.com/terms.html', priority: '0.6', changefreq: 'monthly' },
-  { loc: 'https://vidyatopper.com/refund.html', priority: '0.5', changefreq: 'monthly' },
-  { loc: 'https://vidyatopper.com/share.html', priority: '0.6', changefreq: 'monthly' }
-];
+// 2. Process the 6 legacy articles into their subfolders
+console.log('Migrating 6 legacy articles into structured category directories...');
+legacyArticles.forEach(leg => {
+  const catDir = path.join(studyMaterialsDir, leg.categorySlug);
+  if (!fs.existsSync(catDir)) {
+    fs.mkdirSync(catDir, { recursive: true });
+  }
 
-const articleEntries = allArticles.map(a => `  <url>
-    <loc>https://vidyatopper.com/${a.slug}.html</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>`).join('\n');
+  const rootLegacyPath = path.join(outputDir, `${leg.slug}.html`);
+  const targetLegacyPath = path.join(catDir, `${leg.slug}.html`);
 
-const staticEntries = staticPages.map(p => `  <url>
-    <loc>${p.loc}</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
-  </url>`).join('\n');
+  let content = '';
+  if (fs.existsSync(rootLegacyPath)) {
+    content = fs.readFileSync(rootLegacyPath, 'utf8');
+  } else if (fs.existsSync(targetLegacyPath)) {
+    content = fs.readFileSync(targetLegacyPath, 'utf8');
+  }
 
-const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticEntries}
-${articleEntries}
-</urlset>
-`;
+  if (content) {
+    // Update relative asset and navigation links for depth 2
+    content = content
+      .replace(/href="style\.css"/g, 'href="../../assets/css/style.css"')
+      .replace(/src="script\.js"/g, 'src="../../assets/js/script.js"')
+      .replace(/href="logo\.png"/g, 'href="../../assets/images/brand/logo.png"')
+      .replace(/src="logo\.png"/g, 'src="../../assets/images/brand/logo.png"')
+      .replace(/href="index\.html"/g, 'href="../../index.html"')
+      .replace(/href="study-materials\.html"/g, 'href="../../study-materials/index.html"')
+      .replace(/href="about\.html"/g, 'href="../../about.html"')
+      .replace(/href="contact\.html"/g, 'href="../../contact.html"')
+      .replace(/href="privacy-policy\.html"/g, 'href="../../privacy-policy.html"')
+      .replace(/href="terms\.html"/g, 'href="../../terms.html"')
+      .replace(/href="refund\.html"/g, 'href="../../refund.html"')
+      .replace(/https:\/\/vidyatopper\.com\/([a-z0-9\-]+)\.html/g, (match, slug) => {
+        const item = allArticlesMap[slug];
+        if (item) {
+          return `https://vidyatopper.com/study-materials/${item.categorySlug}/${slug}.html`;
+        }
+        return match;
+      });
 
-fs.writeFileSync(path.join(outputDir, 'sitemap.xml'), sitemapContent, 'utf8');
-console.log(`Updated sitemap.xml with ${allArticles.length + staticPages.length} total URLs (without app.vidyatopper.com).`);
+    fs.writeFileSync(targetLegacyPath, content, 'utf8');
+    console.log(`Updated legacy: study-materials/${leg.categorySlug}/${leg.slug}.html`);
+  }
+});
 
-// 3. Generate updated study-materials.html
-console.log('Updating study-materials.html with all 54 articles and interactive category filter...');
+// 3. Generate updated study-materials/index.html
+console.log('Generating study-materials/index.html directory hub...');
 
 const categories = [
-  'All',
-  'Science',
-  'Mathematics',
-  'Social Science',
-  'Hindi Vyakaran',
-  'State Boards',
-  'Class 12 Science',
-  'Class 12 Mathematics',
-  'Exam Strategy'
+  { name: 'All', filter: 'All' },
+  { name: 'Science 🔬', filter: 'science' },
+  { name: 'Maths 📐', filter: 'maths' },
+  { name: 'Hindi Vyakaran ✍️', filter: 'hindi' },
+  { name: 'Social Science 🌍', filter: 'social-science' },
+  { name: 'State Boards 🇮🇳', filter: 'state-boards' },
+  { name: 'Class 12 ⚡', filter: 'class-12' },
+  { name: 'Exam Strategy 🏆', filter: 'exam-tips' }
 ];
 
-function getCategoryIcon(cat) {
-  if (cat.includes('Science')) return '🔬';
-  if (cat.includes('Mathematics')) return '📐';
-  if (cat.includes('Social')) return '🌍';
-  if (cat.includes('Hindi')) return '📝';
-  if (cat.includes('State')) return '🏛️';
-  if (cat.includes('Strategy') || cat.includes('Tips')) return '🏆';
-  if (cat.includes('English')) return '✍️';
+function getCategoryIcon(catSlug) {
+  if (catSlug === 'science') return '🔬';
+  if (catSlug === 'maths') return '📐';
+  if (catSlug === 'hindi') return '✍️';
+  if (catSlug === 'social-science') return '🌍';
+  if (catSlug === 'state-boards') return '🏛️';
+  if (catSlug === 'class-12') return '⚡';
+  if (catSlug === 'exam-tips') return '🏆';
   return '📚';
 }
 
 const articlesCardsHtml = allArticles.map(a => {
-  const cat = a.category || 'General';
-  const icon = getCategoryIcon(cat);
-  const badgeText = a.badge || cat;
+  const catSlug = a.categorySlug || 'science';
+  const icon = getCategoryIcon(catSlug);
+  const badgeText = a.badge || a.category;
   return `
-    <div class="study-article-card" data-category="${cat}" data-title="${a.title.toLowerCase()} ${a.description.toLowerCase()}" style="background:var(--card-bg); border:1.5px solid var(--bdr); border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; transition:transform 0.25s ease, border-color 0.25s ease; box-shadow:var(--shadow);" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='var(--p)';" onmouseout="this.style.transform='none'; this.style.borderColor='var(--bdr)';">
+    <div class="study-article-card" data-category="${catSlug}" data-title="${a.title.toLowerCase()} ${a.description.toLowerCase()}" style="background:var(--card-bg); border:1.5px solid var(--bdr); border-radius:16px; padding:24px; display:flex; flex-direction:column; justify-content:space-between; transition:transform 0.25s ease, border-color 0.25s ease; box-shadow:var(--shadow);" onmouseover="this.style.transform='translateY(-4px)'; this.style.borderColor='var(--p)';" onmouseout="this.style.transform='none'; this.style.borderColor='var(--bdr)';">
       <div>
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
           <span style="font-size:1.8rem;">${icon}</span>
@@ -167,12 +136,12 @@ const articlesCardsHtml = allArticles.map(a => {
         <h3 style="font-size:1.15rem; font-weight:800; color:var(--text); line-height:1.45; margin-bottom:10px;">${a.title}</h3>
         <p style="font-size:0.9rem; color:var(--sub); line-height:1.6; margin-bottom:16px;">${a.description}</p>
       </div>
-      <a href="${a.slug}.html" class="btn-main" style="text-align:center; padding:10px 16px; font-size:0.9rem; text-decoration:none; display:inline-block; border-radius:10px; font-weight:700; background:linear-gradient(135deg, var(--p) 0%, var(--s) 100%); color:#fff;">Read Full Guide →</a>
+      <a href="${catSlug}/${a.slug}.html" class="btn-main" style="text-align:center; padding:10px 16px; font-size:0.9rem; text-decoration:none; display:inline-block; border-radius:10px; font-weight:700; background:linear-gradient(135deg, var(--p) 0%, var(--s) 100%); color:#fff;">Read Full Guide →</a>
     </div>
   `;
 }).join('\n');
 
-const updatedStudyMaterialsHtml = `<!DOCTYPE html>
+const studyMaterialsHubHtml = `<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -184,22 +153,22 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
   <meta name="keywords"
     content="NCERT study materials, Class 10 science notes, CBSE formula handbook, UP Board model papers, Bihar Board matric notes, MP Board exam prep, Class 12 physics notes, free educational guides" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="https://vidyatopper.com/study-materials.html" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/" />
 
   <!-- Google AdSense Official Script -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8779731071171821"
     crossorigin="anonymous"></script>
 
-  <link rel="icon" type="image/png" href="logo.png" />
-  <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="icon" type="image/png" href="../assets/images/brand/logo.png" />
+  <link rel="apple-touch-icon" href="../assets/images/brand/logo.png" />
   <meta name="theme-color" content="#4F46E5" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <script src="../assets/js/script.js" defer></script>
 </head>
 
 <body>
@@ -210,29 +179,25 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
   <!-- ════ NAVBAR ════ -->
   <nav class="glass" id="navbar">
     <div class="ni">
-      <a href="index.html" class="logo">
-        <img src="logo.png" alt="Vidya Topper Logo" style="height: 40px; border-radius: 8px;">
+      <a href="../index.html" class="logo">
+        <img src="../assets/images/brand/logo.png" alt="Vidya Topper Logo" style="height: 40px; border-radius: 8px;">
         Vidya Topper
       </a>
 
       <ul class="nav-links">
-        <li><a href="index.html" class="nav-item">Home</a></li>
-        <li><a href="study-materials.html" class="nav-item active">Study Hub 📚</a></li>
-        <li><a href="about.html" class="nav-item">About Us</a></li>
-        <li><a href="contact.html" class="nav-item">Contact</a></li>
-        <li><a href="privacy-policy.html" class="nav-item">Privacy</a></li>
+        <li><a href="../index.html" class="nav-item">Home</a></li>
+        <li><a href="index.html" class="nav-item active">Study Hub 📚</a></li>
+        <li><a href="../about.html" class="nav-item">About Us</a></li>
+        <li><a href="../contact.html" class="nav-item">Contact</a></li>
+        <li><a href="../privacy-policy.html" class="nav-item">Privacy</a></li>
         <li>
           <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle dark mode">
-            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <circle cx="12" cy="12" r="5" stroke-width="2" />
-              <path stroke-linecap="round" stroke-width="2"
-                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+              <path stroke-linecap="round" stroke-width="2" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
             </svg>
-            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
           </button>
         </li>
@@ -251,56 +216,60 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
   <!-- Mobile Drawer Menu -->
   <div class="mobile-menu-overlay" id="mobile-menu">
     <ul class="mobile-menu-links">
-      <li><a href="index.html" class="mobile-nav-item">Home</a></li>
-      <li><a href="study-materials.html" class="mobile-nav-item active">Study Materials 📚</a></li>
-      <li><a href="about.html" class="mobile-nav-item">About Us</a></li>
-      <li><a href="contact.html" class="mobile-nav-item">Contact</a></li>
-      <li><a href="privacy-policy.html" class="mobile-nav-item">Privacy Policy</a></li>
+      <li><a href="../index.html" class="mobile-nav-item">Home</a></li>
+      <li><a href="index.html" class="mobile-nav-item active">Study Hub 📚</a></li>
+      <li><a href="../about.html" class="mobile-nav-item">About Us</a></li>
+      <li><a href="../contact.html" class="mobile-nav-item">Contact</a></li>
+      <li><a href="../privacy-policy.html" class="mobile-nav-item">Privacy Policy</a></li>
       <li><a href="https://app.vidyatopper.com" target="_blank" class="nav-cta"
           style="display: block; text-align: center; margin-top: 15px; background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);">Launch Web App 🚀</a></li>
     </ul>
   </div>
 
   <!-- ════ HEADER BANNER ════ -->
-  <header class="legal-header" style="padding-bottom:30px;">
+  <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">Official Curriculum Library</span>
-      <h1>📚 Free Study Materials &amp; Notes Hub</h1>
-      <p>Explore 50+ comprehensive NCERT revision guides, formula handbooks, solved board papers, and exam blueprints for 2025–2026.</p>
-      <span class="legal-updated">${allArticles.length} In-Depth Academic Guides | 100% Free &amp; Ad-Supported</span>
+      <span class="legal-badge">📚 Free Board Exam Study Library</span>
+      <h1>NCERT &amp; State Board Study Materials Hub</h1>
+      <p>54+ In-Depth Chapter Notes, Formula Sheets, Hindi Vyakaran, and Solved Model Papers for Class 10 &amp; 12.</p>
+      <span class="legal-updated">Updated for Academic Session 2025–2026 | Dual English &amp; Hindi Medium</span>
     </div>
   </header>
 
-  <!-- ════ MAIN CONTENT CONTAINER ════ -->
-  <main style="max-width:1160px; margin:0 auto; padding:40px 5% 80px;">
+  <!-- ════ MAIN DIRECTORY WITH FILTER & SEARCH ════ -->
+  <main class="legal-content">
 
     <!-- Search & Filter Controls -->
-    <div style="background:var(--card-bg); border:1px solid var(--bdr); border-radius:18px; padding:24px; margin-bottom:36px; box-shadow:var(--shadow);">
+    <div style="background:var(--card-bg); border:1.5px solid var(--bdr); border-radius:18px; padding:24px; margin-bottom:32px; box-shadow:var(--shadow);">
       <div style="display:flex; flex-direction:column; gap:16px;">
+        
+        <!-- Live Instant Search Bar -->
         <div style="position:relative;">
-          <input type="text" id="article-search" placeholder="🔍 Search any chapter, formula, or board (e.g. Chemical Reactions, Trigonometry, UP Board, Calculus)..." style="width:100%; padding:14px 20px; border-radius:12px; border:1.5px solid var(--bdr); background:var(--bg); color:var(--text); font-size:1rem; outline:none; transition:border-color 0.2s;" oninput="filterArticles()" onfocus="this.style.borderColor='var(--p)'" onblur="this.style.borderColor='var(--bdr)'" />
+          <input type="text" id="article-search" placeholder="🔍 Search chapter, subject, formula, or exam (e.g. trigonometry, chemical reactions, samas, bihar board)..."
+            style="width:100%; padding:14px 20px; font-size:1rem; border:1.5px solid var(--bdr); border-radius:12px; background:var(--bg); color:var(--text); outline:none; transition:border-color 0.2s;"
+            oninput="filterArticles()" onfocus="this.style.borderColor='var(--p)'" onblur="this.style.borderColor='var(--bdr)'" />
         </div>
 
-        <div style="display:flex; gap:8px; flex-wrap:wrap;" id="category-pills">
-          <button class="filter-pill active" onclick="setCategory('All', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--p); background:var(--p); color:#fff; font-weight:700; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">All (54)</button>
-          <button class="filter-pill" onclick="setCategory('Science', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">🔬 Science</button>
-          <button class="filter-pill" onclick="setCategory('Mathematics', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">📐 Mathematics</button>
-          <button class="filter-pill" onclick="setCategory('Social Science', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">🌍 Social Science</button>
-          <button class="filter-pill" onclick="setCategory('Hindi Vyakaran', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">📝 Hindi Vyakaran</button>
-          <button class="filter-pill" onclick="setCategory('State Boards', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">🏛️ State Boards</button>
-          <button class="filter-pill" onclick="setCategory('Class 12', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">⚡ Class 12</button>
-          <button class="filter-pill" onclick="setCategory('Exam Strategy', this)" style="padding:8px 16px; border-radius:999px; border:1px solid var(--bdr); background:var(--bg); color:var(--sub); font-weight:600; cursor:pointer; font-size:0.85rem; transition:all 0.2s;">🏆 Strategy &amp; Tips</button>
+        <!-- Category Pills -->
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;" id="category-pills">
+          <span style="font-size:0.85rem; font-weight:700; color:var(--sub); margin-right:4px;">Filter:</span>
+          ${categories.map((c, i) => `
+            <button class="filter-pill" onclick="setCategory('${c.filter}', this)" style="border:1px solid ${i === 0 ? 'var(--p)' : 'var(--bdr)'}; background:${i === 0 ? 'var(--p)' : 'var(--bg)'}; color:${i === 0 ? '#fff' : 'var(--sub)'}; padding:8px 16px; border-radius:999px; font-size:0.85rem; font-weight:700; cursor:pointer; transition:all 0.2s;">${c.name}</button>
+          `).join('')}
         </div>
+
       </div>
     </div>
 
-    <!-- Active Count Indicator -->
-    <div style="margin-bottom:20px; font-size:0.95rem; color:var(--sub); font-weight:600;">
-      Showing <span id="article-count" style="color:var(--p); font-weight:800;">${allArticles.length}</span> study guides:
+    <!-- Active Count Display -->
+    <div style="margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+      <p style="color:var(--sub); font-size:0.95rem; margin:0;">
+        Showing <strong id="article-count" style="color:var(--text);">${allArticles.length}</strong> verified study guides &amp; notes
+      </p>
     </div>
 
     <!-- Articles Grid -->
-    <div id="articles-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(330px, 1fr)); gap:24px;">
+    <div id="articles-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:24px;">
       ${articlesCardsHtml}
     </div>
 
@@ -340,8 +309,8 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
         const text = card.getAttribute('data-title');
 
         const matchesCat = (activeCategory === 'All') ||
-          (activeCategory === 'Class 12' && cat.includes('Class 12')) ||
-          (cat.toLowerCase().includes(activeCategory.toLowerCase()));
+          (cat === activeCategory) ||
+          (activeCategory === 'class-12' && cat === 'class-12');
 
         const matchesQuery = !query || text.includes(query);
 
@@ -363,22 +332,25 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
       const catParam = urlParams.get('category');
       if (catParam) {
         const catMap = {
-          'science': 'Science',
-          'maths': 'Mathematics',
-          'mathematics': 'Mathematics',
-          'sst': 'Social Science',
-          'social': 'Social Science',
-          'hindi': 'Hindi Vyakaran',
-          'state_boards': 'State Boards',
-          'state': 'State Boards',
-          'class12': 'Class 12',
-          'strategy': 'Exam Strategy',
+          'science': 'science',
+          'maths': 'maths',
+          'mathematics': 'maths',
+          'sst': 'social-science',
+          'social-science': 'social-science',
+          'hindi': 'hindi',
+          'state_boards': 'state-boards',
+          'state-boards': 'state-boards',
+          'class12': 'class-12',
+          'class-12': 'class-12',
+          'strategy': 'exam-tips',
+          'exam-tips': 'exam-tips',
           'all': 'All'
         };
         const target = catMap[catParam.toLowerCase()] || catParam;
         const pills = document.querySelectorAll('.filter-pill');
         for (const pill of pills) {
-          if (pill.textContent.toLowerCase().includes(target.toLowerCase())) {
+          const onclickAttr = pill.getAttribute('onclick') || '';
+          if (onclickAttr.includes("'" + target + "'")) {
             setCategory(target, pill);
             break;
           }
@@ -393,7 +365,7 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
       <div class="footer-top">
         <div class="footer-brand">
           <div class="fl" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-            <img src="logo.png" alt="Vidya Topper Logo" style="height: 32px; border-radius: 6px;">
+            <img src="../assets/images/brand/logo.png" alt="Vidya Topper Logo" style="height: 32px; border-radius: 6px;">
             Vidya Topper
           </div>
           <p>A free mobile study app for Indian students — NCERT, Board Exams, and Government Exam preparation all in one place.</p>
@@ -408,25 +380,25 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
         <div class="footer-links-col">
           <h4>Study Hub</h4>
           <ul>
-            <li><a href="study-materials.html">All 50+ Study Guides 📚</a></li>
-            <li><a href="cbse-class-10-science-important-questions.html">Class 10 Science Notes</a></li>
-            <li><a href="cbse-class-10-maths-formula-sheet.html">Maths Formula Sheet</a></li>
+            <li><a href="index.html">All 50+ Study Guides 📚</a></li>
+            <li><a href="science/cbse-class-10-science-important-questions.html">Class 10 Science Notes</a></li>
+            <li><a href="maths/cbse-class-10-maths-formula-sheet.html">Maths Formula Sheet</a></li>
             <li><a href="https://app.vidyatopper.com" target="_blank">Student Web App 🚀</a></li>
           </ul>
         </div>
         <div class="footer-links-col">
           <h4>Legal &amp; About</h4>
           <ul>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            <li><a href="terms.html">Terms of Service</a></li>
-            <li><a href="refund.html">Refund Policy</a></li>
+            <li><a href="../about.html">About Us</a></li>
+            <li><a href="../privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="../terms.html">Terms of Service</a></li>
+            <li><a href="../refund.html">Refund Policy</a></li>
           </ul>
         </div>
         <div class="footer-links-col">
           <h4>Support</h4>
           <ul>
-            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="../contact.html">Contact Us</a></li>
             <li><a href="mailto:vidyatopper.in@gmail.com">vidyatopper.in@gmail.com</a></li>
           </ul>
         </div>
@@ -442,7 +414,73 @@ const updatedStudyMaterialsHtml = `<!DOCTYPE html>
 </body>
 </html>`;
 
-fs.writeFileSync(path.join(outputDir, 'study-materials.html'), updatedStudyMaterialsHtml, 'utf8');
-console.log('Successfully wrote updated study-materials.html!');
+fs.writeFileSync(path.join(studyMaterialsDir, 'index.html'), studyMaterialsHubHtml, 'utf8');
+console.log('Successfully wrote study-materials/index.html!');
 
-console.log('All articles and sitemap built successfully!');
+// 4. Create root study-materials.html as a redirect to /study-materials/
+const rootStudyRedirectHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=/study-materials/">
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/" />
+  <title>Redirecting to Study Materials Hub – Vidya Topper</title>
+</head>
+<body>
+  <p>Redirecting to <a href="/study-materials/">Study Materials Hub</a>...</p>
+</body>
+</html>`;
+fs.writeFileSync(path.join(outputDir, 'study-materials.html'), rootStudyRedirectHtml, 'utf8');
+
+// 5. Generate updated sitemap.xml
+console.log('Generating updated sitemap.xml...');
+
+const sitemapUrls = [
+  { loc: 'https://vidyatopper.com/', priority: '1.0', changefreq: 'daily' },
+  { loc: 'https://vidyatopper.com/study-materials/', priority: '0.9', changefreq: 'daily' },
+  { loc: 'https://vidyatopper.com/about.html', priority: '0.8', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/contact.html', priority: '0.8', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/privacy-policy.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/terms.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/refund.html', priority: '0.5', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/share.html', priority: '0.6', changefreq: 'monthly' },
+  ...allArticles.map(a => ({
+    loc: `https://vidyatopper.com/study-materials/${a.categorySlug}/${a.slug}.html`,
+    priority: '0.8',
+    changefreq: 'weekly'
+  }))
+];
+
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapUrls.map(u => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+fs.writeFileSync(path.join(outputDir, 'sitemap.xml'), sitemapXml, 'utf8');
+console.log(`Updated sitemap.xml with ${sitemapUrls.length} total URLs.`);
+
+// 6. Generate _redirects file for Cloudflare Pages backwards compatibility
+console.log('Generating _redirects file...');
+const redirects = [
+  `/study-materials.html /study-materials/ 301`,
+  ...allArticles.map(a => `/${a.slug}.html /study-materials/${a.categorySlug}/${a.slug}.html 301`)
+];
+fs.writeFileSync(path.join(outputDir, '_redirects'), redirects.join('\n') + '\n', 'utf8');
+console.log('Successfully wrote _redirects file!');
+
+// 7. Clean up root loose article html files
+console.log('Cleaning up loose root HTML article files...');
+allArticles.forEach(a => {
+  const rootFile = path.join(outputDir, `${a.slug}.html`);
+  if (fs.existsSync(rootFile)) {
+    fs.unlinkSync(rootFile);
+    console.log(`Cleaned up loose root file: ${a.slug}.html`);
+  }
+});
+
+console.log('All articles built and codebase organized successfully!');

@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Introduction to Trigonometry Class 10 Notes – Formulas & Proofs – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 10 Maths Chapter 8 Introduction to Trigonometry. Trigonometric ratios table (0°, 30°, 45°, 60°, 90°), fundamental identities proofs, and heights & distances tricks." />
+  <meta name="keywords" content="trigonometry class 10 notes, trigonometric ratios table sin cos tan, trigonometric identities proofs, sin2 + cos2 = 1, heights and distances class 10" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-trigonometry-identities-proofs.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-trigonometry-identities-proofs.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Introduction to Trigonometry Class 10 Notes – Formulas & Proofs – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 10 Maths Chapter 8 Introduction to Trigonometry. Trigonometric ratios table (0°, 30°, 45°, 60°, 90°), fundamental identities proofs, and heights & distances tricks." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Introduction to Trigonometry Class 10 Notes – Formulas & Proofs – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 10 Maths Chapter 8 Introduction to Trigonometry. Trigonometric ratios table (0°, 30°, 45°, 60°, 90°), fundamental identities proofs, and heights & distances tricks." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Introduction to Trigonometry Class 10 Notes – Formulas & Proofs",
+        "description": "Master CBSE Class 10 Maths Chapter 8 Introduction to Trigonometry. Trigonometric ratios table (0°, 30°, 45°, 60°, 90°), fundamental identities proofs, and heights & distances tricks.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-trigonometry-identities-proofs.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Trigonometry & Identities",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-trigonometry-identities-proofs.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Prove that (sin θ - 2sin³θ) / (2cos³θ - cos θ) = tan θ.","acceptedAnswer":{"@type":"Answer","text":"LHS = [sin θ(1 - 2sin²θ)] / [cos θ(2cos²θ - 1)]. Since 1 - 2sin²θ = (cos²θ + sin²θ) - 2sin²θ = cos²θ - sin²θ, and 2cos²θ - 1 = 2cos²θ - (cos²θ + sin²θ) = cos²θ - sin²θ. Both bracket terms cancel out completely! LHS = sin θ / cos θ = tan θ = RHS. (Hence Proved)"}},{"@type":"Question","name":"If tan A = 4/3, find all other trigonometric ratios of angle A.","acceptedAnswer":{"@type":"Answer","text":"Given tan A = P/B = 4/3. Let P = 4k, B = 3k. Hypotenuse H = √(P² + B²) = √(16k² + 9k²) = 5k. Therefore: sin A = 4/5, cos A = 3/5, cosec A = 5/4, sec A = 5/3, cot A = 3/4."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>📐 Trigonometry & Identities: Formulas, Values & Proof Strategies</h1>
+      <p>Comprehensive guide to right-triangle trigonometry ratios, angle values table, and algebraic identity proofs.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | Board Ready</span>
     </div>
   </header>
 
@@ -261,21 +178,143 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Trigonometry & Identities</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      🎯 <strong>Three Golden Identities:</strong> (1) sin²θ + cos²θ = 1; (2) 1 + tan²θ = sec²θ; (3) 1 + cot²θ = cosec²θ. Memorize all rearranged forms for identity proofs.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Trigonometric Ratios (T-Ratios) in a Right Triangle</h2>
+      
+          <p>For a right-angled triangle ΔABC with right angle at B and acute angle <code>θ = ∠A</code>:</p>
+          <ul>
+            <li><code>sin θ = Opposite Side (Perpendicular) / Hypotenuse = P / H</code></li>
+            <li><code>cos θ = Adjacent Side (Base) / Hypotenuse = B / H</code></li>
+            <li><code>tan θ = Opposite / Adjacent = P / B = sin θ / cos θ</code></li>
+            <li><code>cosec θ = 1 / sin θ = H / P</code></li>
+            <li><code>sec θ = 1 / cos θ = H / B</code></li>
+            <li><code>cot θ = 1 / tan θ = B / P = cos θ / sin θ</code></li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Standard Trigonometric Values Table (0° to 90°)</h2>
+      
+          <table style="width:100%; border-collapse:collapse; margin-top:12px; font-size:0.9rem;">
+            <thead>
+              <tr style="background:var(--p-light); text-align:center;">
+                <th style="padding:10px; border:1px solid var(--bdr);">Ratio</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">0°</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">30°</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">45°</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">60°</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">90°</th>
+              </tr>
+            </thead>
+            <tbody style="text-align:center;">
+              <tr>
+                <td style="padding:8px; border:1px solid var(--bdr); font-weight:700;">sin θ</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">0</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1/2</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1/√2</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">√3/2</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1</td>
+              </tr>
+              <tr>
+                <td style="padding:8px; border:1px solid var(--bdr); font-weight:700;">cos θ</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">√3/2</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1/√2</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1/2</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">0</td>
+              </tr>
+              <tr>
+                <td style="padding:8px; border:1px solid var(--bdr); font-weight:700;">tan θ</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">0</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1/√3</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">1</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">√3</td>
+                <td style="padding:8px; border:1px solid var(--bdr);">Not Defined</td>
+              </tr>
+            </tbody>
+          </table>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Fundamental Identities & Top Proving Strategies</h2>
+      
+          <p><strong>The 3 Fundamental Identities:</strong></p>
+          <ol style="padding-left:20px; line-height:1.7;">
+            <li><code>sin²θ + cos²θ = 1  ⟹  sin²θ = 1 - cos²θ  ⟹  cos²θ = 1 - sin²θ</code></li>
+            <li><code>1 + tan²θ = sec²θ  ⟹  sec²θ - tan²θ = 1  ⟹  (sec θ - tan θ)(sec θ + tan θ) = 1</code></li>
+            <li><code>1 + cot²θ = cosec²θ  ⟹  cosec²θ - cot²θ = 1  ⟹  (cosec θ - cot θ)(cosec θ + cot θ) = 1</code></li>
+          </ol>
+          <p><strong>4 Rules of Thumb for Identity Proof Questions:</strong></p>
+          <ul>
+            <li>Convert everything into terms of <strong>sin θ</strong> and <strong>cos θ</strong> when you are stuck.</li>
+            <li>Take the Lowest Common Denominator (LCM) of fractional terms.</li>
+            <li>Rationalize the numerator or denominator when terms like <code>(1 ± sin θ)</code> or <code>(1 ± cos θ)</code> appear inside square roots.</li>
+            <li>Apply algebraic identities: <code>a² - b² = (a - b)(a + b)</code>, <code>a³ + b³ = (a + b)(a² - ab + b²)</code>.</li>
+          </ul>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Prove that (sin θ - 2sin³θ) / (2cos³θ - cos θ) = tan θ.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">LHS = [sin θ(1 - 2sin²θ)] / [cos θ(2cos²θ - 1)]. Since 1 - 2sin²θ = (cos²θ + sin²θ) - 2sin²θ = cos²θ - sin²θ, and 2cos²θ - 1 = 2cos²θ - (cos²θ + sin²θ) = cos²θ - sin²θ. Both bracket terms cancel out completely! LHS = sin θ / cos θ = tan θ = RHS. (Hence Proved)</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ If tan A = 4/3, find all other trigonometric ratios of angle A.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Given tan A = P/B = 4/3. Let P = 4k, B = 3k. Hypotenuse H = √(P² + B²) = √(16k² + 9k²) = 5k. Therefore: sin A = 4/5, cos A = 3/5, cosec A = 5/4, sec A = 5/3, cot A = 3/4.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-coordinate-geometry-formulas.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Coordinate Geometry Class 10 Notes – Distance & Section Formulas</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 7 Coordinate Geometry. Complete formulas for Distance Formula, Se...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Th...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +378,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

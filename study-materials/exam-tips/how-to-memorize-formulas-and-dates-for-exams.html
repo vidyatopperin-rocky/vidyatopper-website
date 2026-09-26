@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>How to Memorize Formulas, Reactions & History Dates – Active Recall & Spaced Repetition – Vidya Topper</title>
+  <meta name="description" content="Scientifically backed memory techniques for students. Learn Active Recall, Spaced Repetition (Leitner box), Feynman Technique, Mind Mapping, and Mnemonics to memorize formulas, chemical equations, and history timelines effortlessly." />
+  <meta name="keywords" content="how to memorize formulas fast for exams, active recall and spaced repetition study, feynman technique study tips, mnemonics for chemistry and history dates, student memory improvement hacks" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/exam-tips/how-to-memorize-formulas-and-dates-for-exams.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/exam-tips/how-to-memorize-formulas-and-dates-for-exams.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="How to Memorize Formulas, Reactions & History Dates – Active Recall & Spaced Repetition – Vidya Topper" />
+  <meta property="og:description" content="Scientifically backed memory techniques for students. Learn Active Recall, Spaced Repetition (Leitner box), Feynman Technique, Mind Mapping, and Mnemonics to memorize formulas, chemical equations, and history timelines effortlessly." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="How to Memorize Formulas, Reactions & History Dates – Active Recall & Spaced Repetition – Vidya Topper" />
+  <meta name="twitter:description" content="Scientifically backed memory techniques for students. Learn Active Recall, Spaced Repetition (Leitner box), Feynman Technique, Mind Mapping, and Mnemonics to memorize formulas, chemical equations, and history timelines effortlessly." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "How to Memorize Formulas, Reactions & History Dates – Active Recall & Spaced Repetition",
+        "description": "Scientifically backed memory techniques for students. Learn Active Recall, Spaced Repetition (Leitner box), Feynman Technique, Mind Mapping, and Mnemonics to memorize formulas, chemical equations, and history timelines effortlessly.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/exam-tips/how-to-memorize-formulas-and-dates-for-exams.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Exam Strategy",
+            "item": "https://vidyatopper.com/study-materials/?category=exam-tips"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Memory Techniques for Exams",
+            "item": "https://vidyatopper.com/study-materials/exam-tips/how-to-memorize-formulas-and-dates-for-exams.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I memorize complex chemical reactions in Class 10 & 12 Chemistry?","acceptedAnswer":{"@type":"Answer","text":"Group reactions by pattern rather than memorizing individual equations in isolation. For example, categorize all precipitation reactions together, all thermal decompositions together, and learn the general blueprint (e.g., Metal Carbonate + Acid → Salt + CO₂ + H₂O). Then write them out from memory daily for 10 minutes."}},{"@type":"Question","name":"What is the best time of day to memorize theoretical facts?","acceptedAnswer":{"@type":"Answer","text":"Cognitive studies suggest that theoretical memorization and formula revision are most effective either early morning (when mental fatigue is zero) or right before sleeping (since the brain consolidates memories during slow-wave sleep)."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">Study Skills & Memory</span>
+      <h1>🧠 How to Memorize Formulas, Reactions & Dates: Cognitive Science for Students</h1>
+      <p>Stop passive re-reading — leverage Active Recall, Spaced Repetition, and Memory Palaces to retain 300% more.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | Study Techniques</span>
     </div>
   </header>
 
@@ -261,21 +178,102 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=exam-tips" style="color:var(--sub); text-decoration:none;">Exam Strategy</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Memory Techniques for Exams</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>The Forgetting Curve:</strong> Without review, humans forget approximately 70% of new information within 24 hours. Reviewing on Day 1, Day 3, Day 7, and Day 30 permanently cements knowledge into long-term memory.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Why Passive Reading Fails & Active Recall Wins</h2>
+      
+          <p>Highlighting textbook lines and repeatedly re-reading notes creates an <strong>Illusion of Competence</strong>: the material feels familiar, but during an exam when the book is closed, the brain fails to retrieve it.</p>
+          <p><strong>Active Recall:</strong> Instead of re-reading, close your notebook and force your brain to retrieve the information from scratch:</p>
+          <ul>
+            <li><strong>The Blank Sheet Technique (Blurting):</strong> After reading a chapter, take a completely blank piece of paper and write down every formula, diagram, and concept you can recall in 15 minutes. Open the book only to see what you missed.</li>
+            <li><strong>Flashcards:</strong> Write the question/formula on front and answer on back. Test yourself actively.</li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Spaced Repetition: Defeating the Ebbinghaus Forgetting Curve</h2>
+      
+          <p>Spaced repetition spaces out revision intervals right at the moment you are about to forget:</p>
+          <div style="background:var(--bg); padding:16px; border:1px solid var(--bdr); border-radius:12px; margin-bottom:14px; line-height:1.7;">
+            <p>• <strong>Review 1:</strong> 24 hours after first learning.</p>
+            <p>• <strong>Review 2:</strong> 3 days after Review 1.</p>
+            <p>• <strong>Review 3:</strong> 7 days after Review 2.</p>
+            <p>• <strong>Review 4:</strong> 21 days after Review 3.</p>
+          </div>
+          <p>With each spaced repetition, the forgetting curve flattens, converting volatile short-term memories into permanent long-term neurological synaptic pathways.</p>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Memory Hooks: Mnemonics, Chunking & The Feynman Method</h2>
+      
+          <ul>
+            <li><strong>Acrostic Mnemonics:</strong> E.g., Trigonometry ratios: <em>"Some People Have, Curly Brown Hair, Turned Permanent Black"</em> (sin=P/H, cos=B/H, tan=P/B).</li>
+            <li><strong>Reactivity Series Mnemonic:</strong> <em>"Please Send Cats Monkeys And Zebras In Lead Cages Securely Guarded"</em> (K, Na, Ca, Mg, Al, Zn, Fe, Pb, Cu, Ag, Au).</li>
+            <li><strong>The Feynman Technique:</strong> Explain a complex scientific concept (e.g., Double Circulation or Faraday’s Law) in simple, everyday language as if teaching a 10-year-old child. Whenever you use technical jargon to mask confusion, consult your textbook to clarify the conceptual gap.</li>
+          </ul>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ How do I memorize complex chemical reactions in Class 10 & 12 Chemistry?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Group reactions by pattern rather than memorizing individual equations in isolation. For example, categorize all precipitation reactions together, all thermal decompositions together, and learn the general blueprint (e.g., Metal Carbonate + Acid → Salt + CO₂ + H₂O). Then write them out from memory daily for 10 minutes.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ What is the best time of day to memorize theoretical facts?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Cognitive studies suggest that theoretical memorization and formula revision are most effective either early morning (when mental fatigue is zero) or right before sleeping (since the brain consolidates memories during slow-wave sleep).</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/exam-tips/how-to-score-95-percent-in-class-10-board-exams.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Topper Strategy & Tips</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">How to Score 95%+ in Class 10 Board Exams – Practical Study Plan & Blueprint</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Proven roadmap to score 95%+ marks in CBSE & State Board Class 10 examinations. Subject-wise prepara...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/best-study-time-table-for-class-10-and-12-students.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Time Management</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Daily 6-Hour Self-Study Timetable for Class 10 & 12 Board Students</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">The most productive daily self-study timetable for Class 10 and 12 board exam aspirants. Structured ...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/exam-stress-and-anxiety-management-for-students.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Student Wellness</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">How to Overcome Board Exam Stress and Anxiety – Practical Techniques for Students</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Proven mental health and stress relief strategies for board exam students. How to eliminate panic at...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +337,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

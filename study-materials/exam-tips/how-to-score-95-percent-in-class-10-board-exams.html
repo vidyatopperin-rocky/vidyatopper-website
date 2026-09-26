@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>How to Score 95%+ in Class 10 Board Exams – Practical Study Plan & Blueprint – Vidya Topper</title>
+  <meta name="description" content="Proven roadmap to score 95%+ marks in CBSE & State Board Class 10 examinations. Subject-wise preparation tips, answer sheet presentation secrets, revision rounds, and NCERT mastery." />
+  <meta name="keywords" content="how to score 95 percent in class 10 board exams, class 10 board exam topper tips, answer sheet presentation tips cbse, revision strategy class 10 boards, ncert mastery timetable" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/exam-tips/how-to-score-95-percent-in-class-10-board-exams.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/exam-tips/how-to-score-95-percent-in-class-10-board-exams.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="How to Score 95%+ in Class 10 Board Exams – Practical Study Plan & Blueprint – Vidya Topper" />
+  <meta property="og:description" content="Proven roadmap to score 95%+ marks in CBSE & State Board Class 10 examinations. Subject-wise preparation tips, answer sheet presentation secrets, revision rounds, and NCERT mastery." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="How to Score 95%+ in Class 10 Board Exams – Practical Study Plan & Blueprint – Vidya Topper" />
+  <meta name="twitter:description" content="Proven roadmap to score 95%+ marks in CBSE & State Board Class 10 examinations. Subject-wise preparation tips, answer sheet presentation secrets, revision rounds, and NCERT mastery." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "How to Score 95%+ in Class 10 Board Exams – Practical Study Plan & Blueprint",
+        "description": "Proven roadmap to score 95%+ marks in CBSE & State Board Class 10 examinations. Subject-wise preparation tips, answer sheet presentation secrets, revision rounds, and NCERT mastery.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/exam-tips/how-to-score-95-percent-in-class-10-board-exams.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Exam Strategy",
+            "item": "https://vidyatopper.com/study-materials/?category=exam-tips"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Score 95%+ in Class 10 Boards",
+            "item": "https://vidyatopper.com/study-materials/exam-tips/how-to-score-95-percent-in-class-10-board-exams.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is NCERT sufficient to score 95%+ in Class 10 CBSE Board Exams?","acceptedAnswer":{"@type":"Answer","text":"Yes! 100% of the CBSE Class 10 question paper is strictly framed within NCERT textbook concepts. For Mathematics, NCERT plus NCERT Exemplar and last 7 years PYQs are sufficient to score a perfect 100/100."}},{"@type":"Question","name":"How many hours should a Class 10 student self-study daily?","acceptedAnswer":{"@type":"Answer","text":"Consistent, focused quality matters far more than endless hours. 4 to 5 hours of distraction-free self-study (excluding school and coaching hours) using active recall and pomodoro sprints is more than enough to rank among the top 1% toppers."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">Topper Strategy & Tips</span>
+      <h1>🏆 How to Score 95%+ in Class 10 Board Exams: The Ultimate Topper Roadmap</h1>
+      <p>A battle-tested blueprint covering NCERT mastery, time management, and answer sheet presentation techniques.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | Board Exam Strategy</span>
     </div>
   </header>
 
@@ -261,21 +178,124 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=exam-tips" style="color:var(--sub); text-decoration:none;">Exam Strategy</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Score 95%+ in Class 10 Boards</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>The 80/20 Rule:</strong> 80% of board exam questions stem from 20% of high-yield recurring NCERT concepts. Prioritize mastering previous 10 years question papers (PYQs) before chasing reference books.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Phase-Wise 4-Month Preparation Timeline</h2>
+      
+          <ol style="padding-left:20px; line-height:1.8;">
+            <li><strong>Month 1 (Complete Syllabus Coverage):</strong> Read NCERT line by line for Science, Social Science, and English. Solve every single in-text and chapter-end exercise. Prepare one-page chapter summary sheets.</li>
+            <li><strong>Month 2 (Past 10 Years Question Papers - PYQs):</strong> Solve previous years board question papers topic-wise. Identify repeated numericals, chemical reactions, and geographic map-pointing patterns.</li>
+            <li><strong>Month 3 (3-Hour Timed Mock Tests):</strong> Sit in an isolated room from 10:30 AM to 1:30 PM (matching board exam hours) and solve full sample papers without touching your phone. Strictly assess your timing and accuracy.</li>
+            <li><strong>Month 4 (Triple Revision Cycle):</strong> Rapid revision using flashcards and formula sheets. Do not start new unfamiliar reference books in the final month.</li>
+          </ol>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Subject-Wise Scoring Tactics for Class 10</h2>
+      
+          <ul>
+            <li><strong>Mathematics (Goal: 100/100):</strong>
+              <ul>
+                <li>Maintain a dedicated <em>Mistake Notebook</em> for silly algebraic errors.</li>
+                <li>Write down every given value, formula, and units (cm, m, cm²) explicitly before calculating.</li>
+                <li>Draw neat geometric figures with a sharp pencil and ruler; highlight final answers in a box.</li>
+              </ul>
+            </li>
+            <li><strong>Science (Goal: 95+):</strong>
+              <ul>
+                <li>Chemistry: Write balanced chemical equations with state symbols (s, l, g, aq) and reaction catalysts.</li>
+                <li>Biology: Always draw labeled diagrams (even when not explicitly demanded) for long-answer questions.</li>
+                <li>Physics: Write sign conventions clearly in ray optics and electricity numericals.</li>
+              </ul>
+            </li>
+            <li><strong>Social Science (Goal: 95+):</strong>
+              <ul>
+                <li>Never write massive essays; structure answers into <strong>bullet points with bold subheadings</strong>.</li>
+                <li>Practice the official CBSE political map of India every weekend to lock all 5 free map marks.</li>
+              </ul>
+            </li>
+            <li><strong>English & Hindi (Goal: 90+):</strong>
+              <ul>
+                <li>Memorize exact letter and notice formats; adhere strictly to prescribed word limits.</li>
+                <li>Practice pristine cursive handwriting with 1-line gaps between questions.</li>
+              </ul>
+            </li>
+          </ul>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Board Answer Sheet Presentation Secrets</h2>
+      
+          <p>Examiners check hundreds of answer scripts daily. A clean, structured copy gets awarded higher subjective marks:</p>
+          <ul>
+            <li>Utilize the <strong>15-Minute Reading Time</strong> effectively: Pick optional choices (e.g., in 5-mark questions) and plan your sequence of answering.</li>
+            <li>Start with your strongest section (Section C, D or A) to build confidence and leave a solid impression on the examiner.</li>
+            <li>Leave two blank lines after every completed answer and draw a pencil partition line.</li>
+            <li>Underline keywords, dates, and formula names with a pencil.</li>
+          </ul>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Is NCERT sufficient to score 95%+ in Class 10 CBSE Board Exams?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Yes! 100% of the CBSE Class 10 question paper is strictly framed within NCERT textbook concepts. For Mathematics, NCERT plus NCERT Exemplar and last 7 years PYQs are sufficient to score a perfect 100/100.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ How many hours should a Class 10 student self-study daily?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Consistent, focused quality matters far more than endless hours. 4 to 5 hours of distraction-free self-study (excluding school and coaching hours) using active recall and pomodoro sprints is more than enough to rank among the top 1% toppers.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/exam-tips/best-study-time-table-for-class-10-and-12-students.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Time Management</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Daily 6-Hour Self-Study Timetable for Class 10 & 12 Board Students</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">The most productive daily self-study timetable for Class 10 and 12 board exam aspirants. Structured ...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/how-to-memorize-formulas-and-dates-for-exams.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Study Skills & Memory</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">How to Memorize Formulas, Reactions & History Dates – Active Recall & Spaced Repetition</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Scientifically backed memory techniques for students. Learn Active Recall, Spaced Repetition (Leitne...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/exam-stress-and-anxiety-management-for-students.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Student Wellness</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">How to Overcome Board Exam Stress and Anxiety – Practical Techniques for Students</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Proven mental health and stress relief strategies for board exam students. How to eliminate panic at...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +359,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

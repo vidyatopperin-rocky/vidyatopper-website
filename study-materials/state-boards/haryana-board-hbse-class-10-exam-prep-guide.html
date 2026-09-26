@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="hi">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>हरियाणा बोर्ड (HBSE) कक्षा 10 परीक्षा तैयारी रणनीति व महत्वपूर्ण प्रश्न 2026 – Vidya Topper</title>
+  <meta name="description" content="हरियाणा विद्यालय शिक्षा बोर्ड (BSEH भिवानी) कक्षा 10 वार्षिक परीक्षा: 80 अंक परीक्षा पैटर्न, विषयवार महत्वपूर्ण टॉपिक्स, केस-स्टडी आधारित प्रश्न एवं समय प्रबंधन टिप्स।" />
+  <meta name="keywords" content="haryana board hbse class 10 exam prep guide 2026, bseh bhiwani 10th science math hindi notes, hbse class 10 sample paper solution 2026" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/state-boards/haryana-board-hbse-class-10-exam-prep-guide.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/state-boards/haryana-board-hbse-class-10-exam-prep-guide.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="हरियाणा बोर्ड (HBSE) कक्षा 10 परीक्षा तैयारी रणनीति व महत्वपूर्ण प्रश्न 2026 – Vidya Topper" />
+  <meta property="og:description" content="हरियाणा विद्यालय शिक्षा बोर्ड (BSEH भिवानी) कक्षा 10 वार्षिक परीक्षा: 80 अंक परीक्षा पैटर्न, विषयवार महत्वपूर्ण टॉपिक्स, केस-स्टडी आधारित प्रश्न एवं समय प्रबंधन टिप्स।" />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="हरियाणा बोर्ड (HBSE) कक्षा 10 परीक्षा तैयारी रणनीति व महत्वपूर्ण प्रश्न 2026 – Vidya Topper" />
+  <meta name="twitter:description" content="हरियाणा विद्यालय शिक्षा बोर्ड (BSEH भिवानी) कक्षा 10 वार्षिक परीक्षा: 80 अंक परीक्षा पैटर्न, विषयवार महत्वपूर्ण टॉपिक्स, केस-स्टडी आधारित प्रश्न एवं समय प्रबंधन टिप्स।" />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "हरियाणा बोर्ड (HBSE) कक्षा 10 परीक्षा तैयारी रणनीति व महत्वपूर्ण प्रश्न 2026",
+        "description": "हरियाणा विद्यालय शिक्षा बोर्ड (BSEH भिवानी) कक्षा 10 वार्षिक परीक्षा: 80 अंक परीक्षा पैटर्न, विषयवार महत्वपूर्ण टॉपिक्स, केस-स्टडी आधारित प्रश्न एवं समय प्रबंधन टिप्स।",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/state-boards/haryana-board-hbse-class-10-exam-prep-guide.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "State Boards",
+            "item": "https://vidyatopper.com/study-materials/?category=state-boards"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "HBSE Class 10 Prep Guide",
+            "item": "https://vidyatopper.com/study-materials/state-boards/haryana-board-hbse-class-10-exam-prep-guide.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"HBSE बोर्ड परीक्षा में पास होने के लिए कितने अंक अनिवार्य हैं?","acceptedAnswer":{"@type":"Answer","text":"हरियाणा बोर्ड में प्रत्येक विषय में थ्योरी और आंतरिक मूल्यांकन को मिलाकर न्यूनतम 33% अंक प्राप्त करना अनिवार्य होता है।"}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">Haryana Board (HBSE) Class 10</span>
+      <h1>🏆 हरियाणा बोर्ड (HBSE भिवानी) कक्षा 10: विषयवार रणनीति व मॉडल प्रश्न</h1>
+      <p>बोर्ड ऑफ स्कूल एजुकेशन हरियाणा (BSEH) के नवीनतम एनुअल असेसमेंट के आधार पर तैयार गाइड।</p>
+      <span class="legal-updated">सत्र 2025–2026 | HBSE भिवानी ब्लूप्रिंट</span>
     </div>
   </header>
 
@@ -261,21 +178,65 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=state-boards" style="color:var(--sub); text-decoration:none;">State Boards</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">HBSE Class 10 Prep Guide</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      🎯 <strong>HBSE पैटर्न:</strong> 80 अंक थ्योरी + 20 अंक आंतरिक मूल्यांकन। वस्तुनिष्ठ व बहुविकल्पीय प्रश्नों की संख्या 30 अंक तक बढ़ा दी गई है।
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. गणित एवं विज्ञान के स्कोरिंग टॉपिक्स</h2>
+      
+          <p>हरियाणा बोर्ड में गणित के अंतर्गत सांख्यिकी (माध्य, माध्यक, बहुलक), पृष्ठीय क्षेत्रफल एवं आयतन, तथा द्विघात समीकरण सबसे अधिक अंक दिलाते हैं। विज्ञान में प्रकाश का अपवर्तन, लेंस सूत्र, धातु-अधातु तथा मानव जनन तंत्र प्रमुख हैं।</p>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ HBSE बोर्ड परीक्षा में पास होने के लिए कितने अंक अनिवार्य हैं?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">हरियाणा बोर्ड में प्रत्येक विषय में थ्योरी और आंतरिक मूल्यांकन को मिलाकर न्यूनतम 33% अंक प्राप्त करना अनिवार्य होता है।</p>
+      </div>
+    
+        </div>
+      </div>
+    
 
-    ${relatedHtml}
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/science/cbse-class-10-science-important-questions.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">NCERT Important Qs</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Science Most Important Questions & Chapter Notes 2026</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Comprehensive CBSE Class 10 Science revision guide. Master chemical reactions, life processes, light...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/board-exam-preparation-tips-2026.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Topper Tips</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">10 Proven Board Exam Preparation Tips to Score 95%+ in 2026 Exams</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Expert strategies for CBSE, UP Board, and Bihar Board students. Study timetables, revision technique...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +300,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

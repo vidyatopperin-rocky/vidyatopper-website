@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems – Vidya Topper</title>
+  <meta name="description" content="Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of roots based on Discriminant D, factorization method, and train speed problems." />
+  <meta name="keywords" content="quadratic equations class 10 notes, quadratic formula shreedharacharya, discriminant b2 - 4ac nature of roots, train speed word problems, ncert class 10 maths chapter 4" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems – Vidya Topper" />
+  <meta property="og:description" content="Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of roots based on Discriminant D, factorization method, and train speed problems." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems – Vidya Topper" />
+  <meta name="twitter:description" content="Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of roots based on Discriminant D, factorization method, and train speed problems." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems",
+        "description": "Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of roots based on Discriminant D, factorization method, and train speed problems.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Quadratic Equations (Maths)",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Find the values of k for which 2x² + kx + 3 = 0 has two equal real roots.","acceptedAnswer":{"@type":"Answer","text":"For equal real roots, the discriminant must be zero: D = b² - 4ac = 0. Here a = 2, b = k, c = 3. Thus: k² - 4(2)(3) = 0 ⟹ k² - 24 = 0 ⟹ k² = 24 ⟹ k = ±√24 = ±2√6."}},{"@type":"Question","name":"Can the sum of ages of two friends be 20 years, with product of their ages 4 years ago being 48?","acceptedAnswer":{"@type":"Answer","text":"Let friend A age = x. Friend B age = 20 - x. Four years ago: (x - 4)(16 - x) = 48 ⟹ 16x - x² - 64 + 4x = 48 ⟹ x² - 20x + 112 = 0. Discriminant D = (-20)² - 4(1)(112) = 400 - 448 = -48 < 0. Since D < 0, no real solution exists. This situation is mathematically impossible."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>📈 Quadratic Equations: Complete Formulas, Roots & Word Problems</h1>
+      <p>From the quadratic formula and nature of roots to standard age, area, and speed applications.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | CBSE Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,131 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Quadratic Equations (Maths)</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>Exam Formula:</strong> The Discriminant D = b² - 4ac determines everything about the roots. If D > 0 (two distinct real roots), D = 0 (two equal real roots), D < 0 (no real roots).
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Standard Form & Methods of Solving Quadratic Equations</h2>
+      
+          <p>A quadratic equation in variable <em>x</em> is an equation of the form:</p>
+          <div style="background:var(--bg); padding:12px; border:1px solid var(--bdr); border-radius:10px; margin-bottom:12px;">
+            <code>ax² + bx + c = 0</code> (where a, b, c are real numbers and <strong>a ≠ 0</strong>)
+          </div>
+          <p><strong>Method 1: Factorization by Splitting the Middle Term:</strong></p>
+          <p>Find two numbers <em>p</em> and <em>q</em> such that their sum <code>p + q = b</code> and their product <code>p · q = a · c</code>. Express the middle term as <code>px + qx</code>, group the terms, and factor out binomial roots.</p>
+          <p><strong>Method 2: Quadratic Formula (Shreedharacharya’s Rule):</strong></p>
+          <div style="background:var(--p-light); padding:14px 18px; border-radius:10px; font-size:1.05rem;">
+            <code>x = [ -b ± √(b² - 4ac) ] / (2a)</code>
+          </div>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Nature of Roots & The Discriminant (D)</h2>
+      
+          <p>The expression <code>D = b² - 4ac</code> is called the <strong>Discriminant</strong> because it discriminates the character of the solutions:</p>
+          <table style="width:100%; border-collapse:collapse; margin-top:12px; font-size:0.9rem;">
+            <thead>
+              <tr style="background:var(--p-light); text-align:left;">
+                <th style="padding:10px; border:1px solid var(--bdr);">Value of Discriminant D</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">Nature of Roots</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">Roots Formula</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>D > 0</code> (Positive)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);">Two distinct real roots</td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>x = (-b + √D)/2a</code> and <code>x = (-b - √D)/2a</code></td>
+              </tr>
+              <tr>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>D = 0</code> (Zero)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);">Two equal real roots (coincident)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>x = -b / (2a)</code> (repeated twice)</td>
+              </tr>
+              <tr>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>D < 0</code> (Negative)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);">No real roots (Imaginary roots)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);">No real solutions exist in ℝ</td>
+              </tr>
+            </tbody>
+          </table>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Solving Classic Train Speed & Work-Time Word Problems</h2>
+      
+          <p><strong>Standard Train Speed Problem Template:</strong></p>
+          <p><em>"A train travels 360 km at a uniform speed. If the speed had been 5 km/h more, it would have taken 1 hour less for the same journey. Find the original speed."</em></p>
+          <div style="background:var(--bg); padding:16px; border:1px solid var(--bdr); border-radius:12px; line-height:1.7;">
+            <p>1. Let original speed = <code>x km/h</code>. Increased speed = <code>(x + 5) km/h</code>.</p>
+            <p>2. Time taken at original speed: <code>t₁ = 360 / x</code> hours.</p>
+            <p>3. Time taken at increased speed: <code>t₂ = 360 / (x + 5)</code> hours.</p>
+            <p>4. Equation: <code>t₁ - t₂ = 1  ⟹  360/x - 360/(x + 5) = 1</code></p>
+            <p>5. Simplify: <code>360[(x + 5 - x) / (x(x + 5))] = 1  ⟹  1800 = x² + 5x</code></p>
+            <p>6. <code>x² + 5x - 1800 = 0  ⟹  (x + 45)(x - 40) = 0</code></p>
+            <p>7. Since speed cannot be negative, <code>x = 40 km/h</code>. The original speed is <strong>40 km/h</strong>.</p>
+          </div>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Find the values of k for which 2x² + kx + 3 = 0 has two equal real roots.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">For equal real roots, the discriminant must be zero: D = b² - 4ac = 0. Here a = 2, b = k, c = 3. Thus: k² - 4(2)(3) = 0 ⟹ k² - 24 = 0 ⟹ k² = 24 ⟹ k = ±√24 = ±2√6.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Can the sum of ages of two friends be 20 years, with product of their ages 4 years ago being 48?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Let friend A age = x. Friend B age = 20 - x. Four years ago: (x - 4)(16 - x) = 48 ⟹ 16x - x² - 64 + 4x = 48 ⟹ x² - 20x + 112 = 0. Discriminant D = (-20)² - 4(1)(112) = 400 - 448 = -48 < 0. Since D < 0, no real solution exists. This situation is mathematically impossible.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-pair-of-linear-equations.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Pair of Linear Equations in Two Variables Class 10 Notes & Methods</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master Class 10 Maths Chapter 3 Pair of Linear Equations in Two Variables. Consistency conditions, g...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-arithmetic-progressions.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Arithmetic Progressions Class 10 Notes – nth Term & Sum Formulas</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 5 Arithmetic Progressions. Complete notes on common difference d,...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +366,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

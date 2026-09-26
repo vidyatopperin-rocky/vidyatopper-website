@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Coordinate Geometry Class 10 Notes – Distance & Section Formulas – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 10 Maths Chapter 7 Coordinate Geometry. Complete formulas for Distance Formula, Section Formula (internal division), Midpoint formula, and collinearity tests." />
+  <meta name="keywords" content="coordinate geometry class 10 notes, distance formula proof, section formula internal division, midpoint coordinates formula, collinear points condition" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-coordinate-geometry-formulas.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-coordinate-geometry-formulas.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Coordinate Geometry Class 10 Notes – Distance & Section Formulas – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 10 Maths Chapter 7 Coordinate Geometry. Complete formulas for Distance Formula, Section Formula (internal division), Midpoint formula, and collinearity tests." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Coordinate Geometry Class 10 Notes – Distance & Section Formulas – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 10 Maths Chapter 7 Coordinate Geometry. Complete formulas for Distance Formula, Section Formula (internal division), Midpoint formula, and collinearity tests." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Coordinate Geometry Class 10 Notes – Distance & Section Formulas",
+        "description": "Master CBSE Class 10 Maths Chapter 7 Coordinate Geometry. Complete formulas for Distance Formula, Section Formula (internal division), Midpoint formula, and collinearity tests.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-coordinate-geometry-formulas.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Coordinate Geometry (Maths)",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-coordinate-geometry-formulas.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Find the ratio in which the Y-axis divides the line segment joining A(5, -6) and B(-1, -4).","acceptedAnswer":{"@type":"Answer","text":"Any point on the Y-axis has x-coordinate equal to 0, i.e., P(0, y). Let the ratio be k : 1. Using section formula for x: 0 = [k(-1) + 1(5)] / (k + 1) ⟹ -k + 5 = 0 ⟹ k = 5. Therefore, the Y-axis divides the segment in the ratio 5 : 1."}},{"@type":"Question","name":"Show that points A(1, 5), B(2, 3), and C(-2, -11) are collinear.","acceptedAnswer":{"@type":"Answer","text":"Calculate distances: AB = √[(2-1)² + (3-5)²] = √[1 + 4] = √5. BC = √[(-2-2)² + (-11-3)²] = √[16 + 196] = √212 = 2√53. AC = √[(-2-1)² + (-11-5)²] = √[9 + 256] = √265. Since AB + BC ≠ AC, the points are NOT collinear."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>📍 Coordinate Geometry: Complete Formulas, Proofs & Coordinate Geometry</h1>
+      <p>Distance between points, section ratio division, and proofs of geometric shapes on the Cartesian plane.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | CBSE Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,102 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Coordinate Geometry (Maths)</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>Section Ratio Tip:</strong> Whenever finding the ratio in which a point divides a line segment, always assume the ratio as k : 1 instead of m₁ : m₂ to reduce variables.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. The Distance Formula & Applications</h2>
+      
+          <p>The straight-line distance between two coordinates <code>A(x₁, y₁)</code> and <code>B(x₂, y₂)</code> in the Cartesian plane is derived from Pythagoras Theorem:</p>
+          <div style="background:var(--p-light); padding:14px 18px; border-radius:10px; font-size:1.05rem;">
+            <code>AB = √[ (x₂ - x₁)² + (y₂ - y₁)² ]</code>
+          </div>
+          <p><strong>Distance from Origin (0,0):</strong> Distance of point <code>P(x, y)</code> from origin is simply <code>OP = √(x² + y²)</code>.</p>
+          <p><strong>Proving Geometric Figures on Cartesian Plane:</strong></p>
+          <ul>
+            <li><strong>Equilateral Triangle:</strong> Show all three side lengths are equal: <code>AB = BC = CA</code>.</li>
+            <li><strong>Right-Angled Triangle:</strong> Show sum of squares of two sides equals square of the third side: <code>AB² + BC² = AC²</code>.</li>
+            <li><strong>Square vs. Rhombus:</strong> All 4 sides equal (<code>AB = BC = CD = DA</code>). For a Square, diagonals are equal (<code>AC = BD</code>); for a Rhombus, diagonals are NOT equal.</li>
+            <li><strong>Rectangle vs. Parallelogram:</strong> Opposite sides equal. For a Rectangle, diagonals are equal; for a Parallelogram, diagonals are unequal.</li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Section Formula & Midpoint Coordinates</h2>
+      
+          <p>The coordinates of point <code>P(x, y)</code> that divides the line segment joining <code>A(x₁, y₁)</code> and <code>B(x₂, y₂)</code> internally in the ratio <code>m₁ : m₂</code> are given by:</p>
+          <div style="background:var(--bg); padding:16px; border:1px solid var(--bdr); border-radius:12px; margin-bottom:14px; line-height:1.8;">
+            <code>x = (m₁x₂ + m₂x₁) / (m₁ + m₂)</code>
+            <br/>
+            <code>y = (m₁y₂ + m₂y₁) / (m₁ + m₂)</code>
+          </div>
+          <p><strong>Special Case 1: Midpoint Formula (Ratio 1 : 1):</strong></p>
+          <div style="background:var(--p-light); padding:12px 18px; border-radius:10px;">
+            <code>Midpoint M = [ (x₁ + x₂) / 2, (y₁ + y₂) / 2 ]</code>
+          </div>
+          <p><strong>Special Case 2: Centroid of a Triangle:</strong></p>
+          <p>The centroid <em>G</em> of ΔABC with vertices (x₁, y₁), (x₂, y₂), (x₃, y₃) is:
+            <br/><code>G = [ (x₁ + x₂ + x₃) / 3, (y₁ + y₂ + y₃) / 3 ]</code>
+          </p>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Find the ratio in which the Y-axis divides the line segment joining A(5, -6) and B(-1, -4).</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Any point on the Y-axis has x-coordinate equal to 0, i.e., P(0, y). Let the ratio be k : 1. Using section formula for x: 0 = [k(-1) + 1(5)] / (k + 1) ⟹ -k + 5 = 0 ⟹ k = 5. Therefore, the Y-axis divides the segment in the ratio 5 : 1.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Show that points A(1, 5), B(2, 3), and C(-2, -11) are collinear.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Calculate distances: AB = √[(2-1)² + (3-5)²] = √[1 + 4] = √5. BC = √[(-2-2)² + (-11-3)²] = √[16 + 196] = √212 = 2√53. AC = √[(-2-1)² + (-11-5)²] = √[9 + 256] = √265. Since AB + BC ≠ AC, the points are NOT collinear.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-triangles-theorems-proofs.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Triangles Class 10 Notes – Basic Proportionality Theorem (BPT) & Proofs</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 6 Triangles. Complete proofs of Basic Proportionality Theorem (Th...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-trigonometry-identities-proofs.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Introduction to Trigonometry Class 10 Notes – Formulas & Proofs</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 10 Maths Chapter 8 Introduction to Trigonometry. Trigonometric ratios table (0°, 3...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +337,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

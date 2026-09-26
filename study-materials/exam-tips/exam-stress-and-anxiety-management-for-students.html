@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>How to Overcome Board Exam Stress and Anxiety – Practical Techniques for Students – Vidya Topper</title>
+  <meta name="description" content="Proven mental health and stress relief strategies for board exam students. How to eliminate panic attacks, sleep anxiety, fear of failure, and maintain razor-sharp focus during exam season." />
+  <meta name="keywords" content="how to reduce exam stress class 10 12, board exam anxiety relief techniques, fear of failure in exams, 4-7-8 breathing method for students, sleep schedule during board exams" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/exam-tips/exam-stress-and-anxiety-management-for-students.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/exam-tips/exam-stress-and-anxiety-management-for-students.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="How to Overcome Board Exam Stress and Anxiety – Practical Techniques for Students – Vidya Topper" />
+  <meta property="og:description" content="Proven mental health and stress relief strategies for board exam students. How to eliminate panic attacks, sleep anxiety, fear of failure, and maintain razor-sharp focus during exam season." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="How to Overcome Board Exam Stress and Anxiety – Practical Techniques for Students – Vidya Topper" />
+  <meta name="twitter:description" content="Proven mental health and stress relief strategies for board exam students. How to eliminate panic attacks, sleep anxiety, fear of failure, and maintain razor-sharp focus during exam season." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "How to Overcome Board Exam Stress and Anxiety – Practical Techniques for Students",
+        "description": "Proven mental health and stress relief strategies for board exam students. How to eliminate panic attacks, sleep anxiety, fear of failure, and maintain razor-sharp focus during exam season.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/exam-tips/exam-stress-and-anxiety-management-for-students.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Exam Strategy",
+            "item": "https://vidyatopper.com/study-materials/?category=exam-tips"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Exam Stress & Anxiety Relief",
+            "item": "https://vidyatopper.com/study-materials/exam-tips/exam-stress-and-anxiety-management-for-students.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What should I do if my mind goes completely blank during the board exam?","acceptedAnswer":{"@type":"Answer","text":"Put your pen down, close your eyes, take 3 slow deep breaths, and take a sip of water. Skip that difficult question immediately and move forward to an easy question you know well. Solving 2 or 3 easy questions will restore your dopamine and confidence, after which your subconscious brain will naturally unlock the answer to the skipped question."}},{"@type":"Question","name":"How do I deal with parental pressure and fear of disappointing family?","acceptedAnswer":{"@type":"Answer","text":"Communicate openly with your parents about your preparation and efforts. Remember that parental concern stems from love and security anxiety. Focus entirely on executing your daily study plan with honesty rather than fixating on uncontrollable end results."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">Student Wellness</span>
+      <h1>🧘 How to Manage Board Exam Stress, Fear & Anxiety Effectively</h1>
+      <p>Practical cognitive drills, physical wellness routines, and focus techniques to maintain mental peace.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | Student Health</span>
     </div>
   </header>
 
@@ -261,21 +178,105 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=exam-tips" style="color:var(--sub); text-decoration:none;">Exam Strategy</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Exam Stress & Anxiety Relief</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>Mindset Shift:</strong> An exam does not measure your intelligence, intrinsic worth, or future potential — it is merely a 3-hour check of how well you can recall specific curriculum facts onto paper. Approach it as an exciting game.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Recognizing Exam Anxiety & The Yerkes-Dodson Law</h2>
+      
+          <p>A mild amount of adrenaline/stress is actually beneficial — it sharpens focus and alertness. However, when stress exceeds the optimal threshold, performance collapses, resulting in memory blanks, trembling hands, and rapid heartbeat.</p>
+          <p><strong>Physical Warning Signs:</strong></p>
+          <ul>
+            <li>Inability to fall asleep despite physical exhaustion.</li>
+            <li>Sudden blank outs upon looking at a difficult question.</li>
+            <li>Unreasonable guilt whenever taking a short relaxation break.</li>
+            <li>Frequent tension headaches and upset stomach before test days.</li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. The 4-7-8 Breathing Technique for Instant Panic Control</h2>
+      
+          <p>Whenever you feel panic rising in the exam hall or study table, activate your body’s parasympathetic nervous system using the <strong>4-7-8 Respiratory Reset</strong>:</p>
+          <ol style="padding-left:20px; line-height:1.7;">
+            <li>Exhale completely through your mouth with a soft whooshing sound.</li>
+            <li>Close your lips and inhale quietly through your nose for a mental count of <strong>4 seconds</strong>.</li>
+            <li>Hold your breath effortlessly for <strong>7 seconds</strong>.</li>
+            <li>Exhale completely through your mouth for <strong>8 seconds</strong>.</li>
+            <li>Repeat this cycle 4 times. Your heart rate will automatically decelerate within 90 seconds.</li>
+          </ol>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Nutrition, Sleep & Screen Boundaries During Exam Month</h2>
+      
+          <ul>
+            <li><strong>Strict 7-Hour Sleep Rule:</strong> During sleep, the brain's glymphatic system clears metabolic toxins, and memory consolidation occurs. Sacrificing sleep for "all-nighters" reduces memory recall and cognitive processing speed by up to 40%.</li>
+            <li><strong>Cut Caffeine Crashes:</strong> Avoid excessive energy drinks or strong coffee past 4:00 PM; caffeine spikes cortisol and induces jittery palpitations.</li>
+            <li><strong>30-Minute Daily Sunlight Walk:</strong> Light cardiovascular exercise (brisk walking, cycling) stimulates brain-derived neurotrophic factor (BDNF), enhancing neuroplasticity and lowering cortisol.</li>
+            <li><strong>Digital Detox:</strong> Eliminate social media scrolling (Instagram Reels, YouTube Shorts) during exam months — algorithmic micro-content over-stimulates dopamine circuits and destroys deep sustained attention.</li>
+          </ul>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ What should I do if my mind goes completely blank during the board exam?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Put your pen down, close your eyes, take 3 slow deep breaths, and take a sip of water. Skip that difficult question immediately and move forward to an easy question you know well. Solving 2 or 3 easy questions will restore your dopamine and confidence, after which your subconscious brain will naturally unlock the answer to the skipped question.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ How do I deal with parental pressure and fear of disappointing family?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Communicate openly with your parents about your preparation and efforts. Remember that parental concern stems from love and security anxiety. Focus entirely on executing your daily study plan with honesty rather than fixating on uncontrollable end results.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/exam-tips/how-to-score-95-percent-in-class-10-board-exams.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Topper Strategy & Tips</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">How to Score 95%+ in Class 10 Board Exams – Practical Study Plan & Blueprint</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Proven roadmap to score 95%+ marks in CBSE & State Board Class 10 examinations. Subject-wise prepara...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/best-study-time-table-for-class-10-and-12-students.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Time Management</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Daily 6-Hour Self-Study Timetable for Class 10 & 12 Board Students</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">The most productive daily self-study timetable for Class 10 and 12 board exam aspirants. Structured ...</div>
+        </a>
+      
+        <a href="../../study-materials/exam-tips/how-to-memorize-formulas-and-dates-for-exams.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Study Skills & Memory</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">How to Memorize Formulas, Reactions & History Dates – Active Recall & Spaced Repetition</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Scientifically backed memory techniques for students. Learn Active Recall, Spaced Repetition (Leitne...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +340,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

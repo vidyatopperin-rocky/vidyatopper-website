@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Class 12 Maths Matrices and Determinants – Adjoint & Inverse Formulas – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 12 Maths Chapter 3 & 4 Matrices and Determinants. Properties of determinants, transpose, symmetric vs skew-symmetric matrices, adjoint of a matrix, and solving systems of linear equations using matrix inverse method." />
+  <meta name="keywords" content="matrices and determinants class 12 maths notes, adjoint of a matrix formula, inverse of 3x3 matrix a-1 = adj a / det a, cramers rule matrix method linear equations, cbse class 12 maths" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/class-12/class-12-maths-matrices-determinants-formulas.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/class-12/class-12-maths-matrices-determinants-formulas.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Class 12 Maths Matrices and Determinants – Adjoint & Inverse Formulas – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 12 Maths Chapter 3 & 4 Matrices and Determinants. Properties of determinants, transpose, symmetric vs skew-symmetric matrices, adjoint of a matrix, and solving systems of linear equations using matrix inverse method." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Class 12 Maths Matrices and Determinants – Adjoint & Inverse Formulas – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 12 Maths Chapter 3 & 4 Matrices and Determinants. Properties of determinants, transpose, symmetric vs skew-symmetric matrices, adjoint of a matrix, and solving systems of linear equations using matrix inverse method." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Class 12 Maths Matrices and Determinants – Adjoint & Inverse Formulas",
+        "description": "Master CBSE Class 12 Maths Chapter 3 & 4 Matrices and Determinants. Properties of determinants, transpose, symmetric vs skew-symmetric matrices, adjoint of a matrix, and solving systems of linear equations using matrix inverse method.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/class-12/class-12-maths-matrices-determinants-formulas.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Class 12 Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=class-12"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Class 12 Matrices & Determinants",
+            "item": "https://vidyatopper.com/study-materials/class-12/class-12-maths-matrices-determinants-formulas.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"If A is a square matrix of order 3 and |A| = 5, find the value of |adj A|.","acceptedAnswer":{"@type":"Answer","text":"Using the formula |adj A| = |A|^(n - 1): here n = 3 and |A| = 5. Therefore: |adj A| = 5^(3 - 1) = 5² = 25."}},{"@type":"Question","name":"What is the condition for a system AX = B to have infinitely many solutions versus no solution when |A| = 0?","acceptedAnswer":{"@type":"Answer","text":"When |A| = 0 (singular matrix): Calculate (adj A) · B. (1) If (adj A) · B ≠ O (zero matrix), the system is inconsistent and has NO SOLUTION; (2) If (adj A) · B = O, the system may be consistent with INFINITELY MANY SOLUTIONS or inconsistent."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 12 Mathematics</span>
+      <h1>🔢 Matrices & Determinants: Complete Notes, Adjoint & Inverse Guide</h1>
+      <p>From matrix multiplication rules and properties to solving 3-variable linear systems via matrix inversion.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | CBSE Board Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,112 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=class-12" style="color:var(--sub); text-decoration:none;">Class 12 Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Class 12 Matrices & Determinants</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      🎯 <strong>Guaranteed 5-Mark Question:</strong> Solving a system of three linear equations in three variables using the Matrix Inverse Method: X = A⁻¹ B.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Types of Matrices & Multiplication Rules</h2>
+      
+          <p>A matrix is an ordered rectangular array of numbers or functions with <em>m</em> rows and <em>n</em> columns (order <code>m × n</code>):</p>
+          <ul>
+            <li><strong>Symmetric Matrix:</strong> A square matrix <code>A</code> is symmetric if <code>Aᵀ = A</code> (i.e., <code>a_ij = a_ji</code> for all i, j).</li>
+            <li><strong>Skew-Symmetric Matrix:</strong> A square matrix <code>A</code> is skew-symmetric if <code>Aᵀ = -A</code> (i.e., <code>a_ij = -a_ji</code>). All principal diagonal elements of a skew-symmetric matrix are strictly <strong>zero</strong>.</li>
+            <li><strong>Theorem:</strong> Any square matrix <code>A</code> can be uniquely expressed as the sum of a symmetric and a skew-symmetric matrix:
+              <br/><code>A = ½ (A + Aᵀ) [Symmetric] + ½ (A - Aᵀ) [Skew-Symmetric]</code>.</li>
+            <li><strong>Matrix Multiplication Condition:</strong> Product <code>AB</code> is defined if and only if the number of columns in <em>A</em> equals the number of rows in <em>B</em>. Matrix multiplication is generally <strong>non-commutative</strong> (<code>AB ≠ BA</code>).</li>
+          </ul>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Determinants, Minors, Cofactors & Adjoint</h2>
+      
+          <p>A determinant is a scalar value associated with any square matrix. Determinant of transpose: <code>|Aᵀ| = |A|</code>.</p>
+          <p><strong>Cofactor (A_ij):</strong> <code>A_ij = (-1)^(i + j) · M_ij</code> (where M_ij is the minor obtained by deleting row i and column j).</p>
+          <p><strong>Adjoint of a Square Matrix (adj A):</strong> The transpose of the matrix of cofactors: <code>adj A = [A_ij]ᵀ</code>.</p>
+          <p><strong>Fundamental Adjoint Theorems (High-Yield 1-Mark Formulae):</strong></p>
+          <ul>
+            <li><code>A · (adj A) = (adj A) · A = |A| · I</code></li>
+            <li>For an n × n matrix: <code>|adj A| = |A|^(n - 1)</code></li>
+            <li><code>|adj (adj A)| = |A|^((n - 1)²)</code></li>
+            <li><code>adj (AB) = (adj B) · (adj A)</code></li>
+          </ul>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Inverse of a Matrix & Matrix Method for Linear Systems</h2>
+      
+          <p>A square matrix <code>A</code> is invertible (non-singular) if and only if <code>|A| ≠ 0</code>. The inverse matrix is:</p>
+          <div style="background:var(--p-light); padding:14px 18px; border-radius:12px; margin-bottom:12px; font-size:1.05rem;">
+            <code>A⁻¹ = (1 / |A|) · adj(A)</code>
+          </div>
+          <p><strong>Solving System of Linear Equations (AX = B):</strong></p>
+          <div style="background:var(--bg); padding:16px; border:1px solid var(--bdr); border-radius:12px; line-height:1.7;">
+            <p>For system: <code>a₁x + b₁y + c₁z = d₁</code>, <code>a₂x + b₂y + c₂z = d₂</code>, <code>a₃x + b₃y + c₃z = d₃</code>:</p>
+            <p>1. Form coefficient matrix <code>A = [[a₁, b₁, c₁], [a₂, b₂, c₂], [a₃, b₃, c₃]]</code>, variable vector <code>X = [[x], [y], [z]]</code>, and constant vector <code>B = [[d₁], [d₂], [d₃]]</code>.</p>
+            <p>2. Calculate determinant <code>|A|</code>. If <code>|A| ≠ 0</code>, the system is <strong>consistent</strong> with a unique solution:</p>
+            <p style="font-weight:700; color:var(--p); font-size:1.1rem;"><code>X = A⁻¹ · B</code></p>
+          </div>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ If A is a square matrix of order 3 and |A| = 5, find the value of |adj A|.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Using the formula |adj A| = |A|^(n - 1): here n = 3 and |A| = 5. Therefore: |adj A| = 5^(3 - 1) = 5² = 25.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ What is the condition for a system AX = B to have infinitely many solutions versus no solution when |A| = 0?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">When |A| = 0 (singular matrix): Calculate (adj A) · B. (1) If (adj A) · B ≠ O (zero matrix), the system is inconsistent and has NO SOLUTION; (2) If (adj A) · B = O, the system may be consistent with INFINITELY MANY SOLUTIONS or inconsistent.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/class-12/class-12-maths-calculus-derivatives-integrals-formula.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 12 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Class 12 Maths Calculus Master Sheet – Differentiation & Integration Formulas</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 12 Maths Calculus. Complete master cheat sheet of differentiation formulas, integr...</div>
+        </a>
+      
+        <a href="../../study-materials/class-12/class-12-physics-electrostatics-formulas-derivations.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 12 Physics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Class 12 Physics Electrostatics Notes – Gauss Law & Capacitance Derivations</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 12 Physics Chapter 1 & 2 Electrostatics. Complete notes on Coulomb’s law, electric...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +347,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

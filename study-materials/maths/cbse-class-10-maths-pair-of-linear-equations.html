@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Pair of Linear Equations in Two Variables Class 10 Notes & Methods – Vidya Topper</title>
+  <meta name="description" content="Master Class 10 Maths Chapter 3 Pair of Linear Equations in Two Variables. Consistency conditions, graphical method, substitution method, elimination method, and upstream-downstream problems." />
+  <meta name="keywords" content="pair of linear equations in two variables class 10, consistency conditions a1 a2 b1 b2 c1 c2, elimination method steps, substitution method maths, speed upstream downstream problem" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-pair-of-linear-equations.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-pair-of-linear-equations.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Pair of Linear Equations in Two Variables Class 10 Notes & Methods – Vidya Topper" />
+  <meta property="og:description" content="Master Class 10 Maths Chapter 3 Pair of Linear Equations in Two Variables. Consistency conditions, graphical method, substitution method, elimination method, and upstream-downstream problems." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Pair of Linear Equations in Two Variables Class 10 Notes & Methods – Vidya Topper" />
+  <meta name="twitter:description" content="Master Class 10 Maths Chapter 3 Pair of Linear Equations in Two Variables. Consistency conditions, graphical method, substitution method, elimination method, and upstream-downstream problems." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Pair of Linear Equations in Two Variables Class 10 Notes & Methods",
+        "description": "Master Class 10 Maths Chapter 3 Pair of Linear Equations in Two Variables. Consistency conditions, graphical method, substitution method, elimination method, and upstream-downstream problems.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-pair-of-linear-equations.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Mathematics",
+            "item": "https://vidyatopper.com/study-materials/?category=maths"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Linear Equations in 2 Variables",
+            "item": "https://vidyatopper.com/study-materials/maths/cbse-class-10-maths-pair-of-linear-equations.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"For what value of k will the equations 2x + 3y = 7 and (k-1)x + (k+2)y = 3k have infinitely many solutions?","acceptedAnswer":{"@type":"Answer","text":"For infinitely many solutions: a₁/a₂ = b₁/b₂ = c₁/c₂. Thus: 2/(k-1) = 3/(k+2) = 7/(3k). Cross-multiplying the first two: 2(k+2) = 3(k-1) ⟹ 2k + 4 = 3k - 3 ⟹ k = 7. Checking with 7/(3k): 7/(21) = 1/3, which matches 2/(7-1) = 2/6 = 1/3. Hence, k = 7."}},{"@type":"Question","name":"Solve for x and y: 2x + 3y = 11 and 2x - 4y = -24.","acceptedAnswer":{"@type":"Answer","text":"Subtracting equation 2 from equation 1 eliminates x: (2x - 2x) + (3y - (-4y)) = 11 - (-24) ⟹ 7y = 35 ⟹ y = 5. Substituting y = 5 into 2x + 3(5) = 11 ⟹ 2x = -4 ⟹ x = -2. Solution: x = -2, y = 5."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 10 Mathematics</span>
+      <h1>📊 Linear Equations in Two Variables: Complete Solution Guide</h1>
+      <p>Detailed coverage of graphical consistency, algebraic methods, and word problem strategies.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | NCERT Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,132 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=maths" style="color:var(--sub); text-decoration:none;">Mathematics</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Linear Equations in 2 Variables</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>Board Blueprint:</strong> Word problems on upstream/downstream boat speeds, fraction problems, and age problems carry 4 to 5 marks in the long answer section.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Standard Form & Consistency Conditions</h2>
+      
+          <p>A pair of linear equations in variables <em>x</em> and <em>y</em> is represented as:</p>
+          <div style="background:var(--bg); padding:12px; border:1px solid var(--bdr); border-radius:10px; margin-bottom:12px;">
+            <code>a₁x + b₁y + c₁ = 0</code> and <code>a₂x + b₂y + c₂ = 0</code>
+          </div>
+          <table style="width:100%; border-collapse:collapse; margin-top:12px; font-size:0.9rem;">
+            <thead>
+              <tr style="background:var(--p-light); text-align:left;">
+                <th style="padding:10px; border:1px solid var(--bdr);">Ratio Comparison</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">Graphical Representation</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">Algebraic Interpretation</th>
+                <th style="padding:10px; border:1px solid var(--bdr);">System Consistency</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>a₁/a₂ ≠ b₁/b₂</code></td>
+                <td style="padding:10px; border:1px solid var(--bdr);">Intersecting lines at 1 point</td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><strong>Exactly 1 Unique Solution</strong></td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><strong>Consistent</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>a₁/a₂ = b₁/b₂ = c₁/c₂</code></td>
+                <td style="padding:10px; border:1px solid var(--bdr);">Coincident lines (overlapping)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><strong>Infinitely Many Solutions</strong></td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><strong>Consistent (Dependent)</strong></td>
+              </tr>
+              <tr>
+                <td style="padding:10px; border:1px solid var(--bdr);"><code>a₁/a₂ = b₁/b₂ ≠ c₁/c₂</code></td>
+                <td style="padding:10px; border:1px solid var(--bdr);">Parallel lines (never meet)</td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><strong>No Solution (Zero)</strong></td>
+                <td style="padding:10px; border:1px solid var(--bdr);"><strong>Inconsistent</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Algebraic Solution Methods: Substitution & Elimination</h2>
+      
+          <p><strong>Method 1: Elimination Method (Most Efficient for Board Exams):</strong></p>
+          <ol style="padding-left:20px; line-height:1.7;">
+            <li>Multiply one or both equations by suitable non-zero constants so coefficients of either <em>x</em> or <em>y</em> become equal.</li>
+            <li>Add or subtract the two equations to eliminate that variable.</li>
+            <li>Solve the resulting linear equation in one variable.</li>
+            <li>Substitute this value back into either original equation to find the other variable.</li>
+          </ol>
+          <p><strong>Method 2: Substitution Method:</strong> Express one variable in terms of the other from one equation, and substitute it into the second equation.</p>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Master Formula for Upstream & Downstream Boat Word Problems</h2>
+      
+          <p>Let speed of boat in still water = <code>x km/h</code>, and speed of stream (current) = <code>y km/h</code>:</p>
+          <ul>
+            <li><strong>Speed Downstream (Moving with the stream):</strong> <code>Speed = (x + y) km/h</code></li>
+            <li><strong>Speed Upstream (Moving against the stream):</strong> <code>Speed = (x - y) km/h</code> (Always x > y)</li>
+            <li><strong>Time Equations:</strong> <code>Time = Distance / Speed</code>.
+              <br/>Upstream Time: <code>t₁ = Distance / (x - y)</code>; Downstream Time: <code>t₂ = Distance / (x + y)</code>.</li>
+          </ul>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ For what value of k will the equations 2x + 3y = 7 and (k-1)x + (k+2)y = 3k have infinitely many solutions?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">For infinitely many solutions: a₁/a₂ = b₁/b₂ = c₁/c₂. Thus: 2/(k-1) = 3/(k+2) = 7/(3k). Cross-multiplying the first two: 2(k+2) = 3(k-1) ⟹ 2k + 4 = 3k - 3 ⟹ k = 7. Checking with 7/(3k): 7/(21) = 1/3, which matches 2/(7-1) = 2/6 = 1/3. Hence, k = 7.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Solve for x and y: 2x + 3y = 11 and 2x - 4y = -24.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Subtracting equation 2 from equation 1 eliminates x: (2x - 2x) + (3y - (-4y)) = 11 - (-24) ⟹ 7y = 35 ⟹ y = 5. Substituting y = 5 into 2x + 3(5) = 11 ⟹ 2x = -4 ⟹ x = -2. Solution: x = -2, y = 5.</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/maths/cbse-class-10-maths-quadratic-equations-solutions.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Quadratic Equations Class 10 Notes – Discriminant, Roots & Word Problems</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Comprehensive CBSE Class 10 Maths Chapter 4 Quadratic Equations notes. Quadratic formula, nature of ...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-polynomials-notes.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 10 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Polynomials Class 10 Notes – Zeroes, Graph Shapes & Coefficients</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Complete CBSE Class 10 Maths Chapter 2 Polynomials revision notes. Geometrical meaning of zeroes, pa...</div>
+        </a>
+      
+        <a href="../../study-materials/maths/cbse-class-10-maths-formula-sheet.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">Formula Handbook</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">CBSE Class 10 Maths Complete Formula Sheet & Quick Revision Notes</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">All Class 10 Maths formulas in one place. Real numbers, polynomials, quadratic equations, AP, coordi...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +367,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>

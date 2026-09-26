@@ -1,97 +1,14 @@
-// vidyatopper-website-main/generator/template.js
-const fs = require('fs');
-const path = require('path');
-
-function generateArticleHtml(article, allArticlesMap = {}) {
-  const lang = article.lang || 'en';
-  const categorySlug = article.categorySlug || 'science';
-  const canonicalUrl = `https://vidyatopper.com/study-materials/${categorySlug}/${article.slug}.html`;
-
-  // FAQ schema if present
-  let faqSchema = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqEntities = article.faq.map(item => ({
-      "@type": "Question",
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer
-      }
-    }));
-    faqSchema = JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqEntities
-    });
-  }
-
-  // Related articles links
-  let relatedHtml = '';
-  if (article.relatedSlugs && article.relatedSlugs.length > 0) {
-    const cards = article.relatedSlugs.map(slug => {
-      const rel = allArticlesMap[slug];
-      if (!rel) return '';
-      const relCat = rel.categorySlug || 'science';
-      return `
-        <a href="../../study-materials/${relCat}/${slug}.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
-          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">${rel.badge || 'Study Guide'}</div>
-          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">${rel.title}</div>
-          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">${rel.description ? rel.description.substring(0, 100) + '...' : ''}</div>
-        </a>
-      `;
-    }).filter(Boolean).join('');
-
-    if (cards) {
-      relatedHtml = `
-        <div class="legal-card" style="margin-top:28px;">
-          <h2>📚 Related Study Guides &amp; Notes</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
-            ${cards}
-          </div>
-        </div>
-      `;
-    }
-  }
-
-  // FAQ HTML
-  let faqCardHtml = '';
-  if (article.faq && article.faq.length > 0) {
-    const faqItems = article.faq.map((item, idx) => `
-      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
-        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ ${item.question}</h3>
-        <p style="color:var(--sub); line-height:1.65; margin:0;">${item.answer}</p>
-      </div>
-    `).join('');
-
-    faqCardHtml = `
-      <div class="legal-card">
-        <h2>💡 Frequently Asked Questions (FAQ)</h2>
-        <div style="margin-top:16px;">
-          ${faqItems}
-        </div>
-      </div>
-    `;
-  }
-
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
-      <h2>${sec.h2}</h2>
-      ${sec.contentHtml}
-    </div>
-  `).join('\n');
-
-  return `<!DOCTYPE html>
-<html lang="${lang}">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${article.title} – Vidya Topper</title>
-  <meta name="description" content="${article.description}" />
-  <meta name="keywords" content="${article.keywords}" />
+  <title>Class 12 Physics Current Electricity – Kirchhoff’s Rules & Wheatstone Bridge – Vidya Topper</title>
+  <meta name="description" content="Master CBSE Class 12 Physics Chapter 3 Current Electricity. Complete guide to drift velocity derivation, Ohm’s law microscopic form, Kirchhoff’s Junction and Loop rules, and Wheatstone bridge balance." />
+  <meta name="keywords" content="current electricity class 12 physics notes, drift velocity derivation vd = eeτ/m, kirchhoffs laws circuit numericals, wheatstone bridge balanced condition proof p/q = r/s, meter bridge" />
   <meta name="author" content="Vidya Topper Educational Research Team" />
-  <link rel="canonical" href="${canonicalUrl}" />
+  <link rel="canonical" href="https://vidyatopper.com/study-materials/class-12/class-12-physics-current-electricity-kirchhoff-rules.html" />
 
   <!-- Google AdSense Official Verification -->
   <meta name="google-adsense-account" content="ca-pub-8779731071171821" />
@@ -100,17 +17,17 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="${canonicalUrl}" />
+  <meta property="og:url" content="https://vidyatopper.com/study-materials/class-12/class-12-physics-current-electricity-kirchhoff-rules.html" />
   <meta property="og:site_name" content="Vidya Topper" />
-  <meta property="og:title" content="${article.title} – Vidya Topper" />
-  <meta property="og:description" content="${article.description}" />
+  <meta property="og:title" content="Class 12 Physics Current Electricity – Kirchhoff’s Rules & Wheatstone Bridge – Vidya Topper" />
+  <meta property="og:description" content="Master CBSE Class 12 Physics Chapter 3 Current Electricity. Complete guide to drift velocity derivation, Ohm’s law microscopic form, Kirchhoff’s Junction and Loop rules, and Wheatstone bridge balance." />
   <meta property="og:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vidyatopper" />
-  <meta name="twitter:title" content="${article.title} – Vidya Topper" />
-  <meta name="twitter:description" content="${article.description}" />
+  <meta name="twitter:title" content="Class 12 Physics Current Electricity – Kirchhoff’s Rules & Wheatstone Bridge – Vidya Topper" />
+  <meta name="twitter:description" content="Master CBSE Class 12 Physics Chapter 3 Current Electricity. Complete guide to drift velocity derivation, Ohm’s law microscopic form, Kirchhoff’s Junction and Loop rules, and Wheatstone bridge balance." />
   <meta name="twitter:image" content="https://vidyatopper.com/assets/images/brand/feature-graphic.png" />
 
   <link rel="icon" type="image/png" href="../../assets/images/brand/logo.png" />
@@ -130,8 +47,8 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     "@graph": [
       {
         "@type": "Article",
-        "headline": "${article.title.replace(/"/g, '\\"')}",
-        "description": "${article.description.replace(/"/g, '\\"')}",
+        "headline": "Class 12 Physics Current Electricity – Kirchhoff’s Rules & Wheatstone Bridge",
+        "description": "Master CBSE Class 12 Physics Chapter 3 Current Electricity. Complete guide to drift velocity derivation, Ohm’s law microscopic form, Kirchhoff’s Junction and Loop rules, and Wheatstone bridge balance.",
         "image": "https://vidyatopper.com/assets/images/brand/feature-graphic.png",
         "author": {
           "@type": "Organization",
@@ -146,7 +63,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
             "url": "https://vidyatopper.com/assets/images/brand/logo.png"
           }
         },
-        "mainEntityOfPage": "${canonicalUrl}"
+        "mainEntityOfPage": "https://vidyatopper.com/study-materials/class-12/class-12-physics-current-electricity-kirchhoff-rules.html"
       },
       {
         "@type": "BreadcrumbList",
@@ -166,18 +83,18 @@ function generateArticleHtml(article, allArticlesMap = {}) {
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "${article.category || 'Guide'}",
-            "item": "https://vidyatopper.com/study-materials/?category=${categorySlug}"
+            "name": "Class 12 Science",
+            "item": "https://vidyatopper.com/study-materials/?category=class-12"
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "${(article.shortTitle || article.title).replace(/"/g, '\\"')}",
-            "item": "${canonicalUrl}"
+            "name": "Class 12 Current Electricity",
+            "item": "https://vidyatopper.com/study-materials/class-12/class-12-physics-current-electricity-kirchhoff-rules.html"
           }
         ]
       }
-      ${faqSchema ? ',' + faqSchema : ''}
+      ,{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does the resistance of a metallic conductor increase with rising temperature?","acceptedAnswer":{"@type":"Answer","text":"Electrical resistance is inversely proportional to relaxation time: R ∝ 1/τ. When temperature increases, metallic positive ions vibrate with greater thermal amplitude, increasing the collision frequency of free conduction electrons. This sharply reduces the average relaxation time (τ), thereby increasing resistance and resistivity."}},{"@type":"Question","name":"Differentiate between EMF and Terminal Potential Difference of a battery cell.","acceptedAnswer":{"@type":"Answer","text":"Electromotive Force (EMF, E) is the maximum potential difference between the electrodes of a cell in an open circuit when no current is drawn. Terminal Potential Difference (V) is the voltage across the electrodes when the cell is discharging through an external circuit: V = E - I·r (where r is internal resistance)."}}]}
     ]
   }
   </script>
@@ -245,10 +162,10 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   <!-- ════ HEADER BANNER ════ -->
   <header class="legal-header">
     <div class="wrap">
-      <span class="legal-badge">${article.badge || 'Curriculum Guide'}</span>
-      <h1>${article.h1 || article.title}</h1>
-      <p>${article.subtitle || article.description}</p>
-      <span class="legal-updated">${article.updated || 'Academic Session 2025–2026 | 100% Free Access'}</span>
+      <span class="legal-badge">CBSE Class 12 Physics</span>
+      <h1>⚡ Current Electricity: Drift Velocity, Kirchhoff’s Laws & Bridges</h1>
+      <p>From microscopic electron conduction to solving complex multi-loop circuits and bridges.</p>
+      <span class="legal-updated">Academic Session 2025–2026 | CBSE Board Aligned</span>
     </div>
   </header>
 
@@ -261,21 +178,108 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span>›</span>
       <a href="../../study-materials/index.html" style="color:var(--p); text-decoration:none; font-weight:600;">Study Materials Hub</a>
       <span>›</span>
-      <a href="../../study-materials/index.html?category=${categorySlug}" style="color:var(--sub); text-decoration:none;">${article.category || 'Guide'}</a>
+      <a href="../../study-materials/index.html?category=class-12" style="color:var(--sub); text-decoration:none;">Class 12 Science</a>
       <span>›</span>
-      <span style="color:var(--text);">${article.shortTitle || article.title}</span>
+      <span style="color:var(--text);">Class 12 Current Electricity</span>
     </div>
 
-    ${article.highlight ? `
+    
     <div class="legal-highlight">
-      ${article.highlight}
-    </div>` : ''}
+      💡 <strong>Circuit Solving Tip:</strong> Kirchhoff’s 1st Law (Junction Rule) is based on the <em>Conservation of Charge</em>. Kirchhoff’s 2nd Law (Loop Rule) is based on the <em>Conservation of Energy</em>.
+    </div>
 
-    ${sectionsHtml}
+    
+    <div class="legal-card">
+      <h2>1. Drift Velocity & Microscopic Derivation of Ohm’s Law</h2>
+      
+          <p><strong>Drift Velocity (v_d):</strong> The average velocity with which free conduction electrons get drifted towards the positive terminal of a conductor under an applied electric field.</p>
+          <div style="background:var(--bg); padding:14px; border:1px solid var(--bdr); border-radius:12px; margin-bottom:12px;">
+            <code>v_d = - (e · E · τ) / m</code>
+            <br/><span style="font-size:0.85rem; color:var(--sub);">(where e = elementary charge, E = electric field, m = electron mass, τ = average relaxation time)</span>
+          </div>
+          <p><strong>Relation Between Electric Current (I) and Drift Velocity (v_d):</strong></p>
+          <div style="background:var(--p-light); padding:12px 18px; border-radius:10px; margin-bottom:12px;">
+            <code>I = n · e · A · v_d</code>  ⟹  Current Density: <code>J = I / A = n · e · v_d</code>
+          </div>
+          <p><strong>Derivation of Resistivity:</strong> Substituting <code>v_d = (eEτ)/m</code>:
+            <br/><code>I = n · e · A · [ (e · V · τ) / (m · L) ]  ⟹  V / I = [ m / (n · e² · τ) ] · (L / A)</code>
+            <br/>Comparing with <code>R = ρ(L/A)</code>, we obtain electrical resistivity: <code>ρ = m / (n · e² · τ)</code>.
+          </p>
+        
+    </div>
+  
 
-    ${faqCardHtml}
+    <div class="legal-card">
+      <h2>2. Kirchhoff’s Circuit Laws & Sign Conventions</h2>
+      
+          <ul>
+            <li><strong>Kirchhoff’s First Rule (Junction Rule / Current Law - KCL):</strong> In any electrical network, the algebraic sum of currents meeting at any junction is zero: <code>∑ I = 0</code>. (Sum of currents entering a junction = Sum of currents leaving). Represents <strong>Conservation of Electric Charge</strong>.</li>
+            <li><strong>Kirchhoff’s Second Rule (Loop Rule / Voltage Law - KVL):</strong> The algebraic sum of changes in potential around any closed loop involving resistors and cells in the loop is zero: <code>∑ ΔV = ∑ E - ∑ (I·R) = 0</code>. Represents <strong>Conservation of Energy</strong>.</li>
+          </ul>
+        
+    </div>
+  
 
-    ${relatedHtml}
+    <div class="legal-card">
+      <h2>3. Wheatstone Bridge Balanced Condition Derivation</h2>
+      
+          <p>A Wheatstone bridge consists of four resistors P, Q, R, and S arranged in a quadrilateral ABCD with a galvanometer G connected between B and D:</p>
+          <div style="background:var(--card-bg); border:1.5px solid var(--bdr); padding:16px; border-radius:12px; line-height:1.7;">
+            <p>Under balanced condition, no current flows through the galvanometer: <code>I_g = 0  ⟹  V_B = V_D</code>.</p>
+            <p>Applying Loop Rule to Loop ABDA: <code>-I₁·P + I₂·R = 0  ⟹  I₁·P = I₂·R</code> ... (Equation 1)</p>
+            <p>Applying Loop Rule to Loop BCDB: <code>-I₁·Q + I₂·S = 0  ⟹  I₁·Q = I₂·S</code> ... (Equation 2)</p>
+            <p>Dividing Equation 1 by Equation 2: <code>(I₁·P) / (I₁·Q) = (I₂·R) / (I₂·S)  ⟹  P / Q = R / S</code></p>
+            <p>This is the famous <strong>Wheatstone Bridge Balance Condition</strong>. Used in Meter Bridge experiments to accurately determine unknown resistance.</p>
+          </div>
+        
+    </div>
+  
+
+    
+      <div class="legal-card">
+        <h2>💡 Frequently Asked Questions (FAQ)</h2>
+        <div style="margin-top:16px;">
+          
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Why does the resistance of a metallic conductor increase with rising temperature?</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Electrical resistance is inversely proportional to relaxation time: R ∝ 1/τ. When temperature increases, metallic positive ions vibrate with greater thermal amplitude, increasing the collision frequency of free conduction electrons. This sharply reduces the average relaxation time (τ), thereby increasing resistance and resistivity.</p>
+      </div>
+    
+      <div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--bdr);">
+        <h3 style="font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:6px;">❓ Differentiate between EMF and Terminal Potential Difference of a battery cell.</h3>
+        <p style="color:var(--sub); line-height:1.65; margin:0;">Electromotive Force (EMF, E) is the maximum potential difference between the electrodes of a cell in an open circuit when no current is drawn. Terminal Potential Difference (V) is the voltage across the electrodes when the cell is discharging through an external circuit: V = E - I·r (where r is internal resistance).</p>
+      </div>
+    
+        </div>
+      </div>
+    
+
+    
+        <div class="legal-card" style="margin-top:28px;">
+          <h2>📚 Related Study Guides &amp; Notes</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin-top:16px;">
+            
+        <a href="../../study-materials/class-12/class-12-physics-electrostatics-formulas-derivations.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 12 Physics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Class 12 Physics Electrostatics Notes – Gauss Law & Capacitance Derivations</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 12 Physics Chapter 1 & 2 Electrostatics. Complete notes on Coulomb’s law, electric...</div>
+        </a>
+      
+        <a href="../../study-materials/class-12/class-12-chemistry-chemical-kinetics-rate-laws.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 12 Chemistry</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Class 12 Chemical Kinetics Notes – Rate Laws, Half-Life & Arrhenius Equation</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 12 Chemistry Chapter 3 Chemical Kinetics. Integrated rate equations for Zero and F...</div>
+        </a>
+      
+        <a href="../../study-materials/class-12/class-12-maths-calculus-derivatives-integrals-formula.html" style="text-decoration:none; display:block; padding:16px; background:var(--bg); border:1px solid var(--bdr); border-radius:12px; transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--p)'" onmouseout="this.style.borderColor='var(--bdr)'">
+          <div style="font-size:0.8rem; font-weight:700; color:var(--p); text-transform:uppercase; margin-bottom:4px;">CBSE Class 12 Mathematics</div>
+          <div style="font-size:0.98rem; font-weight:700; color:var(--text); line-height:1.4;">Class 12 Maths Calculus Master Sheet – Differentiation & Integration Formulas</div>
+          <div style="font-size:0.85rem; color:var(--sub); margin-top:6px; line-height:1.4;">Master CBSE Class 12 Maths Calculus. Complete master cheat sheet of differentiation formulas, integr...</div>
+        </a>
+      
+          </div>
+        </div>
+      
 
     <!-- Bottom App CTA -->
     <div class="legal-card" style="text-align:center; background:var(--p-light);">
@@ -339,7 +343,4 @@ function generateArticleHtml(article, allArticlesMap = {}) {
   </footer>
 
 </body>
-</html>`;
-}
-
-module.exports = { generateArticleHtml };
+</html>
