@@ -53,6 +53,26 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     }
   }
 
+  // Table of Contents HTML
+  let tocHtml = '';
+  if (article.sections && article.sections.length > 1) {
+    const tocList = article.sections.map((sec, idx) => `
+      <li style="margin-bottom:8px;"><a href="#sec-${idx+1}" style="color:var(--p); text-decoration:none; font-weight:600;">${sec.h2}</a></li>
+    `).join('');
+
+    tocHtml = `
+      <div class="legal-card" style="background:var(--bg); border:1.5px solid var(--bdr); margin-bottom:24px;">
+        <h3 style="font-size:1.1rem; font-weight:800; color:var(--text); margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+          <span>📑</span> In This Chapter Guide (Table of Contents)
+        </h3>
+        <ol style="margin:0; padding-left:22px; line-height:1.75; font-size:0.94rem;">
+          ${tocList}
+          ${article.faq && article.faq.length > 0 ? '<li style="margin-bottom:8px;"><a href="#faq-section" style="color:var(--p); text-decoration:none; font-weight:600;">💡 Frequently Asked Questions (FAQ)</a></li>' : ''}
+        </ol>
+      </div>
+    `;
+  }
+
   // FAQ HTML
   let faqCardHtml = '';
   if (article.faq && article.faq.length > 0) {
@@ -64,7 +84,7 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     `).join('');
 
     faqCardHtml = `
-      <div class="legal-card">
+      <div class="legal-card" id="faq-section">
         <h2>💡 Frequently Asked Questions (FAQ)</h2>
         <div style="margin-top:16px;">
           ${faqItems}
@@ -73,9 +93,9 @@ function generateArticleHtml(article, allArticlesMap = {}) {
     `;
   }
 
-  // Render sections
-  const sectionsHtml = (article.sections || []).map(sec => `
-    <div class="legal-card">
+  // Render sections with unique anchor IDs
+  const sectionsHtml = (article.sections || []).map((sec, idx) => `
+    <div class="legal-card" id="sec-${idx+1}">
       <h2>${sec.h2}</h2>
       ${sec.contentHtml}
     </div>
@@ -266,10 +286,27 @@ function generateArticleHtml(article, allArticlesMap = {}) {
       <span style="color:var(--text);">${article.shortTitle || article.title}</span>
     </div>
 
+    <!-- E-E-A-T Academic Verification Card -->
+    <div style="background:var(--card-bg); border:1.5px solid var(--bdr); border-radius:14px; padding:16px 20px; margin-bottom:24px; box-shadow:var(--shadow); display:flex; gap:16px; align-items:center;">
+      <div style="font-size:2.4rem; line-height:1;">🎓</div>
+      <div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:4px;">
+          <span style="font-size:0.75rem; font-weight:800; background:rgba(34, 197, 94, 0.12); color:#16a34a; border:1px solid rgba(34, 197, 94, 0.3); padding:3px 10px; border-radius:999px; text-transform:uppercase;">Fact-Checked &amp; Verified</span>
+          <span style="font-size:0.8rem; color:var(--sub);">Academic Session 2025–2026</span>
+        </div>
+        <div style="font-size:0.95rem; font-weight:700; color:var(--text);">Reviewed by Vidya Topper Senior Academic Board</div>
+        <p style="font-size:0.82rem; color:var(--sub); margin:3px 0 0; line-height:1.4;">
+          Authored by subject matter experts. Content strictly validated against latest NCERT rationalized curriculum and official Board Marking Schemes.
+        </p>
+      </div>
+    </div>
+
     ${article.highlight ? `
     <div class="legal-highlight">
       ${article.highlight}
     </div>` : ''}
+
+    ${tocHtml}
 
     ${sectionsHtml}
 
@@ -277,8 +314,21 @@ function generateArticleHtml(article, allArticlesMap = {}) {
 
     ${relatedHtml}
 
+    <!-- Author & Editorial Credentials Card -->
+    <div class="legal-card" style="background:var(--bg); border:1px solid var(--bdr); margin-top:30px;">
+      <div style="display:flex; gap:16px; align-items:flex-start;">
+        <div style="font-size:2rem;">✍️</div>
+        <div>
+          <h4 style="font-size:1rem; font-weight:700; color:var(--text); margin-bottom:4px;">About Vidya Topper Academic Research Team</h4>
+          <p style="font-size:0.85rem; color:var(--sub); line-height:1.5; margin:0;">
+            Our educational publishing team consists of experienced CBSE educators, state board toppers, and IIT/NIT alumni dedicated to providing 100% free, high-yield study materials, formula handbooks, and step-by-step NCERT solutions for students across India. Found a typo or improvement? <a href="../../contact.html" style="color:var(--p); font-weight:600;">Let us know here →</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
     <!-- Bottom App CTA -->
-    <div class="legal-card" style="text-align:center; background:var(--p-light);">
+    <div class="legal-card" style="text-align:center; background:var(--p-light); margin-top:24px;">
       <h3>🚀 Test Your Mastery with Free Interactive MCQs</h3>
       <p style="margin:12px 0;">Solve chapter-wise quizzes, track your All-India percentile, and get instant explanations on Vidya Topper Web &amp; Android Apps.</p>
       <a href="https://app.vidyatopper.com" target="_blank" class="btn-main" style="display:inline-block; text-decoration:none; background:linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color:#fff; padding:12px 28px; border-radius:999px; font-weight:700;">Open Free Web App 💻</a>

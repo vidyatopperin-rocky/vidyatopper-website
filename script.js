@@ -1094,4 +1094,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentYear = new Date().getFullYear();
     copyrightElem.textContent = `© ${currentYear} Vidya Topper. All rights reserved.`;
   }
+
+  /* ====================================================
+     22. INTERACTIVE COOKIE CONSENT BANNER (Universal Compliance)
+     ==================================================== */
+  if (!localStorage.getItem("vt_cookie_consent")) {
+    const banner = document.createElement("div");
+    banner.id = "cookie-consent-banner";
+    banner.className = "cookie-consent-bar";
+    banner.innerHTML = `
+      <div class="cookie-inner">
+        <div class="cookie-text">
+          <span style="font-size:1.3rem; margin-right:10px;">🍪</span>
+          <span>We use cookies to analyze study traffic and provide a personalized learning experience in compliance with our <a href="/privacy-policy.html" style="color:var(--p); font-weight:700; text-decoration:underline;">Privacy Policy</a>.</span>
+        </div>
+        <div class="cookie-btns">
+          <button id="accept-cookies-btn" class="btn-main" style="padding:8px 20px; font-size:0.88rem; border:none; cursor:pointer;">Accept All</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(banner);
+
+    const acceptBtn = document.getElementById("accept-cookies-btn");
+    if (acceptBtn) {
+      acceptBtn.addEventListener("click", () => {
+        localStorage.setItem("vt_cookie_consent", "accepted");
+        banner.style.opacity = "0";
+        banner.style.transform = "translate(-50%, 20px)";
+        banner.style.transition = "all 0.3s ease";
+        setTimeout(() => banner.remove(), 350);
+      });
+    }
+  }
 });
