@@ -83,6 +83,8 @@ legacyArticles.forEach(leg => {
       .replace(/href="contact\.html"/g, 'href="../../contact.html"')
       .replace(/href="privacy-policy\.html"/g, 'href="../../privacy-policy.html"')
       .replace(/href="terms\.html"/g, 'href="../../terms.html"')
+      .replace(/href="disclaimer\.html"/g, 'href="../../disclaimer.html"')
+      .replace(/href="editorial-policy\.html"/g, 'href="../../editorial-policy.html"')
       .replace(/href="refund\.html"/g, 'href="../../refund.html"')
       .replace(/https:\/\/vidyatopper\.com\/([a-z0-9\-]+)\.html/g, (match, slug) => {
         const item = allArticlesMap[slug];
@@ -221,6 +223,8 @@ const studyMaterialsHubHtml = `<!DOCTYPE html>
       <li><a href="../about.html" class="mobile-nav-item">About Us</a></li>
       <li><a href="../contact.html" class="mobile-nav-item">Contact</a></li>
       <li><a href="../privacy-policy.html" class="mobile-nav-item">Privacy Policy</a></li>
+      <li><a href="../disclaimer.html" class="mobile-nav-item">Disclaimer</a></li>
+      <li><a href="../editorial-policy.html" class="mobile-nav-item">Editorial Standards</a></li>
       <li><a href="https://app.vidyatopper.com" target="_blank" class="nav-cta"
           style="display: block; text-align: center; margin-top: 15px; background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);">Launch Web App 🚀</a></li>
     </ul>
@@ -387,11 +391,13 @@ const studyMaterialsHubHtml = `<!DOCTYPE html>
           </ul>
         </div>
         <div class="footer-links-col">
-          <h4>Legal &amp; About</h4>
+          <h4>Legal &amp; Policy</h4>
           <ul>
             <li><a href="../about.html">About Us</a></li>
             <li><a href="../privacy-policy.html">Privacy Policy</a></li>
             <li><a href="../terms.html">Terms of Service</a></li>
+            <li><a href="../disclaimer.html">Disclaimer</a></li>
+            <li><a href="../editorial-policy.html">Editorial Standards</a></li>
             <li><a href="../refund.html">Refund Policy</a></li>
           </ul>
         </div>
@@ -442,6 +448,8 @@ const sitemapUrls = [
   { loc: 'https://vidyatopper.com/contact.html', priority: '0.8', changefreq: 'monthly' },
   { loc: 'https://vidyatopper.com/privacy-policy.html', priority: '0.6', changefreq: 'monthly' },
   { loc: 'https://vidyatopper.com/terms.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/disclaimer.html', priority: '0.6', changefreq: 'monthly' },
+  { loc: 'https://vidyatopper.com/editorial-policy.html', priority: '0.7', changefreq: 'monthly' },
   { loc: 'https://vidyatopper.com/refund.html', priority: '0.5', changefreq: 'monthly' },
   { loc: 'https://vidyatopper.com/share.html', priority: '0.6', changefreq: 'monthly' },
   ...allArticles.map(a => ({
